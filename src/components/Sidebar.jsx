@@ -1,0 +1,138 @@
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation, NavLink } from "react-router-dom";
+import { FiMenu, FiX } from "react-icons/fi";
+import { RiLogoutCircleLine } from "react-icons/ri";
+import { BiSolidDashboard } from "react-icons/bi";
+import { FaUserDoctor } from "react-icons/fa6";
+import { MdGroupAdd } from "react-icons/md";
+import { FaUserInjured } from "react-icons/fa";
+import Modal from "./Modal";
+import UserInfo from "./UserInfo";
+
+const Sidebar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
+
+  useEffect(() => {
+    setIsSidebarOpen(false);
+  }, [location.pathname]);
+
+  const navItems = [
+    {
+      label: "Dashboard",
+      path: "/dashboard",
+      icon: BiSolidDashboard,
+    },
+    {
+      label: "Add Patient",
+      path: "/add",
+      icon: MdGroupAdd,
+    },
+    {
+      label: "Patient List",
+      path: "/patients",
+      icon: FaUserInjured,
+    },
+    {
+      label: "Profile",
+      path: "/profile",
+      icon: FaUserDoctor,
+    },
+  ];
+
+  return (
+    <aside className="flex flex-col md:flex-row max-h-screen lg:fixed lg:h-screen overflow-y-auto">
+      <div className="md:hidden fixed top-0 left-0 right-0 bg-white z-40">
+        <div className="flex items-center justify-between px-4 py-3">
+          <button onClick={toggleSidebar} className="p-2 rounded-md">
+            {isSidebarOpen ? <FiX size={20} /> : <FiMenu size={20} />}
+          </button>
+          <div className="text-xl font-bold">Retinalyze.ai</div>
+          <img
+            src="https://placehold.co/400"
+            alt="User"
+            className="w-8 h-8 rounded-full border-2 border-gray-600"
+          />
+        </div>
+      </div>
+
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+          onClick={toggleSidebar}
+        />
+      )}
+
+      <div
+        className={`fixed md:static flex flex-col h-screen bg-white shadow-4xl w-64 z-40 transform transition-transform duration-300 ease-in-out ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } top-0 left-0 md:translate-x-0 md:w-64`}
+      >
+        <div className="flex items-center justify-center gap-3 mt-5">
+          <img
+            src="https://placehold.co/400"
+            alt=""
+            className="h-12 w-12 object-contain rounded-full hidden md:block"
+          />
+          <h1 className="text-2xl font-extrabold">
+            Retinalyze.ai
+            <span className="block font-normal text-xs text-gray-600">
+              Early Stroke Risk Detection
+            </span>
+          </h1>
+        </div>
+        <div className="border-t mt-5 border-gray-300"></div>
+        <nav className="flex-1 p-4 items-center justify-center py-4">
+          <ul className="space-y-2 text-sm">
+            {navItems.map(({ label, path, icon: Icon }) => (
+              <li key={path}>
+                <NavLink
+                  to={path}
+                  className={({ isActive }) =>
+                    `flex items-center px-4 py-2.5 font-semibold rounded-lg ${
+                      isActive ? "bg-blue-500 text-white" : "hover:bg-gray-100"
+                    }`
+                  }
+                >
+                  <Icon className="mr-3" size={16} />
+                  {label}
+                </NavLink>
+              </li>
+            ))}
+            <li>
+              <div
+                className="flex items-center px-4 font-semibold py-2.5 cursor-pointer hover:bg-gray-100 hover:rounded-lg"
+                onClick={() => {
+                  const modal = document.getElementById("logout_modal");
+                  if (modal && !modal.open) modal.showModal();
+                }}
+              >
+                <RiLogoutCircleLine className="mr-3" size={16} />
+                Sign out
+              </div>
+            </li>
+          </ul>
+        </nav>
+        <UserInfo />
+      </div>
+
+      <Modal
+        modalId="logout_modal"
+        title="Confirm Logout"
+        message="Are you sure you want to log out?"
+        confirmLabel="Yes, Logout"
+        color="bg-red-500"
+        onConfirm={() => {
+          sessionStorage.clear();
+          const modal = document.getElementById("logout_modal");
+          if (modal && modal.open) modal.close();
+          setTimeout(() => navigate("/"), 100);
+        }}
+      />
+    </aside>
+  );
+};
+
+export default Sidebar;
