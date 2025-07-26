@@ -93,7 +93,7 @@ const Register = () => {
       <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl p-6">
         <form>
           <div className="grid lg:grid-cols-2 gap-6 h-full">
-            <div className="space-y-3">
+            <div className="space-y-4">
               {inputs.map((field) => (
                 <InputField
                   key={field.id}
@@ -107,7 +107,7 @@ const Register = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Image Upload
               </label>
-              <div className="relative w-full h-87 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 flex items-center justify-center overflow-hidden hover:bg-gray-100 transition-colors">
+              <div className="relative w-full h-90 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 flex items-center justify-center overflow-hidden hover:bg-gray-100 transition-colors">
                 {formData.imagePreview ? (
                   <div className="relative w-full h-full">
                     <img

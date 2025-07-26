@@ -8,7 +8,7 @@ const UserInfo = () => {
           alt="user"
         />
         <div>
-          <p className="text-sm font-bold">Dr. Marc Gerasmio</p>
+          <p className="text-sm font-bold">Dr. Juan Dela Cruz</p>
           <p className="text-xs text-gray-700">Ophthalmologist</p>
         </div>
       </div>

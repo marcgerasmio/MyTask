@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation, NavLink } from "react-router-dom";
 import { FiMenu, FiX } from "react-icons/fi";
 import { RiLogoutCircleLine } from "react-icons/ri";
@@ -10,6 +10,7 @@ import Modal from "./Modal";
 import UserInfo from "./UserInfo";
 
 const Sidebar = () => {
+  const modalRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -105,8 +106,9 @@ const Sidebar = () => {
               <div
                 className="flex items-center px-4 font-semibold py-2.5 cursor-pointer hover:bg-gray-100 hover:rounded-lg"
                 onClick={() => {
-                  const modal = document.getElementById("logout_modal");
-                  if (modal && !modal.open) modal.showModal();
+                  if (modalRef.current && !modalRef.current.open) {
+                    modalRef.current.showModal();
+                  }
                 }}
               >
                 <RiLogoutCircleLine className="mr-3" size={16} />
@@ -119,15 +121,14 @@ const Sidebar = () => {
       </div>
 
       <Modal
-        modalId="logout_modal"
+        ref={modalRef}
         title="Confirm Logout"
         message="Are you sure you want to log out?"
         confirmLabel="Yes, Logout"
         color="bg-red-500"
         onConfirm={() => {
           sessionStorage.clear();
-          const modal = document.getElementById("logout_modal");
-          if (modal && modal.open) modal.close();
+          if (modalRef.current?.open) modalRef.current.close();
           setTimeout(() => navigate("/"), 100);
         }}
       />

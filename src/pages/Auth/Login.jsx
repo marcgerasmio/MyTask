@@ -1,11 +1,20 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import InputField from "../../components/InputField";
 import { MdOutlineAlternateEmail, MdOutlineRemoveRedEye } from "react-icons/md";
 import { IoEyeOffOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Modal from "../../components/Modal";
 
 const Login = () => {
+  const modalRef = useRef(null);
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [modalData, setModalData] = useState({
+    isOpen: false,
+    type: "",
+    message: "",
+  });
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -28,6 +37,31 @@ const Login = () => {
       onIconClick: () => setShowPassword(!showPassword),
     },
   ];
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { email, password } = formData;
+    // test logic
+    if (email === "test@example.com" && password === "password123") {
+      setModalData({
+        isOpen: true,
+        type: "success",
+        message: "Login Successfully!",
+      });
+      setTimeout(() => {
+        modalRef.current?.showModal();
+      }, 0);
+    } else {
+      setModalData({
+        isOpen: true,
+        type: "error",
+        message: "Invalid email or password.",
+      });
+      setTimeout(() => {
+        modalRef.current?.showModal();
+      }, 0);
+    }
+  };
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -75,7 +109,7 @@ const Login = () => {
               <h2 className="text-2xl font-bold">Welcome Back</h2>
               <p className="text-gray-600">Sign in your personal account</p>
             </div>
-            <form className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
               {inputs.map((field) => (
                 <InputField
                   key={field.id}
@@ -98,14 +132,12 @@ const Login = () => {
                   </Link>
                 </label>
               </div>
-              <Link to="/dashboard">
-                <button
-                  type="submit"
-                  className="btn bg-blue-500 hover:bg-blue-400 text-white border-none rounded-md w-full"
-                >
-                  Sign in
-                </button>
-              </Link>
+              <button
+                type="submit"
+                className="btn bg-blue-500 hover:bg-blue-400 text-white border-none rounded-md w-full"
+              >
+                Sign in
+              </button>
             </form>
             <div className="mt-4 flex items-center justify-between text-sm">
               <Link to="/register" className="text-blue-600 hover:underline">
@@ -118,6 +150,26 @@ const Login = () => {
           </div>
         </div>
       </div>
+
+      {modalData.isOpen && (
+        <Modal
+          ref={modalRef}
+          title={modalData.type === "success" ? "Success" : "Error"}
+          message={modalData.message}
+          confirmLabel="OK"
+          color={
+            modalData.type === "success"
+              ? "bg-green-500 hover:bg-green-600"
+              : "bg-red-500 hover:bg-red-600"
+          }
+          onConfirm={() => {
+            setModalData({ ...modalData, isOpen: false });
+            if (modalData.type === "success") {
+              navigate("/dashboard");
+            }
+          }}
+        />
+      )}
     </div>
   );
 };

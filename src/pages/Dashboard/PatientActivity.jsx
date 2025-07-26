@@ -1,33 +1,41 @@
+import ResultModal from "../Patient/ResultModal";
+import { useRef, useState } from "react";
+
 const PatientActivity = () => {
-  const patients = [
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const modalRef = useRef(null);
+
+  const patient = [
     {
       id: 1,
-      name: "Marc Dominic Gerasmio",
-      age: 23,
-      date: "May 10, 2025",
-      riskLevel: "High Risk",
-      riskColor: "bg-red-500",
+      image: "https://img.daisyui.com/images/profile/demo/3@94.webp",
+      patient: "Marc Dominic Gerasmio Jr.",
+      age: 25,
+      lastCheckup: "May 8, 2025",
+      riskLevel: "High",
     },
     {
       id: 2,
-      name: "Marion Jotohot",
+      image: "https://img.daisyui.com/images/profile/demo/2@94.webp",
+      patient: "Marion Jotohot",
       age: 24,
-      date: "May 12, 2025",
-      riskLevel: "Low Risk",
-      riskColor: "btn-success",
+      lastCheckup: "May 10, 2025",
+      riskLevel: "Moderate",
     },
     {
       id: 3,
-      name: "John Elro Karl Estoque",
-      age: 24,
-      date: "May 13, 2025",
-      riskLevel: "Moderate",
-      riskColor: "btn-warning",
+      image: "https://img.daisyui.com/images/profile/demo/4@94.webp",
+      patient: "John Elro Karl Estoque",
+      age: 23,
+      lastCheckup: "May 12, 2025",
+      riskLevel: "Low",
     },
   ];
 
-  const getRiskBadgeClass = (riskColor) => {
-    return `btn ${riskColor} btn-sm text-white`;
+  const riskLevelStyles = {
+    High: "bg-red-200 text-red-600",
+    Moderate: "bg-yellow-200 text-yellow-700",
+    Low: "bg-green-300 text-green-700",
   };
 
   return (
@@ -41,7 +49,7 @@ const PatientActivity = () => {
         </p>
       </div>
       <div className="space-y-4">
-        {patients.map((patient) => (
+        {patient.map((patient) => (
           <div
             key={patient.id}
             className="card border border-base-300 rounded-md"
@@ -51,29 +59,46 @@ const PatientActivity = () => {
                 <div className="flex items-center gap-4">
                   <img
                     className="w-12 h-12 rounded-full flex items-center justify-center"
-                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                    src={patient.image}
                     alt="user"
                   />
                   <div>
-                    <h3 className="text-xl font-semibold text-base-content mb-1">
-                      {patient.name}
+                    <h3 className="font-bold text-base-content mb-1">
+                      {patient.patient}
                     </h3>
                     <p className="text-base-content/60 text-sm">
-                      Age: {patient.age} • {patient.date}
+                      Age: {patient.age} • {patient.lastCheckup}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
-                  <span className={getRiskBadgeClass(patient.riskColor)}>
+                  <span
+                    className={`btn border-none cursor-auto ${
+                      riskLevelStyles[patient.riskLevel]
+                    } btn-sm`}
+                  >
                     {patient.riskLevel}
                   </span>
-                  <button className="btn btn-sm">View Report</button>
+                  <button
+                    className="btn btn-sm border-none"
+                    onClick={() => {
+                      setSelectedPatient(patient);
+                      modalRef.current?.open();
+                    }}
+                  >
+                    View Report
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         ))}
       </div>
+      <ResultModal
+        ref={modalRef}
+        patient={selectedPatient}
+        onClose={() => {}}
+      />
     </div>
   );
 };
