@@ -1,10 +1,9 @@
 import { useState, useRef } from "react";
 import InputField from "../../components/InputField";
-import { MdOutlineAlternateEmail, MdOutlineRemoveRedEye } from "react-icons/md";
-import { IoEyeOffOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal";
+import { loginInputs } from "../../lib/data";
 
 const Login = () => {
   const modalRef = useRef(null);
@@ -19,24 +18,6 @@ const Login = () => {
     email: "",
     password: "",
   });
-
-  const inputs = [
-    {
-      label: "Email",
-      id: "email",
-      type: "email",
-      placeholder: "sample@gmail.com",
-      icon: MdOutlineAlternateEmail,
-    },
-    {
-      label: "Password",
-      id: "password",
-      type: showPassword ? "text" : "password",
-      placeholder: "Enter your password",
-      icon: showPassword ? IoEyeOffOutline : MdOutlineRemoveRedEye,
-      onIconClick: () => setShowPassword(!showPassword),
-    },
-  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -110,26 +91,30 @@ const Login = () => {
               <p className="text-gray-600">Sign in your personal account</p>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">
-              {inputs.map((field) => (
+              {loginInputs.map((field) => (
                 <InputField
                   key={field.id}
                   {...field}
+                  type={
+                    field.id === "password"
+                      ? showPassword
+                        ? "text"
+                        : "password"
+                      : field.type
+                  }
                   value={formData[field.id]}
                   onChange={handleChange}
                 />
               ))}
-
               <div className="flex items-center space-x-2">
                 <input
                   type="checkbox"
-                  id="terms"
+                  id="showPassword"
                   className="h-4 w-4 text-blue-500 border-gray-300 rounded"
+                  onChange={(e) => setShowPassword(e.target.checked)}
                 />
-                <label htmlFor="terms" className="text-sm">
-                  I agree to the{" "}
-                  <Link href="#" className="text-blue-600 hover:underline">
-                    Terms and Conditions
-                  </Link>
+                <label htmlFor="showPassword" className="text-sm">
+                  Show password
                 </label>
               </div>
               <button

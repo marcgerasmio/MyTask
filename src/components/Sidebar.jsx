@@ -2,12 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation, NavLink } from "react-router-dom";
 import { FiMenu, FiX } from "react-icons/fi";
 import { RiLogoutCircleLine } from "react-icons/ri";
-import { BiSolidDashboard } from "react-icons/bi";
-import { FaUserDoctor } from "react-icons/fa6";
-import { MdGroupAdd } from "react-icons/md";
-import { FaUserInjured } from "react-icons/fa";
 import Modal from "./Modal";
 import UserInfo from "./UserInfo";
+import { navItems } from "../lib/data";
 
 const Sidebar = () => {
   const modalRef = useRef(null);
@@ -19,29 +16,6 @@ const Sidebar = () => {
   useEffect(() => {
     setIsSidebarOpen(false);
   }, [location.pathname]);
-
-  const navItems = [
-    {
-      label: "Dashboard",
-      path: "/dashboard",
-      icon: BiSolidDashboard,
-    },
-    {
-      label: "Add Patient",
-      path: "/add",
-      icon: MdGroupAdd,
-    },
-    {
-      label: "Patient List",
-      path: "/patients",
-      icon: FaUserInjured,
-    },
-    {
-      label: "Profile",
-      path: "/profile",
-      icon: FaUserDoctor,
-    },
-  ];
 
   return (
     <aside className="flex flex-col md:flex-row max-h-screen lg:fixed lg:h-screen overflow-y-auto">

@@ -1,14 +1,11 @@
 import { Link } from "react-router-dom";
-import { MdOutlineAlternateEmail, MdOutlineRemoveRedEye } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa";
-import { TbNurse } from "react-icons/tb";
-import { IoEyeOffOutline } from "react-icons/io5";
 import { useState } from "react";
 import InputField from "../../components/InputField";
+import { registerInputs } from "../../lib/data";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
     imageFile: null,
     imagePreview: null,
@@ -18,46 +15,6 @@ const Register = () => {
     password: "",
     confirmPassword: "",
   });
-
-  const inputs = [
-    {
-      label: "Full Name",
-      id: "fullname",
-      type: "text",
-      placeholder: "Enter your name",
-      icon: FaRegUser,
-    },
-    {
-      label: "Specialization",
-      id: "specialization",
-      type: "text",
-      placeholder: "ex. Ophthalmologist",
-      icon: TbNurse,
-    },
-    {
-      label: "Email",
-      id: "emailAddress",
-      type: "email",
-      placeholder: "sample_email@gmail.com",
-      icon: MdOutlineAlternateEmail,
-    },
-    {
-      label: "Password",
-      id: "password",
-      type: showPassword ? "text" : "password",
-      placeholder: "Enter your password",
-      icon: showPassword ? IoEyeOffOutline : MdOutlineRemoveRedEye,
-      onIconClick: () => setShowPassword(!showPassword),
-    },
-    {
-      label: "Confirm Password",
-      id: "confirmPassword",
-      type: showConfirmPassword ? "text" : "password",
-      placeholder: "Confirm your password",
-      icon: showConfirmPassword ? IoEyeOffOutline : MdOutlineRemoveRedEye,
-      onIconClick: () => setShowConfirmPassword(!showConfirmPassword),
-    },
-  ];
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -94,14 +51,32 @@ const Register = () => {
         <form>
           <div className="grid lg:grid-cols-2 gap-6 h-full">
             <div className="space-y-4">
-              {inputs.map((field) => (
+              {registerInputs.map((field) => (
                 <InputField
                   key={field.id}
                   {...field}
+                  type={
+                    field.id === "password"
+                      ? showPassword
+                        ? "text"
+                        : "password"
+                      : field.type
+                  }
                   value={formData[field.id]}
                   onChange={handleChange}
                 />
               ))}
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="showPassword"
+                  className="h-4 w-4 text-blue-500 border-gray-300 rounded"
+                  onChange={(e) => setShowPassword(e.target.checked)}
+                />
+                <label htmlFor="showPassword" className="text-sm">
+                  Show password
+                </label>
+              </div>
             </div>
             <div className="flex flex-col">
               <label className="block text-sm font-medium text-gray-700 mb-2">

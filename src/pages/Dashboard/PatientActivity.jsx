@@ -1,36 +1,10 @@
 import ResultModal from "../Patient/ResultModal";
 import { useRef, useState } from "react";
+import { patients } from "../../lib/data";
 
 const PatientActivity = () => {
   const [selectedPatient, setSelectedPatient] = useState(null);
   const modalRef = useRef(null);
-
-  const patient = [
-    {
-      id: 1,
-      image: "https://img.daisyui.com/images/profile/demo/3@94.webp",
-      patient: "Marc Dominic Gerasmio Jr.",
-      age: 25,
-      lastCheckup: "May 8, 2025",
-      riskLevel: "High",
-    },
-    {
-      id: 2,
-      image: "https://img.daisyui.com/images/profile/demo/2@94.webp",
-      patient: "Marion Jotohot",
-      age: 24,
-      lastCheckup: "May 10, 2025",
-      riskLevel: "Moderate",
-    },
-    {
-      id: 3,
-      image: "https://img.daisyui.com/images/profile/demo/4@94.webp",
-      patient: "John Elro Karl Estoque",
-      age: 23,
-      lastCheckup: "May 12, 2025",
-      riskLevel: "Low",
-    },
-  ];
 
   const riskLevelStyles = {
     High: "bg-red-200 text-red-600",
@@ -39,61 +13,66 @@ const PatientActivity = () => {
   };
 
   return (
-    <div className="bg-white p-6 mt-8 rounded-lg shadow-md">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-base-content mb-2">
+    <div className="bg-white p-4 sm:p-6 mt-8 rounded-lg shadow-md">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-xl sm:text-2xl font-bold text-base-content mb-1">
           Recent Activity
         </h1>
-        <p className="text-base-content/70 text-sm">
+        <p className="text-sm text-base-content/70">
           Latest patient analyses and results
         </p>
       </div>
       <div className="space-y-4">
-        {patient.map((patient) => (
-          <div
-            key={patient.id}
-            className="card border border-base-300 rounded-md"
-          >
-            <div className="card-body p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <img
-                    className="w-12 h-12 rounded-full flex items-center justify-center"
-                    src={patient.image}
-                    alt="user"
-                  />
-                  <div>
-                    <h3 className="font-bold text-base-content mb-1">
-                      {patient.patient}
-                    </h3>
-                    <p className="text-base-content/60 text-sm">
-                      Age: {patient.age} • {patient.lastCheckup}
-                    </p>
+        {patients
+          .sort((a, b) => new Date(b.lastCheckup) - new Date(a.lastCheckup))
+          .slice(0, 3)
+          .map((patient) => (
+            <div
+              key={patient.id}
+              className="card border border-base-300 rounded-md"
+            >
+              <div className="card-body p-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div className="flex items-center gap-4">
+                    <img
+                      className="w-12 h-12 rounded-full object-cover"
+                      src={patient.image}
+                      alt="user"
+                    />
+                    <div>
+                      <h3 className="font-semibold text-base-content text-sm sm:text-base">
+                        {patient.patient}
+                      </h3>
+                      <p className="text-sm text-base-content/60">
+                        Age: {patient.age} &nbsp; • &nbsp; Last Checkup:
+                        {patient.lastCheckup}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <span
-                    className={`btn border-none cursor-auto ${
-                      riskLevelStyles[patient.riskLevel]
-                    } btn-sm`}
-                  >
-                    {patient.riskLevel}
-                  </span>
-                  <button
-                    className="btn btn-sm border-none"
-                    onClick={() => {
-                      setSelectedPatient(patient);
-                      modalRef.current?.open();
-                    }}
-                  >
-                    View Report
-                  </button>
+                  <div className="flex justify-center sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
+                    <span
+                      className={`btn border-none cursor-auto ${
+                        riskLevelStyles[patient.riskLevel]
+                      } btn-sm`}
+                    >
+                      {patient.riskLevel}
+                    </span>
+                    <button
+                      className="btn btn-sm border-none"
+                      onClick={() => {
+                        setSelectedPatient(patient);
+                        modalRef.current?.open();
+                      }}
+                    >
+                      View Report
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
+
       <ResultModal
         ref={modalRef}
         patient={selectedPatient}

@@ -10,9 +10,9 @@ const Dashboard = () => {
         <Sidebar />
         <main className="flex-1 p-3 pt-20 lg:p-6 lg:pt-6 lg:ml-64">
           <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
-            <h1 className="text-3xl font-extrabold">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold">
               Welcome back, Dr. Juan!
-              <span className="block font-normal text-lg text-gray-600">
+              <span className="block font-normal text-sm sm:text-base text-gray-600">
                 Here's what's happening with your patients today.
               </span>
             </h1>
