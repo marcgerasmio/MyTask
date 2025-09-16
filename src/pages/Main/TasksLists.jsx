@@ -3,9 +3,11 @@ import { CiSearch } from "react-icons/ci";
 import { IoIosAddCircle } from "react-icons/io";
 import UserModal from "../../components/UserModal";
 import { useState, useRef } from "react";
-import { usersData } from "../../lib/data";
+import { usersData, tasksData } from "../../lib/data";
+import { useNavigate } from "react-router-dom";
 
 const Tasklists = () => {
+  const navigate = useNavigate();
   const modalRef = useRef();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -15,8 +17,8 @@ const Tasklists = () => {
     const search = searchTerm.toLowerCase();
     return emp.name.toLowerCase().includes(search);
   });
-  const getOngoingTask = (tasks) =>
-    tasks?.find((task) => task.status === "ongoing");
+  const getOngoingTask = (tasksData) =>
+    tasksData?.find((task) => task.status === "ongoing");
 
   return (
     <>
@@ -53,14 +55,19 @@ const Tasklists = () => {
               </button>
             </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
             {filteredEmployees.map((emp) => {
-              const ongoingTask = getOngoingTask(emp.tasks || []);
+              const employeeTasks = tasksData.filter(
+                (task) => task.assignedTo === emp.id
+              );
+              const ongoingTask = employeeTasks.find(
+                (task) => task.status === "ongoing"
+              );
               return (
                 <div
                   key={emp.id}
-                  className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition"
-                  onClick={() => setSelectedEmployee(emp)}
+                  className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition hover:scale-[1.02]"
+                  onClick={() => navigate(`/employee/${emp.id}/tasks`)}
                 >
                   <div className="flex items-center gap-4 mb-4">
                     <div className="avatar">

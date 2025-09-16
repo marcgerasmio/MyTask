@@ -6,6 +6,8 @@ import AddPatient from "./pages/Patient/AddPatient";
 import Profile from "./pages/Profile";
 import Users from "./pages/Main/Users";
 import Tasklists from "./pages/Main/TasksLists";
+import EmployeeTasks from "./pages/Main/EmployeeTasks";
+import NotFound from "./NotFound";
 
 const Router = () => {
   return (
@@ -17,7 +19,9 @@ const Router = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/users" element={<Users />} />
         <Route path="/add" element={<AddPatient />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/" element={<Profile />} />
+        <Route path="/employee/:id/tasks" element={<EmployeeTasks />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

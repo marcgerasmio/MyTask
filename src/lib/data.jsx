@@ -327,4 +327,54 @@ export const usersData = [
 
 ];
 
+export const tasksData = [
+  {
+    id: 1,
+    title: "Prepare monthly report",
+    description: "Compile and analyze sales data for the monthly report.",
+    status: "ongoing",
+    assignedTo: 1,
+    dueDate: "2025-09-20",
+  },
+  {
+    id: 2,
+    title: "Update client database",
+    description: "Ensure all client records are up to date.",
+    status: "completed",
+    assignedTo: 2,
+    dueDate: "2025-09-10",
+  },
+  {
+    id: 3,
+    title: "Design new marketing materials",
+    description: "Create flyers and banners for the upcoming campaign.",
+    status: "ongoing",
+    assignedTo: 3,
+    dueDate: "2025-09-25",
+  },
+  {
+    id: 4,
+    title: "Team meeting preparation",
+    description: "Prepare agenda and slides for the weekly team meeting.",
+    status: "pending",
+    assignedTo: 1,
+    dueDate: "2025-09-18",
+  },
+  {
+    id: 5,
+    title: "Review project proposal",
+    description: "Go through the new project proposal and provide feedback.",
+    status: "completed",
+    assignedTo: 3,
+    dueDate: "2025-09-12",
+  },
+    {
+    id: 6,
+    title: "Setup new workstations",
+    description: "Go through the new project proposal and provide feedback.",
+    status: "pending",
+    assignedTo: 1,
+    dueDate: "2025-09-12",
+  },
+];
 
