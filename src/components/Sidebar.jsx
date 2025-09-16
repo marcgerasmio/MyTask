@@ -19,12 +19,12 @@ const Sidebar = () => {
 
   return (
     <aside className="flex flex-col md:flex-row max-h-screen lg:fixed lg:h-screen overflow-y-auto">
-      <div className="md:hidden fixed top-0 left-0 right-0 bg-white z-40">
-        <div className="flex items-center justify-between px-4 py-3">
+      <div className="md:hidden fixed top-0 left-0 right-0 bg-white z-40 bg-green-900">
+        <div className="bg-green-900 flex items-center justify-between px-4 py-3">
           <button onClick={toggleSidebar} className="p-2 rounded-md">
             {isSidebarOpen ? <FiX size={20} /> : <FiMenu size={20} />}
           </button>
-          <div className="text-xl font-bold">Retinalyze.ai</div>
+          <div className="text-xl font-bold">Taskly</div>
           <img
             src="https://placehold.co/400"
             alt="User"
@@ -45,20 +45,20 @@ const Sidebar = () => {
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } top-0 left-0 md:translate-x-0 md:w-64`}
       >
-        <div className="flex items-center justify-center gap-3 mt-5">
+        <div className="bg-green-900 flex items-center justify-center gap-3 p-4">
           <img
             src="https://placehold.co/400"
             alt=""
             className="h-12 w-12 object-contain rounded-full hidden md:block"
           />
-          <h1 className="text-2xl font-extrabold">
-            Retinalyze.ai
-            <span className="block font-normal text-xs text-gray-600">
-              Early Stroke Risk Detection
+          <h1 className="text-2xl text-white font-extrabold">
+            Taskly
+            <span className="block font-normal text-xs text-white">
+              Task Management System
             </span>
           </h1>
         </div>
-        <div className="border-t mt-5 border-gray-300"></div>
+        <div className="border-tborder-gray-300"></div>
         <nav className="flex-1 p-4 items-center justify-center py-4">
           <ul className="space-y-2 text-sm">
             {navItems.map(({ label, path, icon: Icon }) => (
@@ -67,7 +67,7 @@ const Sidebar = () => {
                   to={path}
                   className={({ isActive }) =>
                     `flex items-center px-4 py-2.5 font-semibold rounded-lg ${
-                      isActive ? "bg-blue-500 text-white" : "hover:bg-gray-100"
+                      isActive ? "bg-green-900 text-white" : "hover:bg-gray-100"
                     }`
                   }
                 >

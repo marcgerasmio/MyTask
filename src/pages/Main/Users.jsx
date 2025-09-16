@@ -2,30 +2,29 @@ import Sidebar from "../../components/Sidebar";
 import { CiSearch } from "react-icons/ci";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { FaRegEdit } from "react-icons/fa";
+import { IoIosAddCircle } from "react-icons/io";
 import { IoEyeOutline } from "react-icons/io5";
-import ResultModal from "./ResultModal";
+import UserModal from "../../components/UserModal";
 import { useState, useRef } from "react";
-import { patients } from "../../lib/data";
+import { usersData } from "../../lib/data";
 
-const PatientList = () => {
+const Users = () => {
   const modalRef = useRef();
   const [searchTerm, setSearchTerm] = useState("");
   const [riskFilter, setRiskFilter] = useState("");
   const [selectedPatient, setSelectedPatient] = useState(null);
 
-  const filteredPatients = patients.filter((p) => {
+  const filteredPatients = usersData.filter((p) => {
     const search = searchTerm.toLowerCase();
     const matchesNameOrAge =
-      p.patient.toLowerCase().includes(search) ||
-      p.age.toString().includes(search);
+      p.name.toLowerCase().includes(search);
     const matchesRisk = riskFilter === "" || p.riskLevel === riskFilter;
     return matchesNameOrAge && matchesRisk;
   });
 
-  const riskLevelStyles = {
-    High: "bg-red-100 text-red-600",
-    Moderate: "bg-yellow-100 text-yellow-700",
-    Low: "bg-green-200 text-green-700",
+  const adminStyle = {
+    No: "bg-yellow-100 text-yellow-700",
+    Yes: "bg-green-200 text-green-700",
   };
 
   return (
@@ -35,22 +34,12 @@ const PatientList = () => {
         <main className="flex-1 p-4 pt-20 sm:p-6 lg:pt-6 lg:ml-64">
           <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
             <h1 className="text-lg sm:text-xl md:text-2xl font-extrabold">
-              Patient Management
+              Users Management
               <span className="block font-normal text-sm sm:text-base text-gray-600">
-                Manage your patient records and analysis.
+                Manage your employee records.
               </span>
             </h1>
             <div className="flex flex-col sm:flex-row gap-2">
-              <select
-                className="select rounded-md bg-white w-full sm:w-1/2"
-                value={riskFilter}
-                onChange={(e) => setRiskFilter(e.target.value)}
-              >
-                <option value="">All Risk Levels</option>
-                <option value="High">High Risk</option>
-                <option value="Moderate">Moderate</option>
-                <option value="Low">Low Risk</option>
-              </select>
               <label className="input rounded-md bg-white flex items-center gap-2">
                 <CiSearch className="opacity-50" />
                 <input
@@ -62,56 +51,54 @@ const PatientList = () => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </label>
+               <button className="bg-green-900 text-white btn rounded-lg"
+               onClick={() => {
+                            modalRef.current?.open();
+                          }}>
+                   <IoIosAddCircle className="h-4 w-4 mr-2" />
+                    Add User
+                </button>
             </div>
           </div>
           <div className="overflow-x-auto p-6 bg-white mt-6 rounded-md shadow-md">
             <table className="table table-sm">
               <thead>
                 <tr className="text-xs sm:text-sm">
-                  <th>Patient Name</th>
-                  <th>Age</th>
-                  <th>Risk Level</th>
-                  <th>Last Checkup</th>
+                  <th>Name</th>
+                  <th>Position</th>
+                  <th>Email Address</th>
+                  <th>Admin Access</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredPatients.map((patient) => (
-                  <tr key={patient.id}>
+                {filteredPatients.map((usersData) => (
+                  <tr key={usersData.id}>
                     <td>
                       <div className="flex items-center gap-3">
                         <div className="avatar">
                           <div className="rounded-full h-8 w-8 sm:h-10 sm:w-10">
-                            <img src={patient.image} alt="Avatar" />
+                            <img src={usersData.image} alt="Avatar" />
                           </div>
                         </div>
                         <div className="text-sm sm:text-base">
-                          {patient.patient}
+                          {usersData.name}
                         </div>
                       </div>
                     </td>
-                    <td className="text-sm">{patient.age}</td>
+                    <td className="text-sm">{usersData.position}</td>
+                       <td className="text-sm">{usersData.email}</td>
                     <td>
                       <span
                         className={`btn border-none cursor-auto ${
-                          riskLevelStyles[patient.riskLevel]
+                          adminStyle[usersData.isAdmin]
                         } btn-xs`}
                       >
-                        {patient.riskLevel}
+                        {usersData.isAdmin}
                       </span>
                     </td>
-                    <td className="text-sm">{patient.lastCheckup}</td>
                     <td>
                       <div className="flex items-center gap-1">
-                        <button
-                          className="btn btn-ghost hover:bg-white border-none shadow-none btn-xs"
-                          onClick={() => {
-                            setSelectedPatient(patient);
-                            modalRef.current?.open();
-                          }}
-                        >
-                          <IoEyeOutline size={18} />
-                        </button>
                         <button className="btn btn-ghost hover:bg-white border-none shadow-none btn-xs">
                           <FaRegEdit size={16} />
                         </button>
@@ -130,7 +117,7 @@ const PatientList = () => {
           </div>
         </main>
       </div>
-      <ResultModal
+      <UserModal
         ref={modalRef}
         patient={selectedPatient}
         onClose={() => {}}
@@ -139,4 +126,4 @@ const PatientList = () => {
   );
 };
 
-export default PatientList;
+export default Users;

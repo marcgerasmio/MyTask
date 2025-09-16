@@ -9,6 +9,8 @@ import { BiSolidDashboard } from "react-icons/bi";
 import { FaUserDoctor } from "react-icons/fa6";
 import { MdGroupAdd } from "react-icons/md";
 import { FaUserInjured } from "react-icons/fa";
+import { FaTasks } from "react-icons/fa";
+import { FaCalendarAlt } from "react-icons/fa";
 
 export const loginInputs = [
   {
@@ -72,13 +74,18 @@ export const navItems = [
     icon: BiSolidDashboard,
   },
   {
-    label: "Add Patient",
-    path: "/add",
-    icon: MdGroupAdd,
+    label: "Tasks List",
+    path: "/tasks",
+    icon: FaTasks,
+  },
+    {
+    label: "Activities",
+    path: "/activities",
+    icon: FaCalendarAlt,
   },
   {
-    label: "Patient List",
-    path: "/patients",
+    label: "Users",
+    path: "/users",
     icon: FaUserInjured,
   },
   {
@@ -91,31 +98,27 @@ export const navItems = [
 export const cards = [
   {
     id: 1,
-    title: "Total Patients",
+    title: "Total Tasks",
     icon: LuUsers,
-    count: 58,
-    detail: "+2 from last week",
+    count: 100,
   },
   {
     id: 2,
-    title: "High Risk Cases",
+    title: "Pending Tasks",
     icon: IoWarningOutline,
     count: 12,
-    detail: "Require immediate attention",
   },
   {
     id: 3,
-    title: "This Week",
+    title: "Due This Week",
     icon: IoCalendarClearOutline,
-    count: 23,
-    detail: "Analysis completed",
+    count: 10,
   },
   {
     id: 4,
-    title: "Success Rate",
+    title: "Total Completed",
     icon: FaArrowTrendUp,
-    count: "94.2%",
-    detail: "Accurate predictions",
+    count: 50,
   },
 ];
 
@@ -231,3 +234,97 @@ export const addPatientInputs = [
     placeholder: "e.g., smoking, exercise habits",
   },
 ];
+
+export const myEvents = [
+  {
+    id: 1,
+    title: 'DTS STARTS',
+    start: new Date(2025, 9, 13, 0, 0, 0),
+    end: new Date(2025, 9, 13, 0, 0, 0)
+  },
+  {
+    id: 2,
+     title: 'DTS ENDS',
+    start: new Date(2025, 9, 12, 0, 0, 0),
+    end: new Date(2025, 9, 12, 0, 0, 0)
+  },
+  {
+    id: 3,
+    title: 'Conference',
+    start: new Date(2025, 9, 15, 0, 0, 0),
+    end: new Date(2025, 9, 15, 0, 0, 0)
+  },
+  {
+    id: 4,
+     title: 'Meeting',
+    start: new Date(2025, 9, 20, 0, 0, 0),
+    end: new Date(2025, 9, 20, 0, 0, 0)
+  },
+];
+
+
+export const tasksDone = [
+  {
+    id: 1,
+    name: "Marc Dominic Gerasmio",
+    date: "September 15, 2025",
+    task: "Campus Life Page Upgrade",
+    image:"https://img.daisyui.com/images/profile/demo/4@94.webp",
+    level: "Moderate",
+  },
+  {
+    id: 2,
+    name: "Marc Dominic Gerasmio",
+    date: "September 11, 2025",
+    task: "Alumni Life Page",
+    image:"https://img.daisyui.com/images/profile/demo/4@94.webp",
+    level: "Moderate",
+  },
+  {
+    id: 3,
+    name: "Marion Jotohot",
+    date: "September 15, 2025",
+    task: "Setup Backend",
+    image:"https://img.daisyui.com/images/profile/demo/2@94.webp",
+    level: "Low",
+  },
+  {
+    id: 4,
+    name: "Marion Jotohot",
+    date: "September 15, 2025",
+    task: "Create PubMat for SW",
+    image:"https://img.daisyui.com/images/profile/demo/2@94.webp",
+    level: "High",
+  },
+];
+
+
+export const usersData = [
+  {
+    id: 1,
+    name: "Marc Dominic Gerasmio",
+    position: "Programmer I",
+    email: "mdgerasmio@carsu.edu.ph",
+    isAdmin: "No",
+    image:"https://img.daisyui.com/images/profile/demo/2@94.webp",
+  },
+  {
+    id: 2,
+    name: "Cedrick Roa",
+    position: "Photographer I",
+    email: "caroa@carsu.edu.ph",
+    isAdmin: "No",
+    image:"https://img.daisyui.com/images/profile/demo/2@94.webp",
+  },
+  {
+    id: 3,
+    name: "Aquessa Piamonte",
+    position: "Information Officer III",
+    email: "arpiamonte@carsu.edu.ph",
+    isAdmin: "Yes",
+    image:"https://img.daisyui.com/images/profile/demo/4@94.webp",
+  },
+
+];
+
+
