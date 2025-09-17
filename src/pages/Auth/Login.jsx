@@ -1,9 +1,9 @@
 import { useState, useRef } from "react";
 import InputField from "../../components/InputField";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal";
 import { loginInputs } from "../../lib/data";
+import Supabase from "../../Supabase";
 
 const Login = () => {
   const modalRef = useRef(null);
@@ -22,17 +22,16 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = formData;
-    // test logic
-    if (email === "test@example.com" && password === "password123") {
-      setModalData({
-        isOpen: true,
-        type: "success",
-        message: "Login Successfully!",
-      });
-      setTimeout(() => {
-        modalRef.current?.showModal();
-      }, 0);
-    } else {
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const { email, password } = formData;
+    const { data, error } = await Supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+ if (error) {
       setModalData({
         isOpen: true,
         type: "error",
@@ -41,8 +40,18 @@ const Login = () => {
       setTimeout(() => {
         modalRef.current?.showModal();
       }, 0);
+    } else {
+    
+      setModalData({
+        isOpen: true,
+        type: "success",
+        message: "Login Successfully!",
+      });
+      setTimeout(() => {
+        modalRef.current?.showModal();
+      }, 0);
     }
-  };
+};
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -64,7 +73,7 @@ const Login = () => {
               <h2 className="text-2xl font-bold">Welcome Back</h2>
               <p className="text-gray-600">Sign in your personal account</p>
             </div>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form className="space-y-4">
               {loginInputs.map((field) => (
                 <InputField
                   key={field.id}
@@ -92,7 +101,7 @@ const Login = () => {
                 </label>
               </div>
               <button
-                type="submit"
+                onClick={handleLogin}
                 className="btn bg-green-900 hover:bg-green-700 text-white border-none rounded-md w-full"
               >
                 Sign in

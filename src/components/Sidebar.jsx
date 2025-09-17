@@ -26,7 +26,7 @@ const Sidebar = () => {
           </button>
           <div className="text-xl font-bold">Taskly</div>
           <img
-            src="https://placehold.co/400"
+            src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp"
             alt="User"
             className="w-8 h-8 rounded-full border-2 border-gray-600"
           />
@@ -47,7 +47,7 @@ const Sidebar = () => {
       >
         <div className="bg-green-900 flex items-center justify-center gap-3 p-4">
           <img
-            src="https://placehold.co/400"
+            src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp"
             alt=""
             className="h-12 w-12 object-contain rounded-full hidden md:block"
           />

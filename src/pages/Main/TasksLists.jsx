@@ -2,6 +2,7 @@ import Sidebar from "../../components/Sidebar";
 import { CiSearch } from "react-icons/ci";
 import { IoIosAddCircle } from "react-icons/io";
 import UserModal from "../../components/UserModal";
+import TaskModal from "../../components/TaskModal";
 import { useState, useRef } from "react";
 import { usersData, tasksData } from "../../lib/data";
 import { useNavigate } from "react-router-dom";
@@ -105,6 +106,10 @@ const Tasklists = () => {
           showTasks 
         />
       )}
+        <TaskModal
+           ref={modalRef}
+          onClose={() => {}}
+        />
     </>
   );
 };

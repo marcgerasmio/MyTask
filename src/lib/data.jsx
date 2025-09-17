@@ -7,7 +7,6 @@ import { IoCalendarClearOutline } from "react-icons/io5";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import { BiSolidDashboard } from "react-icons/bi";
 import { FaUserDoctor } from "react-icons/fa6";
-import { MdGroupAdd } from "react-icons/md";
 import { FaUserInjured } from "react-icons/fa";
 import { FaTasks } from "react-icons/fa";
 import { FaCalendarAlt } from "react-icons/fa";
@@ -237,28 +236,24 @@ export const addPatientInputs = [
 
 export const myEvents = [
   {
-    id: 1,
-    title: 'DTS STARTS',
-    start: new Date(2025, 9, 13, 0, 0, 0),
-    end: new Date(2025, 9, 13, 0, 0, 0)
+    title: 'Benchmarking',
+    start: new Date(2025, 8, 13),
+    end: new Date(2025, 8, 13)
   },
   {
-    id: 2,
-     title: 'DTS ENDS',
-    start: new Date(2025, 9, 12, 0, 0, 0),
-    end: new Date(2025, 9, 12, 0, 0, 0)
+     title: 'Project Presentation',
+    start: new Date(2025, 8, 12),
+    end: new Date(2025, 8, 12)
   },
   {
-    id: 3,
     title: 'Conference',
-    start: new Date(2025, 9, 15, 0, 0, 0),
-    end: new Date(2025, 9, 15, 0, 0, 0)
+    start: new Date(2025, 8, 15),
+    end: new Date(2025, 8, 15)
   },
   {
-    id: 4,
      title: 'Meeting',
-    start: new Date(2025, 9, 20, 0, 0, 0),
-    end: new Date(2025, 9, 20, 0, 0, 0)
+    start: new Date(2025, 8, 20),
+    end: new Date(2025, 8, 20)
   },
 ];
 
@@ -334,7 +329,7 @@ export const tasksData = [
     description: "Compile and analyze sales data for the monthly report.",
     status: "ongoing",
     assignedTo: 1,
-    dueDate: "2025-09-20",
+    dateCreated: "2025-09-20",
   },
   {
     id: 2,
@@ -342,7 +337,7 @@ export const tasksData = [
     description: "Ensure all client records are up to date.",
     status: "completed",
     assignedTo: 2,
-    dueDate: "2025-09-10",
+    dateCreated: "2025-09-10",
   },
   {
     id: 3,
@@ -350,7 +345,7 @@ export const tasksData = [
     description: "Create flyers and banners for the upcoming campaign.",
     status: "ongoing",
     assignedTo: 3,
-    dueDate: "2025-09-25",
+    dateCreated: "2025-09-25",
   },
   {
     id: 4,
@@ -358,7 +353,7 @@ export const tasksData = [
     description: "Prepare agenda and slides for the weekly team meeting.",
     status: "pending",
     assignedTo: 1,
-    dueDate: "2025-09-18",
+    dateCreated: "2025-09-18",
   },
   {
     id: 5,
@@ -366,7 +361,7 @@ export const tasksData = [
     description: "Go through the new project proposal and provide feedback.",
     status: "completed",
     assignedTo: 3,
-    dueDate: "2025-09-12",
+    dateCreated: "2025-09-12",
   },
     {
     id: 6,
@@ -374,7 +369,7 @@ export const tasksData = [
     description: "Go through the new project proposal and provide feedback.",
     status: "pending",
     assignedTo: 1,
-    dueDate: "2025-09-12",
+    dateCreated: "2025-09-12",
   },
 ];
 

@@ -1,10 +1,15 @@
 import { useRef, forwardRef, useImperativeHandle } from "react";
 import { FaSave } from "react-icons/fa";
 import { useState } from "react";
+import supabase from "../Supabase";
 
 const UserModal = forwardRef(({onClose }, ref) => {
   const dialogRef = useRef(null);
-
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [position, setPosition] = useState('');
+  const [isAdmin, setIsAdmin] = useState('');
   const [password, setPassword] = useState('');
 
   function generatePassword() {
@@ -17,6 +22,28 @@ const UserModal = forwardRef(({onClose }, ref) => {
     setPassword(retVal);
     return retVal;
 }
+
+  const handleCreateAccount = async (e) => {
+    e.preventDefault();
+    const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+  });
+  handleUserDetails(data.user.id);
+};
+
+  const handleUserDetails = async (user_id) => {
+   const { data, error } = await supabase
+  .from('userDetails')
+  .insert({ 
+    user_id,
+    first_name,
+    last_name,
+    position,
+    isAdmin,
+  });
+console.log(data);
+};
 
   useImperativeHandle(ref, () => ({
     open: () => dialogRef.current?.showModal(),
@@ -59,6 +86,9 @@ const UserModal = forwardRef(({onClose }, ref) => {
                           id="firstName"
                           placeholder="Juan"
                           className="w-full border rounded-md p-2"
+                          value={first_name}
+                          onChange={(e) => setFirstName(e.target.value)
+                          }
                         />
                       </div>
                       <div className="space-y-2">
@@ -72,6 +102,9 @@ const UserModal = forwardRef(({onClose }, ref) => {
                           id="lastName"
                           placeholder="Dela Cruz"
                           className="w-full border rounded-md p-2"
+                          value={last_name}
+                          onChange={(e) => setLastName(e.target.value)
+                          }
                         />
                       </div>
                     </div>
@@ -84,6 +117,9 @@ const UserModal = forwardRef(({onClose }, ref) => {
                           id="phone"
                           placeholder="user@carsu.edu.ph"
                           className="w-full border rounded-md p-2"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)
+                          }
                         />
                       </div>
                       <div className="space-y-2">
@@ -94,6 +130,9 @@ const UserModal = forwardRef(({onClose }, ref) => {
                           id="title"
                           placeholder="Employee"
                           className="w-full border rounded-md p-2"
+                          value={position}
+                          onChange={(e) => setPosition(e.target.value)
+                          }
                         />
                       </div>
                       </div>
@@ -112,10 +151,10 @@ const UserModal = forwardRef(({onClose }, ref) => {
                     <div className="space-y-2">
                         <label className="block text-sm font-medium ">Give Admin Access?</label>
                         <div className="relative flex items-center">
-                            <select id="isAdmin" className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <select id="isAdmin" className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value={isAdmin} onChange={(e) => setIsAdmin(e.target.value)}>
                                 <option value="" disabled="">Select option</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option></select>
+                                <option value="TRUE">Yes</option>
+                                <option value="FALSE">No</option></select>
                                 </div>
                                 </div>
                     </div>
@@ -126,7 +165,8 @@ const UserModal = forwardRef(({onClose }, ref) => {
                                         Generate Password
                                     </button>
 
-                                   <button className="bg-green-900 text-white btn rounded-lg">
+                                   <button className="bg-green-900 text-white btn rounded-lg"
+                                   onClick={handleCreateAccount}>
                                        <FaSave className="h-4 w-4 mr-2" />
                                         Save
                                     </button>

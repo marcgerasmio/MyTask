@@ -82,8 +82,9 @@ const EmployeeTasks = () => {
             ) : (
               filteredTasks.map((task) => (
                 <div key={task.id} className="bg-gray-50 rounded p-4 shadow">
-                  <div className="font-semibold">{task.title}</div>
-                  <div className="text-xs text-gray-400">{task.description}</div>
+                  <div className="font-bold">{task.title}</div>
+                  <div className="text-s text-gray-600">{task.description}</div>
+                    <div className="text-xs text-gray-400">{task.dateCreated}</div>
                 </div>
               ))
             )}
@@ -91,6 +92,7 @@ const EmployeeTasks = () => {
         </div>
       </main>
     </div>
+    
   );
 };
 
