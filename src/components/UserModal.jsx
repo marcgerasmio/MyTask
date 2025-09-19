@@ -42,7 +42,7 @@ const UserModal = forwardRef(({onClose }, ref) => {
     position,
     isAdmin,
   });
-console.log(data);
+window.location.reload();
 };
 
   useImperativeHandle(ref, () => ({

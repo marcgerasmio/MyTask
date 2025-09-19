@@ -6,6 +6,11 @@ import TaskModal from "../../components/TaskModal";
 import { useState, useRef } from "react";
 import { usersData, tasksData } from "../../lib/data";
 import { useNavigate } from "react-router-dom";
+import { FetchUsers, FetchTasks} from "../../lib/data";
+
+
+export const UserData = await FetchUsers();
+export const TasksData = await FetchTasks();
 
 const Tasklists = () => {
   const navigate = useNavigate();
@@ -14,9 +19,9 @@ const Tasklists = () => {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
 
  
-  const filteredEmployees = usersData.filter((emp) => {
+  const filteredEmployees = UserData.filter((emp) => {
     const search = searchTerm.toLowerCase();
-    return emp.name.toLowerCase().includes(search);
+    return emp.first_name.toLowerCase().includes(search);
   });
   const getOngoingTask = (tasksData) =>
     tasksData?.find((task) => task.status === "ongoing");
@@ -58,8 +63,8 @@ const Tasklists = () => {
           </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
             {filteredEmployees.map((emp) => {
-              const employeeTasks = tasksData.filter(
-                (task) => task.assignedTo === emp.id
+              const employeeTasks = TasksData.filter(
+                (task) => task.user_id === emp.id
               );
               const ongoingTask = employeeTasks.find(
                 (task) => task.status === "ongoing"
@@ -77,9 +82,8 @@ const Tasklists = () => {
                       </div>
                     </div>
                     <div>
-                      <div className="font-bold text-lg">{emp.name}</div>
+                      <div className="font-bold text-lg">{emp.first_name} {emp.last_name}</div>
                       <div className="text-sm text-gray-500">{emp.position}</div>
-                      <div className="text-xs text-gray-400">{emp.email}</div>
                     </div>
                   </div>
                   <div>

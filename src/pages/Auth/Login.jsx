@@ -30,7 +30,7 @@ const Login = () => {
     const { data, error } = await Supabase.auth.signInWithPassword({
     email,
     password,
-  });
+  })
  if (error) {
       setModalData({
         isOpen: true,
@@ -41,7 +41,6 @@ const Login = () => {
         modalRef.current?.showModal();
       }, 0);
     } else {
-    
       setModalData({
         isOpen: true,
         type: "success",

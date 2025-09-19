@@ -6,7 +6,10 @@ import { IoIosAddCircle } from "react-icons/io";
 import { IoEyeOutline } from "react-icons/io5";
 import UserModal from "../../components/UserModal";
 import { useState, useRef } from "react";
-import { usersData } from "../../lib/data";
+import { FetchUsers } from "../../lib/data";
+import { deleteFunction } from "../../lib/functions";
+
+export const UserData = await FetchUsers();
 
 const Users = () => {
   const modalRef = useRef();
@@ -14,17 +17,18 @@ const Users = () => {
   const [riskFilter, setRiskFilter] = useState("");
   const [selectedPatient, setSelectedPatient] = useState(null);
 
-  const filteredPatients = usersData.filter((p) => {
+  const filteredPatients = UserData.filter((p) => {
     const search = searchTerm.toLowerCase();
     const matchesNameOrAge =
-      p.name.toLowerCase().includes(search);
+      p.first_name.toLowerCase().includes(search) || 
+      p.last_name.toLowerCase().includes(search);
     const matchesRisk = riskFilter === "" || p.riskLevel === riskFilter;
     return matchesNameOrAge && matchesRisk;
   });
 
   const adminStyle = {
-    No: "bg-yellow-100 text-yellow-700",
-    Yes: "bg-green-200 text-green-700",
+    false: "bg-yellow-100 text-yellow-700",
+    true: "bg-green-200 text-green-700",
   };
 
   return (
@@ -66,35 +70,33 @@ const Users = () => {
                 <tr className="text-xs sm:text-sm">
                   <th>Name</th>
                   <th>Position</th>
-                  <th>Email Address</th>
                   <th>Admin Access</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredPatients.map((usersData) => (
-                  <tr key={usersData.id}>
+                {filteredPatients.map((UserData) => (
+                  <tr key={UserData.id}>
                     <td>
                       <div className="flex items-center gap-3">
                         <div className="avatar">
                           <div className="rounded-full h-8 w-8 sm:h-10 sm:w-10">
-                            <img src={usersData.image} alt="Avatar" />
+                            <img src={UserData.image} alt="No Image" />
                           </div>
                         </div>
                         <div className="text-sm sm:text-base">
-                          {usersData.name}
+                          {UserData.first_name} {UserData.last_name}
                         </div>
                       </div>
                     </td>
-                    <td className="text-sm">{usersData.position}</td>
-                       <td className="text-sm">{usersData.email}</td>
+                    <td className="text-sm">{UserData.position}</td>
                     <td>
                       <span
                         className={`btn border-none cursor-auto ${
-                          adminStyle[usersData.isAdmin]
+                          adminStyle[UserData.isAdmin]
                         } btn-xs`}
                       >
-                        {usersData.isAdmin}
+                        {UserData.isAdmin.toString().toUpperCase()}
                       </span>
                     </td>
                     <td>
@@ -102,7 +104,8 @@ const Users = () => {
                         <button className="btn btn-ghost hover:bg-white border-none shadow-none btn-xs">
                           <FaRegEdit size={16} />
                         </button>
-                        <button className="btn btn-ghost text-red-500 hover:bg-white border-none shadow-none btn-xs">
+                        <button className="btn btn-ghost text-red-500 hover:bg-white border-none shadow-none btn-xs"
+                        onClick={() => deleteFunction("userDetails", UserData.id)}>
                           <FaRegTrashCan size={14} />
                         </button>
                       </div>

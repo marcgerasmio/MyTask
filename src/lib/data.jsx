@@ -10,6 +10,18 @@ import { FaUserDoctor } from "react-icons/fa6";
 import { FaUserInjured } from "react-icons/fa";
 import { FaTasks } from "react-icons/fa";
 import { FaCalendarAlt } from "react-icons/fa";
+import Supabase from "../Supabase";
+
+
+export async function FetchUsers(){
+const { data } = await Supabase.from("userDetails").select("*");
+return data;
+};
+
+export async function FetchTasks(){
+const { data } = await Supabase.from("tasks").select("*");
+return data;
+};
 
 export const loginInputs = [
   {
