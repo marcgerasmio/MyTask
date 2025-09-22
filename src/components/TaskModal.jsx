@@ -2,11 +2,19 @@ import { useRef, forwardRef, useImperativeHandle } from "react";
 import { FaSave } from "react-icons/fa";
 import { useState } from "react";
 import { usersData } from "../lib/data";
+import { FetchUsers } from "../lib/data";
+import supabase from "../Supabase";
+
+const UserData = await FetchUsers();
 
 const TaskModal = forwardRef(({onClose }, ref) => {
   const dialogRef = useRef(null);
 
   const [password, setPassword] = useState('');
+  const [user_id, setUserId] = useState('');
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [deadline, setDeadline] = useState('');
 
   function generatePassword() {
     var length = 8,
@@ -28,6 +36,19 @@ const TaskModal = forwardRef(({onClose }, ref) => {
     dialogRef.current?.close();
     onClose?.();
   };
+
+  const createTask = async () => {
+   const { data, error } = await supabase
+  .from('tasks')
+  .insert({ 
+    user_id,
+    title,
+    description,
+    deadline,
+    status: 'ongoing',
+  });
+  window.location.reload();
+};
 
 
   return (
@@ -60,6 +81,9 @@ const TaskModal = forwardRef(({onClose }, ref) => {
                           id="firstName"
                           placeholder="Task Title"
                           className="w-full border rounded-md p-2"
+                          value={title}
+                          onChange={(e) => setTitle(e.target.value)
+                          }
                         />
                       </div> 
                     </div>
@@ -73,6 +97,9 @@ const TaskModal = forwardRef(({onClose }, ref) => {
                           placeholder="Task Description"
                           className="w-full border rounded-md p-2"
                           rows={6}
+                          value={description}
+                          onChange={(e) => setDescription(e.target.value)
+                          }
                         />
                       </div>
                       </div>
@@ -84,14 +111,18 @@ const TaskModal = forwardRef(({onClose }, ref) => {
                         <input
                         type="date"
                         className="w-full border rounded-md p-2"
+                        value={deadline}
+                        onChange={(e) => setDeadline(e.target.value)
+                        }
                         />
                       </div>
                     <div className="space-y-2">
                         <label className="block text-sm font-medium ">Assign To</label>
                         <div className="relative flex items-center">
-                           <select name={usersData} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            {usersData.map(users =>
-                            <option key={users.id} value={users.name}>{users.name}</option>
+                           <select name={UserData} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value={user_id} onChange={(e) => setUserId(e.target.value)}>
+                            <option>Select Employee</option>
+                            {UserData.map(users =>
+                            <option key={users.id} value={users.id}>{users.first_name} {users.last_name} </option>
                             )};
                         </select>
                                 </div>
@@ -99,7 +130,8 @@ const TaskModal = forwardRef(({onClose }, ref) => {
                     </div>
 
                          <div className="flex flex-col justify-end sm:flex-row gap-2">
-                                   <button className="bg-green-900 text-white btn rounded-lg">
+                                   <button className="bg-green-900 text-white btn rounded-lg"
+                                   onClick={createTask}>
                                        <FaSave className="h-4 w-4 mr-2" />
                                         Save
                                     </button>

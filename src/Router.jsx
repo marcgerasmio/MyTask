@@ -8,6 +8,7 @@ import Users from "./pages/Main/Users";
 import Tasklists from "./pages/Main/TasksLists";
 import EmployeeTasks from "./pages/Main/EmployeeTasks";
 import NotFound from "./NotFound";
+import ActivityList from "./pages/Main/Activities";
 
 const Router = () => {
   return (
@@ -20,7 +21,8 @@ const Router = () => {
         <Route path="/users" element={<Users />} />
         <Route path="/add" element={<AddPatient />} />
         <Route path="/" element={<Profile />} />
-        <Route path="/employee/:id/tasks" element={<EmployeeTasks />} />
+        <Route path="/employee/tasks" element={<EmployeeTasks />} />
+         <Route path="/activities" element={<ActivityList />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

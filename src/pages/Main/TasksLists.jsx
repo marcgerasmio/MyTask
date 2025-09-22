@@ -9,8 +9,8 @@ import { useNavigate } from "react-router-dom";
 import { FetchUsers, FetchTasks} from "../../lib/data";
 
 
-export const UserData = await FetchUsers();
-export const TasksData = await FetchTasks();
+const UserData = await FetchUsers();
+const TasksData = await FetchTasks();
 
 const Tasklists = () => {
   const navigate = useNavigate();
@@ -73,7 +73,7 @@ const Tasklists = () => {
                 <div
                   key={emp.id}
                   className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition hover:scale-[1.02]"
-                  onClick={() => navigate(`/employee/${emp.id}/tasks`)}
+                  onClick={() => navigate(`/employee/tasks`, { state: { employeeData: emp} })}
                 >
                   <div className="flex items-center gap-4 mb-4">
                     <div className="avatar">
@@ -84,6 +84,7 @@ const Tasklists = () => {
                     <div>
                       <div className="font-bold text-lg">{emp.first_name} {emp.last_name}</div>
                       <div className="text-sm text-gray-500">{emp.position}</div>
+                      
                     </div>
                   </div>
                   <div>

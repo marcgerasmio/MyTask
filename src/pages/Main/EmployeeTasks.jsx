@@ -4,6 +4,8 @@ import { usersData, tasksData } from "../../lib/data";
 import Sidebar from "../../components/Sidebar";
 import { FaBackward } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { FetchTasks } from "../../lib/data";
 
 
 const STATUS_TABS = [
@@ -19,19 +21,20 @@ const TAB_COLORS = {
   default: "bg-gray-200 text-gray-700"
 };
 
+const TasksData = await FetchTasks();
+
 
 const EmployeeTasks = () => {
+  
+  const location = useLocation();
+  const { employeeData } = location.state || {};
     const navigate = useNavigate();
     const { id } = useParams();
     const employeeId = Number(id);
     const employee = usersData.find((emp) => emp.id === employeeId);
-    const employeeTasks = tasksData.filter((task) => task.assignedTo === employeeId);
+    const employeeTasks = TasksData.filter((task) => task.user_id === employeeData.id);
 
   const [activeTab, setActiveTab] = useState("ongoing");
-
-  if (!employee) {
-    return <div className="p-6">Employee not found.</div>;
-  }
 
   const filteredTasks = employeeTasks.filter((task) => task.status.toLowerCase() === activeTab);
 
@@ -42,11 +45,11 @@ const EmployeeTasks = () => {
         <div className="bg-white p-4 rounded shadow">
         <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
                   <div className="flex items-center gap-4">
-              <img src={employee.image} alt="Avatar" className="rounded-full h-16 w-16" />
+              <img src={employeeData.image} alt="Avatar" className="rounded-full h-16 w-16" />
               <div>
-                <div className="font-bold text-xl">{employee.name}</div>
-                <div className="text-sm text-gray-500">{employee.position}</div>
-                <div className="text-xs text-gray-400">{employee.email}</div>
+                <div className="font-bold text-xl">{employeeData.first_name} {employeeData.last_name}</div>
+                <div className="text-sm text-gray-500">{employeeData.position}</div>
+                <div className="text-xs text-gray-400">{employeeData.email}</div>
               </div>
             </div>
                     <div className="flex flex-col sm:flex-row gap-2 align-center">
@@ -84,7 +87,7 @@ const EmployeeTasks = () => {
                 <div key={task.id} className="bg-gray-50 rounded p-4 shadow">
                   <div className="font-bold">{task.title}</div>
                   <div className="text-s text-gray-600">{task.description}</div>
-                    <div className="text-xs text-gray-400">{task.dateCreated}</div>
+                  <div className="text-xs text-red-400">{task.deadline}</div>
                 </div>
               ))
             )}

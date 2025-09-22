@@ -32,7 +32,8 @@ const UserModal = forwardRef(({onClose }, ref) => {
   handleUserDetails(data.user.id);
 };
 
-  const handleUserDetails = async (user_id) => {
+
+const handleUserDetails = async (user_id) => {
    const { data, error } = await supabase
   .from('userDetails')
   .insert({ 

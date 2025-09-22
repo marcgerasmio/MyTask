@@ -1,0 +1,69 @@
+import Sidebar from "../../components/Sidebar";
+import { CiSearch } from "react-icons/ci";
+import { FaRegTrashCan } from "react-icons/fa6";
+import { FaRegEdit } from "react-icons/fa";
+import { IoIosAddCircle } from "react-icons/io";
+import { IoEyeOutline } from "react-icons/io5";
+import UserModal from "../../components/UserModal";
+import { useState, useRef } from "react";
+import { FetchUsers } from "../../lib/data";
+import { deleteFunction } from "../../lib/functions";
+import MyCalendar from "../../components/Calendar";
+
+export const UserData = await FetchUsers();
+
+const ActivityList = () => {
+  const modalRef = useRef();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [riskFilter, setRiskFilter] = useState("");
+  const [selectedPatient, setSelectedPatient] = useState(null);
+
+  const filteredPatients = UserData.filter((p) => {
+    const search = searchTerm.toLowerCase();
+    const matchesNameOrAge =
+      p.first_name.toLowerCase().includes(search) || 
+      p.last_name.toLowerCase().includes(search);
+    const matchesRisk = riskFilter === "" || p.riskLevel === riskFilter;
+    return matchesNameOrAge && matchesRisk;
+  });
+
+  const adminStyle = {
+    false: "bg-yellow-100 text-yellow-700",
+    true: "bg-green-200 text-green-700",
+  };
+
+  return (
+    <>
+      <div className="flex flex-col lg:flex-row min-h-screen bg-gray-100">
+        <Sidebar />
+        <main className="flex-1 p-4 pt-20 sm:p-6 lg:pt-6 lg:ml-64">
+          <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
+            <h1 className="text-lg sm:text-xl md:text-2xl font-extrabold">
+           Activities List
+              <span className="block font-normal text-sm sm:text-base text-gray-600">
+                Manage activities within CSU.
+              </span>
+            </h1>
+            <div className="flex flex-col sm:flex-row gap-2">
+               <button className="bg-green-900 text-white btn rounded-lg"
+               onClick={() => {
+                            modalRef.current?.open();
+                          }}>
+                   <IoIosAddCircle className="h-4 w-4 mr-2" />
+                    Add Activity
+                </button>
+            </div>
+          </div>
+         <MyCalendar />
+        </main>
+      </div>
+      <UserModal
+        ref={modalRef}
+        patient={selectedPatient}
+        onClose={() => {}}
+      />
+    </>
+  );
+};
+
+export default ActivityList;
