@@ -4,9 +4,10 @@ import { FiMenu, FiX } from "react-icons/fi";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import Modal from "./Modal";
 import UserInfo from "./UserInfo";
-import { navItems } from "../lib/data";
+import { navItems, navItemsEmployee } from "../lib/data";
 
 const Sidebar = () => {
+  const isAdmin = sessionStorage.getItem("isAdmin");
   const modalRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -16,6 +17,8 @@ const Sidebar = () => {
   useEffect(() => {
     setIsSidebarOpen(false);
   }, [location.pathname]);
+
+  const navItemsToUse = isAdmin === "true" ? navItems : navItemsEmployee;
 
   return (
     <aside className="flex flex-col md:flex-row max-h-screen lg:fixed lg:h-screen overflow-y-auto">
@@ -61,7 +64,7 @@ const Sidebar = () => {
         <div className="border-tborder-gray-300"></div>
         <nav className="flex-1 p-4 items-center justify-center py-4">
           <ul className="space-y-2 text-sm">
-            {navItems.map(({ label, path, icon: Icon }) => (
+            {navItemsToUse.map(({ label, path, icon: Icon }) => (
               <li key={path}>
                 <NavLink
                   to={path}

@@ -1,9 +1,9 @@
 import Sidebar from "../../components/Sidebar";
-import DashCard from "./DashCard";
-import Activity from "./Activity"
+import DashCard from "../Dashboard/DashCard";
+import Deadline from "./Deadline";
 import MyCalendar from "../../components/Calendar";
 
-const Dashboard = () => {
+const EmployeeDashboard = () => {
   return (
     <>
       <div className="flex min-h-screen bg-gray-100">
@@ -11,15 +11,15 @@ const Dashboard = () => {
         <main className="flex-1 p-3 pt-20 lg:p-6 lg:pt-6 lg:ml-64">
           <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
             <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold">
-              Welcome back!
+              Welcome back, User!
               <span className="block font-normal text-sm sm:text-base text-gray-600">
                 Here's what's happening today.
               </span>
             </h1>
           </div>
-        <DashCard />
+          <DashCard />
           <div className="grid grid-cols-2 gap-4">
-        <Activity />
+        <Deadline />
         <MyCalendar />
           </div>
       
@@ -29,4 +29,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default EmployeeDashboard;

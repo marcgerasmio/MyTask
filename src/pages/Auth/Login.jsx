@@ -6,6 +6,7 @@ import { loginInputs } from "../../lib/data";
 import Supabase from "../../Supabase";
 
 const Login = () => {
+  const [url, setURL] = useState("");
   const modalRef = useRef(null);
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -41,6 +42,29 @@ const Login = () => {
         modalRef.current?.showModal();
       }, 0);
     } else {
+      console.log(data);
+      handleUserDetails(data.user.id)
+    }
+};
+
+  const handleUserDetails = async (id) => {
+    const { data, error } = await Supabase.from("userDetails").select("*").eq("user_id", id).single();
+    console.log(data);
+    const isAdmin = data.isAdmin;
+    sessionStorage.setItem("isAdmin", data.isAdmin);
+    sessionStorage.setItem("user", JSON.stringify(data));
+    if (isAdmin === true) {
+      setURL("/dashboard");
+      setModalData({
+        isOpen: true,
+        type: "success",
+        message: "Login Successfully!",
+      });
+      setTimeout(() => {
+        modalRef.current?.showModal();
+      }, 0);
+    } else {
+      setURL("/employee/dashboard");
       setModalData({
         isOpen: true,
         type: "success",
@@ -124,7 +148,7 @@ const Login = () => {
           onConfirm={() => {
             setModalData({ ...modalData, isOpen: false });
             if (modalData.type === "success") {
-              navigate("/dashboard");
+              navigate(url);
             }
           }}
         />

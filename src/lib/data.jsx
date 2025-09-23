@@ -23,6 +23,11 @@ const { data } = await Supabase.from("tasks").select("*");
 return data;
 };
 
+export async function FetchActivities(){
+const { data } = await Supabase.from("activities").select("*");
+return data;
+};
+
 export const loginInputs = [
   {
     label: "Email",
@@ -106,30 +111,48 @@ export const navItems = [
   },
 ];
 
+export const navItemsEmployee = [
+  {
+    label: "Dashboard",
+    path: "/employee/dashboard",
+    icon: BiSolidDashboard,
+  },
+  {
+    label: "Tasks List",
+    path: "/employee/tasklist",
+    icon: FaTasks,
+  },
+    {
+    label: "Activities",
+    path: "/employee/activities",
+    icon: FaCalendarAlt,
+  },
+];
+
 export const cards = [
   {
     id: 1,
     title: "Total Tasks",
     icon: LuUsers,
-    count: 100,
+    count: FetchTasks().then(data => data.length).catch(() => 0),
   },
   {
     id: 2,
     title: "Pending Tasks",
     icon: IoWarningOutline,
-    count: 12,
+    count: FetchTasks().then(data => data.filter(task => task.status === 'pending').length).catch(() => 0),
   },
   {
     id: 3,
-    title: "Due This Week",
+    title: "Ongoing Tasks",
     icon: IoCalendarClearOutline,
-    count: 10,
+    count: FetchTasks().then(data => data.filter(task => task.status === 'ongoing').length).catch(() => 0),
   },
   {
     id: 4,
     title: "Total Completed",
     icon: FaArrowTrendUp,
-    count: 50,
+    count: FetchTasks().then(data => data.filter(task => task.status === 'completed').length).catch(() => 0),
   },
 ];
 

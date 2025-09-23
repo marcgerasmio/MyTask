@@ -1,37 +1,34 @@
 import { useRef, useState } from "react";
 import { tasksDone } from "../../lib/data";
-import { FetchTasks, FetchUsers } from "../../lib/data";
+import { FetchTasks } from "../../lib/data";
 
-const TaskData = await FetchTasks().then(data => data.filter(task => task.status === 'completed')).catch(() => 0);
-const UserData = await FetchUsers();
+
+const user = JSON.parse(sessionStorage.getItem("user"));
+const TaskData = await FetchTasks().then(data => data.filter(task => task.user_id === user.id && task.status != "completed")).catch(() => 0);
 
 const Activity = () => {
+  const [selectedPatient, setSelectedPatient] = useState(null);
   const modalRef = useRef(null);
+
+
   const riskLevelStyles = {
     High: "bg-red-200 text-red-600",
     Moderate: "bg-yellow-200 text-yellow-700",
     Low: "bg-green-300 text-green-700",
   };
 
-  const tasksArray = new Map(UserData.map(obj => [obj.id, obj]));
-
-  const result = TaskData.map(obj2 => {
-      const matchingObj1 = tasksArray.get(obj2.user_id);
-      return matchingObj1 ? { ...matchingObj1, ...obj2 } : obj2;
-  });
-
   return (
     <div className="bg-white p-4 sm:p-6 mt-8 rounded-lg shadow-md">
       <div className="mb-6 sm:mb-8">
         <h1 className="text-xl sm:text-2xl font-bold text-base-content mb-1">
-          Recent Tasks
+          Upcoming Deadlines
         </h1>
         <p className="text-sm text-base-content/70">
-          Latest Tasks Completed
+            Tasks with approaching deadlines
         </p>
       </div>
-      <div className="space-y-4">
-        {result.map((task) => (
+      <div className="space-y-4 overflow-y-auto">
+        {TaskData.map((task) => (
             <div
               key={task.id}
               className="card border border-base-300 rounded-md"
@@ -39,17 +36,12 @@ const Activity = () => {
               <div className="card-body p-4">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                   <div className="flex items-center gap-4">
-                    <img
-                      className="w-12 h-12 rounded-full object-cover"
-                      src={task.image}
-                      alt="user"
-                    />
                     <div>
                       <h3 className="font-semibold text-base-content text-sm sm:text-base">
-                     {task.title}
+                        {task.title}
                       </h3>
-                      <p className="text-xs text-base-content/90">
-                        Assigned To: {task.first_name} {task.last_name}
+                       <p className="text-xs text-red-400">
+                        {task.deadline}
                       </p>
                     </div>
                   </div>

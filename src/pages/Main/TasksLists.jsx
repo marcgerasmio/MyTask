@@ -4,7 +4,6 @@ import { IoIosAddCircle } from "react-icons/io";
 import UserModal from "../../components/UserModal";
 import TaskModal from "../../components/TaskModal";
 import { useState, useRef } from "react";
-import { usersData, tasksData } from "../../lib/data";
 import { useNavigate } from "react-router-dom";
 import { FetchUsers, FetchTasks} from "../../lib/data";
 

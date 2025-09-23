@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import moment from 'moment';
-import { myEvents } from '../lib/data';
+import { FetchActivities } from '../lib/data';
+
+const ActivitiesData = await FetchActivities();
 
 const getEventsForDay = (date) => {
-  return myEvents.filter(event =>
-    moment(event.start).isSame(date, 'day')
+  return ActivitiesData.filter(event =>
+    moment(new Date (event.startDate)).isSame(date, 'day')
   );
 };
 
 const MyCalendar = () => {
   const [currentMonth, setCurrentMonth] = useState(moment());
-
   const startOfMonth = currentMonth.clone().startOf('month');
   const endOfMonth = currentMonth.clone().endOf('month');
   const startDate = startOfMonth.clone().startOf('week');
@@ -65,9 +66,9 @@ const MyCalendar = () => {
                   key={idx}
                   className="mt-1 text-xs bg-blue-100 rounded px-1 overflow-hidden whitespace-nowrap text-ellipsis"
                   style={{ textOverflow: 'ellipsis', display: 'block' }}
-                  title={event.title}
+                  title={event.activityName}
                 >
-                  {event.title}
+                  {event.activityName}
                 </div>
               ))}
             </td>

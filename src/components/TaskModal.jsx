@@ -45,7 +45,7 @@ const TaskModal = forwardRef(({onClose }, ref) => {
     title,
     description,
     deadline,
-    status: 'ongoing',
+    status: 'pending',
   });
   window.location.reload();
 };

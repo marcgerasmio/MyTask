@@ -6,7 +6,7 @@ const DashCard = () => {
       {cards.map((card) => {
         const Icon = card.icon;
         return (
-          <div key={card.id} className="card shadow-md bg-white rounded-lg">
+          <div key={card.id} className="card shadow-md bg-white rounded-lg hover:shadow-lg transition hover:scale-[1.02]">
             <div className="card-body">
               <h2 className="font-semibold flex justify-between tracking-normal">
                 {card.title}
