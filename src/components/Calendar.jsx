@@ -44,7 +44,7 @@ const MyCalendar = () => {
   <thead>
     <tr>
       {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => (
-        <th key={d} className="border p-2 text-center bg-gray-100 w-1/7">{d}</th>
+        <th key={d} className="border p-2 text-center bg-gray-300 w-1/7">{d}</th>
       ))}
     </tr>
   </thead>

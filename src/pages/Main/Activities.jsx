@@ -1,13 +1,8 @@
 import Sidebar from "../../components/Sidebar";
-import { CiSearch } from "react-icons/ci";
-import { FaRegTrashCan } from "react-icons/fa6";
-import { FaRegEdit } from "react-icons/fa";
 import { IoIosAddCircle } from "react-icons/io";
-import { IoEyeOutline } from "react-icons/io5";
 import UserModal from "../../components/UserModal";
 import { useState, useRef } from "react";
 import { FetchUsers } from "../../lib/data";
-import { deleteFunction } from "../../lib/functions";
 import MyCalendar from "../../components/Calendar";
 
 const UserData = await FetchUsers();

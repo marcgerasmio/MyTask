@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { usersData, tasksData } from "../../lib/data";
 import Sidebar from "../../components/Sidebar";
-import { FaBackward } from "react-icons/fa";
+import { IoIosAddCircle } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { FetchTasks } from "../../lib/data";
@@ -76,11 +76,17 @@ const Tasks = () => {
               <div className="text-gray-500">No tasks in this category.</div>
             ) : (
               filteredTasks.map((task) => (
-                <div key={task.id} className="bg-gray-50 rounded p-4 shadow">
+                <div key={task.id} className="bg-gray-50 rounded p-4 shadow flex justify-between items-center">
+                <div>
                   <div className="font-bold">{task.title}</div>
                   <div className="text-s text-gray-600">{task.description}</div>
                   <div className="text-xs text-red-400">{task.deadline}</div>
                 </div>
+                <button className="bg-green-900 text-white btn rounded-lg"
+                onClick={() => {modalRef.current?.open();}}>
+                Action
+                </button>
+                 </div>
               ))
             )}
           </div>
