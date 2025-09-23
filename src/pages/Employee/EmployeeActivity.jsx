@@ -5,7 +5,10 @@ import ActivityList from "../Main/Activities";
 const EmployeeActivity = () => {
   return (
    <>
-   <ActivityList />
+   <div>
+    <ActivityList />
+   </div>
+   
    </>
   );
 };

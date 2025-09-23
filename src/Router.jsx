@@ -34,9 +34,6 @@ const Router = () => {
         <Route path="/employee/dashboard" element={<EmployeeDashboard />} />\
         <Route path="/employee/tasklist" element={<Tasks />} />
         <Route path="/employee/activities" element={<EmployeeActivity />} />
-
-        <Route path="/loading" element={<Loading />} />
-
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

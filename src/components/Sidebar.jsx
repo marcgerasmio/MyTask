@@ -27,7 +27,7 @@ const Sidebar = () => {
           <button onClick={toggleSidebar} className="p-2 rounded-md">
             {isSidebarOpen ? <FiX size={20} /> : <FiMenu size={20} />}
           </button>
-          <div className="text-xl font-bold">Taskly</div>
+          <div className="text-xl font-bold">Tasky</div>
           <img
             src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp"
             alt="User"
@@ -55,7 +55,7 @@ const Sidebar = () => {
             className="h-12 w-12 object-contain rounded-full hidden md:block"
           />
           <h1 className="text-2xl text-white font-extrabold">
-            Taskly
+            Tasky
             <span className="block font-normal text-xs text-white">
               Task Management System
             </span>
@@ -101,7 +101,7 @@ const Sidebar = () => {
         ref={modalRef}
         title="Confirm Logout"
         message="Are you sure you want to log out?"
-        confirmLabel="Yes, Logout"
+        confirmLabel="Yes, Logout."
         color="bg-red-500"
         onConfirm={() => {
           sessionStorage.clear();
