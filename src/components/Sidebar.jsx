@@ -6,6 +6,7 @@ import Modal from "./Modal";
 import UserInfo from "./UserInfo";
 import { navItems, navItemsEmployee } from "../lib/data";
 
+
 const Sidebar = () => {
   const isAdmin = sessionStorage.getItem("isAdmin");
   const modalRef = useRef(null);
@@ -68,6 +69,7 @@ const Sidebar = () => {
               <li key={path}>
                 <NavLink
                   to={path}
+                  reloadDocument={true}
                   className={({ isActive }) =>
                     `flex items-center px-4 py-2.5 font-semibold rounded-lg ${
                       isActive ? "bg-green-900 text-white" : "hover:bg-gray-100"

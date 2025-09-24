@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usersData, tasksData } from "../../lib/data";
 import Sidebar from "../../components/Sidebar";
 import { FaBackward } from "react-icons/fa";
@@ -21,10 +21,14 @@ const TAB_COLORS = {
   default: "bg-gray-200 text-gray-700"
 };
 
-const TasksData = await FetchTasks();
 
 
 const EmployeeTasks = () => {
+  const [TasksData, setTasks] = useState([]);
+  useEffect(() => {
+  FetchTasks().then(setTasks);
+  }, []);
+
   
   const location = useLocation();
   const { employeeData } = location.state || {};

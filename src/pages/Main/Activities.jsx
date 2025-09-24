@@ -1,11 +1,9 @@
 import Sidebar from "../../components/Sidebar";
 import { IoIosAddCircle } from "react-icons/io";
 import UserModal from "../../components/UserModal";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { FetchUsers } from "../../lib/data";
 import MyCalendar from "../../components/Calendar";
-
-const UserData = await FetchUsers();
 
 const ActivityList = () => {
   const isAdmin = sessionStorage.getItem("isAdmin") === "true";
@@ -14,6 +12,11 @@ const ActivityList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [riskFilter, setRiskFilter] = useState("");
   const [selectedPatient, setSelectedPatient] = useState(null);
+  const [UserData, setUsers] = useState([]);
+  useEffect(() => {
+  FetchUsers().then(setUsers);
+  }, []);
+
 
   const filteredPatients = UserData.filter((p) => {
     const search = searchTerm.toLowerCase();

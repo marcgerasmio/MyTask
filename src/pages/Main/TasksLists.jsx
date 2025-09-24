@@ -3,15 +3,20 @@ import { CiSearch } from "react-icons/ci";
 import { IoIosAddCircle } from "react-icons/io";
 import UserModal from "../../components/UserModal";
 import TaskModal from "../../components/TaskModal";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FetchUsers, FetchTasks} from "../../lib/data";
 
-
-const UserData = await FetchUsers();
-const TasksData = await FetchTasks();
-
 const Tasklists = () => {
+  const [TasksData, setTasks] = useState([]);
+  const [UserData, setUsers] = useState([]);
+    useEffect(() => {
+    FetchTasks().then(setTasks);
+    }, []);
+    useEffect(() => {
+    FetchUsers().then(setUsers);
+    }, []);
+  
   const navigate = useNavigate();
   const modalRef = useRef();
   const [searchTerm, setSearchTerm] = useState("");

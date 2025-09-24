@@ -5,17 +5,22 @@ import { FaRegEdit } from "react-icons/fa";
 import { IoIosAddCircle } from "react-icons/io";
 import { IoEyeOutline } from "react-icons/io5";
 import UserModal from "../../components/UserModal";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { FetchUsers } from "../../lib/data";
 import { deleteFunction } from "../../lib/functions";
 
-export const UserData = await FetchUsers();
+
 
 const Users = () => {
   const modalRef = useRef();
   const [searchTerm, setSearchTerm] = useState("");
   const [riskFilter, setRiskFilter] = useState("");
   const [selectedPatient, setSelectedPatient] = useState(null);
+  const [UserData, setUsers] = useState([]);
+  useEffect(() => {
+  FetchUsers().then(setUsers);
+  }, []);
+
 
   const filteredPatients = UserData.filter((p) => {
     const search = searchTerm.toLowerCase();

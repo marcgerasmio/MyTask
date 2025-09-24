@@ -1,11 +1,28 @@
 import { useRef, useState } from "react";
 import { tasksDone } from "../../lib/data";
 import { FetchTasks, FetchUsers } from "../../lib/data";
+import { useEffect } from "react";
 
-const TaskData = await FetchTasks().then(data => data.filter(task => task.status === 'completed')).catch(() => 0);
-const UserData = await FetchUsers();
 
 const Activity = () => {
+  const [UserData, setUsers] = useState([]);
+  const [TaskData, setTasks] = useState([]);
+    useEffect(() => {
+    FetchTasks()
+      .then(data => {
+        const completedTasks = data.filter(task => task.status === 'completed');
+        setTasks(completedTasks);
+      })
+      .catch(err => {
+        console.error("Error fetching tasks:", err);
+        setTasks([]); 
+      });
+  }, []);
+    useEffect(() => {
+    FetchUsers().then(setUsers);
+    }, []);
+
+  
   const modalRef = useRef(null);
   const riskLevelStyles = {
     High: "bg-red-200 text-red-600",

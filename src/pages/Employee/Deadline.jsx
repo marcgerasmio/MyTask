@@ -1,14 +1,24 @@
-import { useRef, useState } from "react";
-import { tasksDone } from "../../lib/data";
+import { useRef, useState, useEffect } from "react";
 import { FetchTasks } from "../../lib/data";
 
 
 const user = JSON.parse(sessionStorage.getItem("user"));
-const TaskData = await FetchTasks().then(data => data.filter(task => task.user_id === user.id && task.status != "completed")).catch(() => 0);
+
 
 const Activity = () => {
-  const [selectedPatient, setSelectedPatient] = useState(null);
   const modalRef = useRef(null);
+  const [TaskData, setTasks] = useState([]);
+      useEffect(() => {
+      FetchTasks()
+        .then(data => {
+          const completedTasks = data.filter(task => task.user_id === user.id && task.status != "completed");
+          setTasks(completedTasks);
+        })
+        .catch(err => {
+          console.error("Error fetching tasks:", err);
+          setTasks([]); 
+        });
+    }, []);
 
 
   const riskLevelStyles = {
@@ -18,7 +28,7 @@ const Activity = () => {
   };
 
   return (
-    <div className="bg-white p-4 sm:p-6 mt-8 rounded-lg shadow-md">
+    <div className="bg-white p-4 sm:p-6 mt-8 rounded-lg shadow-md overflow-y-auto h-[50h]">
       <div className="mb-6 sm:mb-8">
         <h1 className="text-xl sm:text-2xl font-bold text-base-content mb-1">
           Upcoming Deadlines
@@ -27,7 +37,7 @@ const Activity = () => {
             Tasks with approaching deadlines
         </p>
       </div>
-      <div className="space-y-4 overflow-y-auto">
+      <div className="space-y-4 overflow-y-auto h-[50vh]">
         {TaskData.map((task) => (
             <div
               key={task.id}
