@@ -1,6 +1,6 @@
 import Sidebar from "../../components/Sidebar";
 import { IoIosAddCircle } from "react-icons/io";
-import UserModal from "../../components/UserModal";
+import ActivityModal from "../../components/ActivityModal";
 import { useState, useRef, useEffect } from "react";
 import { FetchUsers } from "../../lib/data";
 import MyCalendar from "../../components/Calendar";
@@ -59,7 +59,7 @@ const ActivityList = () => {
          <MyCalendar />
         </main>
       </div>
-      <UserModal
+      <ActivityModal
         ref={modalRef}
         patient={selectedPatient}
         onClose={() => {}}

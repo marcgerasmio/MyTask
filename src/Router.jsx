@@ -13,7 +13,7 @@ import ActivityList from "./pages/Main/Activities";
 import EmployeeDashboard from "./pages/Employee/Dashboard";
 import Tasks from "./pages/Employee/Tasks";
 import EmployeeActivity from "./pages/Employee/EmployeeActivity";
-import Loading from "./components/Loading";
+
 
 const Router = () => {
   return (

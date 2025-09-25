@@ -93,6 +93,7 @@ const Login = () => {
         <div className="grid lg:grid-cols-1 h-full">
           <div className="p-6 lg:p-12 flex flex-col justify-center">
             <div className="mb-6 text-center">
+              <img src="logo.webp" alt="Logo" className="mx-auto h-50 w-30" />
               <h2 className="text-2xl font-bold">Welcome Back</h2>
               <p className="text-gray-600">Sign in your personal account</p>
             </div>

@@ -33,7 +33,7 @@ export const loginInputs = [
     label: "Email",
     id: "email",
     type: "email",
-    placeholder: "sample@gmail.com",
+    placeholder: "sample@carsu.edu.ph",
     icon: MdOutlineAlternateEmail,
   },
   {
@@ -276,7 +276,7 @@ export const myEvents = [
     end: new Date(2025, 8, 13)
   },
   {
-     title: 'Project Presentation',
+    title: 'Project Presentation',
     start: new Date(2025, 8, 12),
     end: new Date(2025, 8, 12)
   },
