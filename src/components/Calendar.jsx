@@ -91,10 +91,11 @@ const MyCalendar = () => {
                     {events.map((event, idx) => (
                       <div
                         key={idx}
-                        className="mt-1 text-xs bg-blue-100 rounded px-1 overflow-hidden whitespace-nowrap text-ellipsis"
+                        className="mt-1 text-xs bg-blue-100 rounded px-1 overflow-hidden whitespace-nowrap text-ellipsis hover:cursor-pointer"
                         style={{ textOverflow: 'ellipsis', display: 'block' }}
                         title={event.activityName}
                         onClick={() => dateFunction(event)}
+                        
                       >
                         {event.activityName}
                       </div>

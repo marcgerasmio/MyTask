@@ -6,6 +6,8 @@ import { FaBackward } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { FetchTasks } from "../../lib/data";
+import { FaRegTrashCan } from "react-icons/fa6";
+import { deleteFunction } from "../../lib/functions";
 
 
 const STATUS_TABS = [
@@ -88,10 +90,16 @@ const EmployeeTasks = () => {
               <div className="text-gray-500">No tasks in this category.</div>
             ) : (
               filteredTasks.map((task) => (
-                <div key={task.id} className="bg-gray-50 rounded p-4 shadow">
-                  <div className="font-bold">{task.title}</div>
-                  <div className="text-s text-gray-600">{task.description}</div>
-                  <div className="text-xs text-red-400">{task.deadline}</div>
+                <div key={task.id} className="bg-gray-50 rounded p-4 shadow flex justify-between items-start">
+                  <div> 
+                    <div className="font-bold">{task.title}</div>
+                    <div className="text-s text-gray-600">{task.description}</div>
+                    <div className="text-xs text-red-400">{task.deadline}</div>
+                  </div>
+                    <button className="btn btn-ghost text-red-500 hover:bg-white border-none shadow-none btn-xs"
+                    onClick={() => deleteFunction("tasks", task.id)}>
+                    <FaRegTrashCan size={14} />
+                    </button>
                 </div>
               ))
             )}
