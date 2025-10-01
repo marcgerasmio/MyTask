@@ -12,14 +12,14 @@ const STATUS_TABS = [
 ];
 
 const TAB_COLORS = {
-  ongoing: "bg-gradient-to-br from-blue-400 to-blue-600 text-white",
+  ongoing: "bg-orange-400 text-white",
   pending: "bg-gradient-to-br from-yellow-300 to-yellow-500 text-white",
-  completed: "bg-gradient-to-br from-green-400 to-green-600 text-white",
+  completed: "bg-green-800 text-white",
   default: "bg-gray-200 text-gray-700"
 };
 
 const BORDER_COLORS = {
-  ongoing: "border-blue-400",
+  ongoing: "border-orange-800",
   pending: "border-yellow-400",
   completed: "border-green-400",
   default: "border-gray-300"
