@@ -2,6 +2,7 @@ import Sidebar from "../../components/Sidebar";
 import DashCard from "./DashCard";
 import Activity from "./Activity"
 import MyCalendar from "../../components/Calendar";
+import EmotionCard from "./EmotionCard";
 
 const Dashboard = () => {
   return (
@@ -17,6 +18,7 @@ const Dashboard = () => {
               </span>
             </h1>
           </div>
+        <EmotionCard />
         <DashCard />
         <div className="grid grid-cols-2 gap-4">
         <Activity />

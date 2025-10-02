@@ -9,6 +9,7 @@ import { BiSolidDashboard } from "react-icons/bi";
 import { FaUserDoctor } from "react-icons/fa6";
 import { FaUserInjured } from "react-icons/fa";
 import { FaTasks } from "react-icons/fa";
+import { BiTaskX } from "react-icons/bi";
 import { FaCalendarAlt } from "react-icons/fa";
 import Supabase from "../Supabase";
 
@@ -27,6 +28,12 @@ export async function FetchActivities(){
 const { data } = await Supabase.from("activities").select("*");
 return data;
 };
+
+export async function FetchEmotions(){
+const { data } = await Supabase.from("emotion").select("*");
+return data;
+};
+
 
 export const loginInputs = [
   {
@@ -93,6 +100,11 @@ export const navItems = [
     label: "Tasks List",
     path: "/tasks",
     icon: FaTasks,
+  },
+    {
+    label: "Unassigned Tasks",
+    path: "/tasks-unassigned",
+    icon: BiTaskX,
   },
     {
     label: "Activities",

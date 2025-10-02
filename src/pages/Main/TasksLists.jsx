@@ -81,7 +81,7 @@ const Tasklists = () => {
                 >
                   <div className="flex items-center gap-4 mb-4">
                     <div className="avatar">
-                      <div className="rounded-full h-12 w-12">
+                      <div className="rounded-full h-20 w-20">
                         <img src={emp.image} alt="Avatar" />
                       </div>
                     </div>

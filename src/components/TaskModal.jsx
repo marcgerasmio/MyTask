@@ -9,12 +9,12 @@ const UserData = await FetchUsers();
 
 const TaskModal = forwardRef(({onClose }, ref) => {
   const dialogRef = useRef(null);
-
   const [password, setPassword] = useState('');
-  const [user_id, setUserId] = useState('');
+  const [user_id, setUserId] = useState(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [deadline, setDeadline] = useState('');
+  const [category, setCategory] = useState('');
 
   function generatePassword() {
     var length = 8,
@@ -45,6 +45,7 @@ const TaskModal = forwardRef(({onClose }, ref) => {
     title,
     description,
     deadline,
+    category,
     status: 'pending',
   });
   window.location.reload();
@@ -87,6 +88,22 @@ const TaskModal = forwardRef(({onClose }, ref) => {
                         />
                       </div> 
                     </div>
+                <div className="space-y-2">
+                <label className="block text-sm font-medium">Task Category</label>
+                <div className="flex flex-wrap gap-4">
+                  {["PubMat", "Article", "Photo/Video", "Website Update", "Others"].map((cat) => (
+                    <label key={cat} className="inline-flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        checked={category === cat}
+                        onChange={() => setCategory(category === cat ? "" : cat)}
+                        className="form-checkbox h-4 w-4 text-blue-600"
+                      />
+                      <span>{cat}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
                    <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                       <div className="space-y-2">
                         <label className="text-sm font-medium" htmlFor="phone">

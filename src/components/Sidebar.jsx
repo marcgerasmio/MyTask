@@ -51,9 +51,10 @@ const Sidebar = () => {
       >
         <div className="bg-green-900 flex items-center justify-center gap-3 p-4">
           <img
-            src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp"
+            src="logo.png"
             alt=""
-            className="h-12 w-12 object-contain rounded-full hidden md:block"
+            className="h-12 w-12 object-contain rounded-full hidden md:block bg-white p-1 border-2 border-gray-600
+            "
           />
           <h1 className="text-2xl text-white font-extrabold">
             Tasky

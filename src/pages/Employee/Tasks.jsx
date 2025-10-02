@@ -60,7 +60,7 @@ function TaskCard({ task, index }) {
       <div className="flex items-center justify-between mb-2">
         <span className="font-semibold text-lg text-gray-800">{task.title}</span>
         <span className={`px-2 py-1 rounded text-xs font-bold uppercase ${TAB_COLORS[task.status.toLowerCase()] || TAB_COLORS.default}`}>
-          {task.status}
+          {task.category}
         </span>
       </div>
       <div className="text-gray-600 mb-2">{task.description}</div>
