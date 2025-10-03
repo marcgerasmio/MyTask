@@ -4,6 +4,9 @@ import { FetchTasks } from "../../lib/data";
 import supabase from "../../Supabase";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { IoMdAddCircleOutline } from "react-icons/io";
+import TaskModal from "../../components/TaskModal";
+import { useRef } from "react";
 
 const STATUS_TABS = [
   { label: "Ongoing", value: "ongoing" },
@@ -126,9 +129,12 @@ function TaskColumn({ status, tasks, moveTask, children }) {
 const Tasks = () => {
   const user = JSON.parse(sessionStorage.getItem("user"));
   const employeeId = Number(user.id);
-  const employeeTasks = TasksData.filter((task) => task.user_id === employeeId);
+  const employeeTasks = TasksData.filter((task) => task.user_id === employeeId && task.status != "tba");
+  const modalRef = useRef();
 
   const [tasks, setTasks] = useState(employeeTasks);
+  const [status, setSelectedStatus] = useState('');
+  const [setId, setSelectedId] = useState('');
 
   const moveTask = useCallback((taskId, newStatus) => {
     setTasks((prev) =>
@@ -143,7 +149,7 @@ const Tasks = () => {
     <div className="flex flex-col lg:flex-row min-h-screen bg-gradient-to-br from-gray-100 to-blue-100">
       <Sidebar />
       <main className="flex-1 p-4 pt-20 sm:p-8 lg:pt-8 lg:ml-64">
-        <div className="bg-white/90 p-6 rounded-2xl shadow-xl mb-8">
+        <div className="bg-white/90 p-6 rounded-xl shadow-xl mb-8">
           <div className="flex flex-col sm:flex-row sm:justify-between gap-4 items-center">
             <div className="flex items-center gap-4">
               <img src={user.image} alt="Avatar" className="rounded-full h-20 w-20 border-4 border-blue-400 shadow" />
@@ -154,10 +160,24 @@ const Tasks = () => {
               </div>
             </div>
             <div className="flex gap-2 mt-4 sm:mt-0">
-              <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold text-sm shadow">Total Tasks: {tasks.length}</span>
-              <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full font-semibold text-sm shadow">
-                Completed: {tasks.filter(t => t.status.toLowerCase() === "completed").length}
-              </span>
+              <select defaultValue="Month" className="select">
+                <option disabled={true}>Month</option>
+                <option>January</option>
+                <option>February</option>
+                <option>March</option>
+              </select>
+              <select defaultValue="Year" className="select">
+                <option disabled={true}>Year</option>
+                <option>2025</option>
+              </select>
+              <button className="bg-green-900 text-white btn rounded-lg">Display</button>
+               <button className="bg-white-900 text-green-900 btn rounded-lg"
+                  onClick={() => {
+                  modalRef.current?.open();
+                  setSelectedStatus("tba")
+                  setSelectedId(user.id)
+
+                }}><IoMdAddCircleOutline className="h-4 w-4 mr-2"/>Create Task</button>
             </div>
           </div>
         </div>
@@ -178,6 +198,12 @@ const Tasks = () => {
           </DndProvider>
         </div>
       </main>
+         <TaskModal
+           ref={modalRef}
+           status={status}
+           setId = {setId}
+          onClose={() => {}}
+        />
     </div>
   );
 };

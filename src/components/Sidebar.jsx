@@ -52,7 +52,7 @@ const Sidebar = () => {
         <div className="bg-green-900 flex items-center justify-center gap-3 p-4">
           <img
             src="logo.png"
-            alt=""
+            alt="0"
             className="h-12 w-12 object-contain rounded-full hidden md:block bg-white p-1 border-2 border-gray-600
             "
           />

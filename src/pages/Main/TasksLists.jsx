@@ -21,6 +21,7 @@ const Tasklists = () => {
   const modalRef = useRef();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [status, setSelectedStatus] = useState('');
 
  
   const filteredEmployees = UserData.filter((emp) => {
@@ -58,6 +59,7 @@ const Tasklists = () => {
                 className="bg-green-900 text-white btn rounded-lg"
                 onClick={() => {
                   modalRef.current?.open();
+                  setSelectedStatus("pending")
                 }}
               >
                 <IoIosAddCircle className="h-4 w-4 mr-2" />
@@ -117,6 +119,7 @@ const Tasklists = () => {
       )}
         <TaskModal
            ref={modalRef}
+           staus={status}
           onClose={() => {}}
         />
     </>

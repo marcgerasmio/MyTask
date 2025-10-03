@@ -5,6 +5,7 @@ import { FaUsers } from "react-icons/fa";
 import { IoIosAddCircle } from "react-icons/io";
 import { IoEyeOutline } from "react-icons/io5";
 import TaskModal from "../../components/TaskModal";
+import AssignModal from "../../components/AsssignModal";
 import { useState, useRef, useEffect } from "react";
 import { FetchTasks, tasksData } from "../../lib/data";
 import { deleteFunction } from "../../lib/functions";
@@ -13,9 +14,10 @@ import { deleteFunction } from "../../lib/functions";
 
 const UnAssigned = () => {
   const modalRef = useRef();
+  const taskRef = useRef();
   const [searchTerm, setSearchTerm] = useState("");
   const [riskFilter, setRiskFilter] = useState("");
-  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [selectedTask, setSelectedTask] = useState(null);
   const [TasksData, setTasks] = useState([]);
  useEffect(() => {
     FetchTasks()
@@ -86,7 +88,8 @@ const UnAssigned = () => {
                       <div className="flex items-center gap-1">
                        <button className="bg-yellow-600 text-white btn rounded-lg"
                         onClick={() => {
-                            modalRef.current?.open();
+                            setSelectedTask(tasks)
+                            taskRef.current?.open();
                         }}>
                         <FaUsers className="h-4 w-4 mr-2" />
                             Assign To
@@ -110,7 +113,12 @@ const UnAssigned = () => {
       </div>
       <TaskModal
         ref={modalRef}
-        patient={selectedPatient}
+        onClose={() => {}}
+      />
+
+        <AssignModal
+        ref={taskRef}
+        task={selectedTask}
         onClose={() => {}}
       />
     </>

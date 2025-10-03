@@ -7,7 +7,7 @@ import supabase from "../Supabase";
 
 const UserData = await FetchUsers();
 
-const TaskModal = forwardRef(({onClose }, ref) => {
+const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
   const dialogRef = useRef(null);
   const [password, setPassword] = useState('');
   const [user_id, setUserId] = useState(null);
@@ -41,15 +41,17 @@ const TaskModal = forwardRef(({onClose }, ref) => {
    const { data, error } = await supabase
   .from('tasks')
   .insert({ 
-    user_id,
+    user_id: setId != null ? setId : user_id,
     title,
     description,
     deadline,
     category,
-    status: 'pending',
+    status,
   });
   window.location.reload();
 };
+
+console.log(setId);
 
 
   return (
@@ -133,17 +135,25 @@ const TaskModal = forwardRef(({onClose }, ref) => {
                         }
                         />
                       </div>
-                    <div className="space-y-2">
-                        <label className="block text-sm font-medium ">Assign To</label>
-                        <div className="relative flex items-center">
-                           <select name={UserData} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value={user_id} onChange={(e) => setUserId(e.target.value)}>
-                            <option>Select Employee</option>
-                            {UserData.map(users =>
-                            <option key={users.id} value={users.id}>{users.first_name} {users.last_name} </option>
-                            )};
-                        </select>
+                        <div>
+                          {setId != null ? (
+                            <div>
+                            </div>
+                          ) : 
+                          <div className="space-y-2">
+                                  <label className="block text-sm font-medium ">Assign To</label>
+                                  <div className="relative flex items-center">
+                                    <select name={UserData} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value={user_id} onChange={(e) => setUserId(e.target.value)}>
+                                      <option>Select Employee</option>
+                                      {UserData.map(users =>
+                                      <option key={users.id} value={users.id}>{users.first_name} {users.last_name} </option>
+                                      )};
+                                  </select>
                                 </div>
-                                </div>
+                          </div>}    
+                    
+                        </div>
+                    
                     </div>
 
                          <div className="flex flex-col justify-end sm:flex-row gap-2">
