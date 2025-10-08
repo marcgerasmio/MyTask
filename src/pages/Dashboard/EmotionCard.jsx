@@ -54,6 +54,7 @@ const EmotionCard = () => {
                     </div> 
                   </div>
                   <div>{emp.first_name}</div>
+                  <div className="text-xs text-base-content/90 text-gray-600">{emp.position}</div>
                 </div>
               </div>
             );

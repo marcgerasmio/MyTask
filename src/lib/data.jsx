@@ -10,6 +10,7 @@ import { FaUserDoctor } from "react-icons/fa6";
 import { FaUserInjured } from "react-icons/fa";
 import { FaTasks } from "react-icons/fa";
 import { BiTaskX } from "react-icons/bi";
+import { ImProfile } from "react-icons/im";
 import { FaCalendarAlt } from "react-icons/fa";
 import Supabase from "../Supabase";
 
@@ -119,7 +120,7 @@ export const navItems = [
   {
     label: "Profile",
     path: "/profile",
-    icon: FaUserDoctor,
+    icon: ImProfile,
   },
 ];
 
@@ -138,6 +139,11 @@ export const navItemsEmployee = [
     label: "Activities",
     path: "/employee/activities",
     icon: FaCalendarAlt,
+  },
+   {
+    label: "Profile",
+    path: "/profile",
+    icon: ImProfile,
   },
 ];
 

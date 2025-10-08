@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect} from "react";
 import InputField from "../../components/InputField";
 import { useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal";
@@ -19,6 +19,11 @@ const Login = () => {
     email: "",
     password: "",
   });
+  useEffect(() => {
+  if (modalData.isOpen && modalRef.current) {
+    modalRef.current.showModal();
+  }
+}, [modalData.isOpen]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,12 +43,10 @@ const Login = () => {
         type: "error",
         message: "Invalid email or password.",
       });
-      setTimeout(() => {
-        modalRef.current?.showModal();
-      }, 0);
     } else {
       console.log(data);
       handleUserDetails(data.user.id)
+      sessionStorage.setItem("email", data.user.email)
     }
 };
 
@@ -60,9 +63,6 @@ const Login = () => {
         type: "success",
         message: "Login Successfully!",
       });
-      setTimeout(() => {
-        modalRef.current?.showModal();
-      }, 0);
     } else {
       setURL("/employee/dashboard");
       setModalData({

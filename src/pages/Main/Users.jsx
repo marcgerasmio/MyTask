@@ -55,7 +55,7 @@ const Users = () => {
                   type="search"
                   className="w-full"
                   required
-                  placeholder="Search name or age"
+                  placeholder="Search name"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -106,9 +106,6 @@ const Users = () => {
                     </td>
                     <td>
                       <div className="flex items-center gap-1">
-                        <button className="btn btn-ghost hover:bg-white border-none shadow-none btn-xs">
-                          <FaRegEdit size={16} />
-                        </button>
                         <button className="btn btn-ghost text-red-500 hover:bg-white border-none shadow-none btn-xs"
                         onClick={() => deleteFunction("userDetails", UserData.id)}>
                           <FaRegTrashCan size={14} />

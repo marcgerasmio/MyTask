@@ -33,28 +33,39 @@ const [emotion, setEmotion] = useState('');
                         </div>
           </div>
           <EmotionCard />
-          <div className="grid grid-cols-2 gap-4">
-        <Deadline />
-        <MyCalendar />
+        
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+            <div className="w-full">
+              <Deadline />
+            </div>
+            <div className="w-full">
+              <MyCalendar />
+            </div>
           </div>
+          
         </main>
       </div>
-      <dialog id="my_modal_1" className="modal">
-      <div className="modal-box bg-gray-200">
-        <h3 className="font-bold text-lg">Hello! How are you feeling today?</h3>
-          <InputEmoji
-          value={emotion}
-          onChange={setEmotion}
-          placeholder="Type a message"
-          maxLength="1"
-        />
-        <div className="modal-action">
-            <button className="btn bg-green-900 text-white rounded-1g"
-            onClick={() => saveEmotion("emotion", user.id, emotion)}>
-              Save</button>
-        </div>
-      </div>
-    </dialog>
+        <dialog id="my_modal_1" className="modal">
+          <div className="modal-box bg-gray-200 overflow-visible">
+            <h3 className="font-bold text-lg">Hello! How are you feeling today?</h3>
+            <div className="relative z-50">
+              <InputEmoji
+                value={emotion}
+                onChange={setEmotion}
+                placeholder="Type a message"
+                maxLength="1"
+              />
+            </div>
+            <div className="modal-action">
+              <button 
+                className="btn bg-green-900 text-white rounded-lg"
+                onClick={() => saveEmotion("emotion", user.id, emotion)}
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </dialog>
     </>
   );
 };

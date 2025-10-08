@@ -51,8 +51,6 @@ const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
   window.location.reload();
 };
 
-console.log(setId);
-
 
   return (
     <dialog ref={dialogRef} className="modal">

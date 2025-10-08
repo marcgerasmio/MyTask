@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import Dashboard from "./pages/Dashboard/Dashboard";
-import Profile from "./pages/Profile";
+import Profile from "./pages/Main/Profile";
 import Users from "./pages/Main/Users";
 import Tasklists from "./pages/Main/TasksLists";
 import EmployeeTasks from "./pages/Main/EmployeeTasks";
@@ -25,7 +25,7 @@ const Router = () => {
         <Route path="/tasks" element={<Tasklists/>} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/users" element={<Users />} />
-        <Route path="/" element={<Profile />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/employee/tasks" element={<EmployeeTasks />} />
          <Route path="/activities" element={<ActivityList />} />
          <Route path="tasks-unassigned" element={< UnAssigned/>} />
