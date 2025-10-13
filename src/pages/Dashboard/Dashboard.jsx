@@ -40,17 +40,17 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Emotion Card */}
+
           <div className="mb-6">
             <EmotionCard />
           </div>
 
-          {/* Dashboard Cards */}
+     
           <div className="mb-6">
             <DashCard />
           </div>
 
-          {/* Activity and Calendar Grid */}
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
             <div className="w-full">
               <Activity />
@@ -63,7 +63,6 @@ const Dashboard = () => {
         </main>
       </div>
 
-      {/* Modal */}
       <dialog id="my_modal_1" className="modal">
         <div className="modal-box bg-gray-200 overflow-visible w-11/12 max-w-md mx-4">
           <h3 className="font-bold text-lg md:text-xl mb-4">
