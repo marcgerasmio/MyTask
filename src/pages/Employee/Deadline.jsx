@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from "react";
+import Supabase from "../../Supabase";
 
 
 const user = JSON.parse(sessionStorage.getItem("user"));
@@ -10,7 +11,7 @@ const Activity = () => {
    
 
       const fetchTasks = async () => {
-    const { data } = await supabase.from("tasks").select("*");
+    const { data } = await Supabase.from("tasks").select("*");
    const completedTasks = data.filter(task => task.user_id === user.id && task.status != "completed");
         setTasks(completedTasks);
   };

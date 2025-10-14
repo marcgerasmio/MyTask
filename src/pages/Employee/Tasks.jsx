@@ -1,12 +1,9 @@
-import { useState, useCallback, useEffect } from "react";
-import Sidebar from "../../components/Sidebar";
-import { FetchTasks } from "../../lib/data";
+import { useState, useCallback, useEffect, useRef } from "react";
 import supabase from "../../Supabase";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { IoMdAddCircleOutline } from "react-icons/io";
 import TaskModal from "../../components/TaskModal";
-import { useRef } from "react";
+import Sidebar from "../../components/Sidebar"; // Add this import
 
 const STATUS_TABS = [
   { label: "Ongoing", value: "ongoing" },
@@ -32,17 +29,7 @@ const ItemTypes = {
   TASK: "task",
 };
 
-  const [TasksData, setTasks] = useState([]);
-   
-
-      const fetchTasks = async () => {
-    const { data } = await supabase.from("tasks").select("*");
-        setTasks(data);
-  };
-
-    useEffect(() => {
-    fetchTasks();
-  }, []);
+const BOARD_HEIGHT = "60vh";
 
 async function updateTaskStatusInSupabase(taskId, newStatus) {
   const { error } = await supabase
@@ -83,8 +70,6 @@ function TaskCard({ task, index }) {
     </div>
   );
 }
-
-const BOARD_HEIGHT = "60vh";
 
 function TaskColumn({ status, tasks, moveTask, children }) {
   const [{ isOver, canDrop }, drop] = useDrop({
@@ -137,14 +122,34 @@ function TaskColumn({ status, tasks, moveTask, children }) {
 }
 
 const Tasks = () => {
-  const user = JSON.parse(sessionStorage.getItem("user"));
-  const employeeId = Number(user.id);
-  const employeeTasks = TasksData.filter((task) => task.user_id === employeeId && task.status != "tba");
-  const modalRef = useRef();
-
-  const [tasks, setTasks] = useState(employeeTasks);
+  // Move all hooks INSIDE the component
+  const [TasksData, setTasksData] = useState([]);
+  const [tasks, setTasks] = useState([]);
   const [status, setSelectedStatus] = useState('');
   const [setId, setSelectedId] = useState('');
+  const modalRef = useRef();
+
+  const user = JSON.parse(sessionStorage.getItem("user"));
+  const employeeId = Number(user.id);
+
+  // Fetch tasks function inside component
+  const fetchTasks = useCallback(async () => {
+    const { data } = await supabase.from("tasks").select("*");
+    setTasksData(data || []);
+  }, []);
+
+  // Fetch tasks on mount
+  useEffect(() => {
+    fetchTasks();
+  }, [fetchTasks]);
+
+  // Update tasks when TasksData changes
+  useEffect(() => {
+    const employeeTasks = TasksData.filter(
+      (task) => task.user_id === employeeId && task.status !== "tba"
+    );
+    setTasks(employeeTasks);
+  }, [TasksData, employeeId]);
 
   const moveTask = useCallback((taskId, newStatus) => {
     setTasks((prev) =>
@@ -162,42 +167,13 @@ const Tasks = () => {
         <div className="bg-white/90 p-6 rounded-xl shadow-xl mb-8">
           <div className="flex flex-col sm:flex-row sm:justify-between gap-4 items-center">
             <div className="flex items-center gap-4">
-              <img src={user.image} alt="Avatar" className="rounded-full h-20 w-20 border-4  shadow" />
+              <img src={user.image} alt="Avatar" className="rounded-full h-20 w-20 border-4 shadow" />
               <div>
                 <div className="font-bold text-2xl text-gray-800">{user.first_name} {user.last_name}</div>
                 <div className="text-sm text-green-900">{user.position}</div>
                 <div className="text-xs text-gray-400">{user.email}</div>
               </div>
             </div>
-            {/* <div className="flex gap-2 mt-4 sm:mt-0">
-              <select defaultValue="Month" className="select">
-                <option disabled={true}>Month</option>
-                <option>January</option>
-                <option>February</option>
-                <option>March</option>
-                <option>April</option>
-                <option>May</option>
-                <option>June</option>
-                <option>July</option>
-                <option>August</option>
-                <option>September</option>
-                <option>October</option>
-                <option>November</option>
-                <option>December</option>
-              </select>
-              <select defaultValue="Year" className="select">
-                <option disabled={true}>Year</option>
-                <option>2025</option>
-              </select>
-              <button className="bg-green-900 text-white btn rounded-lg">Display</button>
-               <button className="bg-white-900 text-green-900 btn rounded-lg"
-                  onClick={() => {
-                  modalRef.current?.open();
-                  setSelectedStatus("tba")
-                  setSelectedId(user.id)
-
-                }}><IoMdAddCircleOutline className="h-4 w-4 mr-2"/>Create Task</button>
-            </div> */}
           </div>
         </div>
         <div className="p-2">
@@ -217,12 +193,12 @@ const Tasks = () => {
           </DndProvider>
         </div>
       </main>
-         <TaskModal
-           ref={modalRef}
-           status={status}
-           setId = {setId}
-          onClose={() => {}}
-        />
+      <TaskModal
+        ref={modalRef}
+        status={status}
+        setId={setId}
+        onClose={() => {}}
+      />
     </div>
   );
 };
