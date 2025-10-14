@@ -7,8 +7,8 @@ import { IoEyeOutline } from "react-icons/io5";
 import TaskModal from "../../components/TaskModal";
 import AssignModal from "../../components/AsssignModal";
 import { useState, useRef, useEffect } from "react";
-import { FetchTasks, tasksData } from "../../lib/data";
 import { deleteFunction } from "../../lib/functions";
+import Supabase from "../../Supabase";
 
 
 
@@ -19,17 +19,15 @@ const UnAssigned = () => {
   const [riskFilter, setRiskFilter] = useState("");
   const [selectedTask, setSelectedTask] = useState(null);
   const [TasksData, setTasks] = useState([]);
- useEffect(() => {
-    FetchTasks()
-      .then(data => {
-        const unassignedTasks = data.filter(task => task.user_id === null);
-        setTasks(unassignedTasks);
-      })
-      .catch(err => {
-        console.error("Error fetching tasks:", err);
-        setTasks([]); 
-      });
-  }, []);
+  const fetchTasks = async () => {
+    const { data } = await Supabase.from("tasks").select("*");
+    const unassignedTasks = data.filter(task => task.user_id === null);
+    setTasks(unassignedTasks);
+  };
+
+   useEffect(() => {
+      fetchTasks();
+    }, []);
 
 
 

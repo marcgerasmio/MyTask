@@ -1,5 +1,4 @@
 import { useRef, useState, useEffect } from "react";
-import { FetchTasks } from "../../lib/data";
 
 
 const user = JSON.parse(sessionStorage.getItem("user"));
@@ -8,17 +7,17 @@ const user = JSON.parse(sessionStorage.getItem("user"));
 const Activity = () => {
   const modalRef = useRef(null);
   const [TaskData, setTasks] = useState([]);
-      useEffect(() => {
-      FetchTasks()
-        .then(data => {
-          const completedTasks = data.filter(task => task.user_id === user.id && task.status != "completed");
-          setTasks(completedTasks);
-        })
-        .catch(err => {
-          console.error("Error fetching tasks:", err);
-          setTasks([]); 
-        });
-    }, []);
+   
+
+      const fetchTasks = async () => {
+    const { data } = await supabase.from("tasks").select("*");
+   const completedTasks = data.filter(task => task.user_id === user.id && task.status != "completed");
+        setTasks(completedTasks);
+  };
+
+    useEffect(() => {
+    fetchTasks();
+  }, []);
 
 
   const riskLevelStyles = {

@@ -6,8 +6,8 @@ import { IoIosAddCircle } from "react-icons/io";
 import { IoEyeOutline } from "react-icons/io5";
 import UserModal from "../../components/UserModal";
 import { useState, useRef, useEffect } from "react";
-import { FetchUsers } from "../../lib/data";
 import { deleteFunction } from "../../lib/functions";
+import Supabase from "../../Supabase";
 
 
 
@@ -16,10 +16,16 @@ const Users = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [riskFilter, setRiskFilter] = useState("");
   const [selectedPatient, setSelectedPatient] = useState(null);
-  const [UserData, setUsers] = useState([]);
-  useEffect(() => {
-  FetchUsers().then(setUsers);
-  }, []);
+  const [UserData, setUserData] = useState([]);
+
+    const fetchUsers = async () => {
+    const { data } = await Supabase.from("userDetails").select("*");
+    setUserData(data);
+  };
+
+   useEffect(() => {
+      fetchUsers();
+    }, []);
 
 
   const filteredPatients = UserData.filter((p) => {

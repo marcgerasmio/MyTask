@@ -2,17 +2,26 @@ import UserModal from "../../components/UserModal";
 import TaskModal from "../../components/TaskModal";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FetchUsers, FetchEmotions} from "../../lib/data";
+import Supabase from "../../Supabase";
+
 
 const EmotionCard = () => {
   const [EmotionData, setEmotion] = useState([]);
   const [UserData, setUsers] = useState([]);
+  
+    const fetchUsers = async () => {
+    const { data } = await Supabase.from("userDetails").select("*");
+    setUsers(data);
+  };
+   const fetchEmotions = async () => {
+    const { data } = await Supabase.from("emotion").select("*");
+    setEmotion(data);
+  };
+
     useEffect(() => {
-    FetchEmotions().then(setEmotion);
-    }, []);
-    useEffect(() => {
-    FetchUsers().then(setUsers);
-    }, []);
+    fetchUsers();
+    fetchEmotions();
+  }, []);
   
   
   const navigate = useNavigate();

@@ -2,7 +2,6 @@ import Sidebar from "../../components/Sidebar";
 import { IoIosAddCircle } from "react-icons/io";
 import ActivityModal from "../../components/ActivityModal";
 import { useState, useRef, useEffect } from "react";
-import { FetchUsers } from "../../lib/data";
 import MyCalendar from "../../components/Calendar";
 
 const ActivityList = () => {
@@ -13,9 +12,14 @@ const ActivityList = () => {
   const [riskFilter, setRiskFilter] = useState("");
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [UserData, setUsers] = useState([]);
-  useEffect(() => {
-  FetchUsers().then(setUsers);
-  }, []);
+  const fetchUsers = async () => {
+    const { data } = await supabase.from("userDetails").select("*");
+    setUsers(data);
+  };
+
+   useEffect(() => {
+      fetchUsers();
+    }, []);
 
 
   const filteredPatients = UserData.filter((p) => {

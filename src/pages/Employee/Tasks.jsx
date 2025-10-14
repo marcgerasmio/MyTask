@@ -159,7 +159,7 @@ const Tasks = () => {
                 <div className="text-xs text-gray-400">{user.email}</div>
               </div>
             </div>
-            <div className="flex gap-2 mt-4 sm:mt-0">
+            {/* <div className="flex gap-2 mt-4 sm:mt-0">
               <select defaultValue="Month" className="select">
                 <option disabled={true}>Month</option>
                 <option>January</option>
@@ -187,7 +187,7 @@ const Tasks = () => {
                   setSelectedId(user.id)
 
                 }}><IoMdAddCircleOutline className="h-4 w-4 mr-2"/>Create Task</button>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="p-2">

@@ -2,7 +2,6 @@ import { useRef, forwardRef, useImperativeHandle } from "react";
 import { FaSave } from "react-icons/fa";
 import { useState } from "react";
 import { usersData } from "../lib/data";
-import { FetchUsers } from "../lib/data";
 import supabase from "../Supabase";
 
 

@@ -5,9 +5,9 @@ import Sidebar from "../../components/Sidebar";
 import { FaBackward } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { FetchTasks } from "../../lib/data";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { deleteFunction } from "../../lib/functions";
+import Supabase from "../../Supabase";
 
 
 const STATUS_TABS = [
@@ -27,10 +27,14 @@ const TAB_COLORS = {
 
 const EmployeeTasks = () => {
   const [TasksData, setTasks] = useState([]);
-  useEffect(() => {
-  FetchTasks().then(setTasks);
-  }, []);
+const fetchTasks = async () => {
+    const { data } = await Supabase.from("tasks").select("*");
+    setTasks(data);
+  };
 
+   useEffect(() => {
+      fetchTasks();
+    }, []);
   
   const location = useLocation();
   const { employeeData } = location.state || {};

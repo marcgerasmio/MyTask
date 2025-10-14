@@ -1,14 +1,23 @@
-import { useRef, forwardRef, useImperativeHandle } from "react";
-import { FetchUsers } from "../lib/data";
+import { useRef, forwardRef, useImperativeHandle, useEffect } from "react";
 import { useState } from "react";
 import { FaSave } from "react-icons/fa";
 import { updateTaskFunction } from "../lib/functions";
+import Supabase from "../Supabase";
 
 
-const UserData = await FetchUsers();
+
 const AssignModal = forwardRef(({ onClose, task }, ref) => {
   const dialogRef = useRef(null);
   const [user_id, setUserId] = useState('');
+    const [UserData, setUsers] = useState([]);
+    const fetchUsers = async () => {
+      const { data } = await Supabase.from("userDetails").select("*");
+      setUsers(data);
+    };
+  
+     useEffect(() => {
+        fetchUsers();
+      }, []);
 
   useImperativeHandle(ref, () => ({
     open: () => dialogRef.current?.showModal(),

@@ -11,19 +11,10 @@ export default function NewsCards() {
 
   const fetchPosts = async () => {
        try {
-    const response = await fetch( 'https://carsu.edu.ph/wp-json/wp/v2/posts' );
-	const posts = await response.json();
-
-	console.log( posts ); 
-    //   const response = await fetch('https://carsu.edu.ph/wp-json/wp/v2/posts?tags=164', {
-    //     method: 'GET',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //   });
-    //   if (!response.ok) throw new Error('Failed to fetch posts');
-    //   const data = await response.json();
-    //   setPosts(data);
+    const response = await fetch( 'https://www.carsu.edu.ph/wp-json/wp/v2/posts?tags=164&_embed' );
+	  const data = await response.json();
+    const slice = data.slice(0,4);
+    setPosts(slice);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -40,6 +31,10 @@ export default function NewsCards() {
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-US', options);
+  };
+
+   const handlePostClick = (postLink) => {
+    window.open(postLink, '_blank', 'noopener,noreferrer');
   };
 
   if (loading) {
@@ -61,11 +56,16 @@ export default function NewsCards() {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className='flex justify-center items-center mb-5'>
+         <h1 className='text-4xl text-green-900 font-serif'>SOM News Archive</h1>
+        </div>
+         
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {posts.map((post) => (
             <div
               key={post.id}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
+              className="bg-white rounded-lg shadow-md overflow-hidden hover:scale-[1.02] transition-shadow duration-300 border border-green-900 cursor-pointer"
+               onClick={() => handlePostClick(post.link)}
             >
               {post.featured_media && post._embedded?.['wp:featuredmedia']?.[0]?.source_url && (
                 <div className="relative h-48 overflow-hidden">
@@ -79,7 +79,7 @@ export default function NewsCards() {
               
               <div className="p-6">
                 <div className="border-l-4 border-yellow-500 pl-3 mb-4">
-                  <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                  <h3 className="text-xs font-semibold text-gray-600 tracking-wide">
                     Press Releases
                   </h3>
                 </div>
@@ -95,15 +95,6 @@ export default function NewsCards() {
                 <div className="text-gray-700 text-sm line-clamp-3">
                   {stripHtml(post.excerpt.rendered)}
                 </div>
-                
-                <a
-                  href={post.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block mt-4 text-blue-600 hover:text-blue-800 font-medium text-sm"
-                >
-                  Read more →
-                </a>
               </div>
             </div>
           ))}

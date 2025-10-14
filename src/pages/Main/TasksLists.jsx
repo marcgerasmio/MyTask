@@ -5,18 +5,25 @@ import UserModal from "../../components/UserModal";
 import TaskModal from "../../components/TaskModal";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FetchUsers, FetchTasks} from "../../lib/data";
+import Supabase from "../../Supabase";
 
 const Tasklists = () => {
   const [TasksData, setTasks] = useState([]);
   const [UserData, setUsers] = useState([]);
-    useEffect(() => {
-    FetchTasks().then(setTasks);
+
+    const fetchUsers = async () => {
+    const { data } = await Supabase.from("userDetails").select("*");
+    setUsers(data);
+  };
+      const fetchTasks = async () => {
+    const { data } = await Supabase.from("tasks").select("*");
+    setTasks(data);
+  };
+
+   useEffect(() => {
+      fetchUsers();
+      fetchTasks();
     }, []);
-    useEffect(() => {
-    FetchUsers().then(setUsers);
-    }, []);
-  
   const navigate = useNavigate();
   const modalRef = useRef();
   const [searchTerm, setSearchTerm] = useState("");

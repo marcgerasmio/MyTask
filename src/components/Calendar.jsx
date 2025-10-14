@@ -1,19 +1,29 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { FetchActivities } from '../lib/data';
 import DateModal from './DateModal';
+import Supabase from '../Supabase';
 
 const localizer = momentLocalizer(moment);
 
-const ActivitiesData = await FetchActivities();
+
 
 const MyCalendar = () => {
+  const [ActivitiesData, setActivitiesData] = useState([]);
   const modalRef = useRef();
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [currentView, setCurrentView] = useState('month');
   const [currentDate, setCurrentDate] = useState('');
+
+    const fetchActivities = async () => {
+    const { data } = await Supabase.from("activities").select("*");
+    setActivitiesData(data);
+  };
+
+   useEffect(() => {
+      fetchActivities();
+    }, []);
 
   const events = ActivitiesData.map(activity => ({
     id: activity.id,

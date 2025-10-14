@@ -1,11 +1,9 @@
 import { useRef, forwardRef, useImperativeHandle } from "react";
 import { FaSave } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usersData } from "../lib/data";
-import { FetchUsers } from "../lib/data";
 import supabase from "../Supabase";
 
-const UserData = await FetchUsers();
 
 const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
   const dialogRef = useRef(null);
@@ -15,6 +13,16 @@ const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
   const [description, setDescription] = useState('');
   const [deadline, setDeadline] = useState('');
   const [category, setCategory] = useState('');
+  const [UserData, setUserData] = useState([]);
+
+    const fetchUsers = async () => {
+    const { data } = await supabase.from("userDetails").select("*");
+    setUserData(data);
+  };
+
+   useEffect(() => {
+      fetchUsers();
+    }, []);
 
   function generatePassword() {
     var length = 8,

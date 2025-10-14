@@ -1,26 +1,27 @@
 import { useRef, useState } from "react";
-import { tasksDone } from "../../lib/data";
-import { FetchTasks, FetchUsers } from "../../lib/data";
 import { useEffect } from "react";
+import Supabase from "../../Supabase";
 
 
 const Activity = () => {
   const [UserData, setUsers] = useState([]);
   const [TaskData, setTasks] = useState([]);
-    useEffect(() => {
-    FetchTasks()
-      .then(data => {
-        const completedTasks = data.filter(task => task.status === 'completed');
+ 
+  const fetchUsers = async () => {
+    const { data } = await Supabase.from("userDetails").select("*");
+    setUsers(data);
+  };
+   const fetchTasks = async () => {
+    const { data } = await Supabase.from("tasks").select("*");
+    const completedTasks = data.filter(task => task.status === 'completed');
         setTasks(completedTasks);
-      })
-      .catch(err => {
-        console.error("Error fetching tasks:", err);
-        setTasks([]); 
-      });
-  }, []);
+  };
+
     useEffect(() => {
-    FetchUsers().then(setUsers);
-    }, []);
+    fetchUsers();
+    fetchTasks();
+  }, []);
+
 
   
   const modalRef = useRef(null);
