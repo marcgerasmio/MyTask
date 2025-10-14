@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import Sidebar from "../../components/Sidebar";
 import { FetchTasks } from "../../lib/data";
 import supabase from "../../Supabase";
@@ -32,7 +32,17 @@ const ItemTypes = {
   TASK: "task",
 };
 
-const TasksData = await FetchTasks();
+  const [TasksData, setTasks] = useState([]);
+   
+
+      const fetchTasks = async () => {
+    const { data } = await supabase.from("tasks").select("*");
+        setTasks(data);
+  };
+
+    useEffect(() => {
+    fetchTasks();
+  }, []);
 
 async function updateTaskStatusInSupabase(taskId, newStatus) {
   const { error } = await supabase
