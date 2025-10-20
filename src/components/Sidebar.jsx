@@ -23,12 +23,20 @@ const Sidebar = () => {
 
   return (
     <aside className="flex flex-col md:flex-row max-h-screen lg:fixed lg:h-screen overflow-y-auto">
-      <div className="md:hidden fixed top-0 left-0 right-0 bg-white z-40 bg-green-900">
-        <div className="bg-green-900 flex items-center justify-between px-4 py-3">
-          <button onClick={toggleSidebar} className="p-2 rounded-md">
+      {/* Mobile Header */}
+      <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-green-900">
+        <div className="flex items-center justify-between px-4 py-3">
+          <button onClick={toggleSidebar} className="p-2 rounded-md text-white">
             {isSidebarOpen ? <FiX size={20} /> : <FiMenu size={20} />}
           </button>
-          <div className="text-xl font-bold">Tasky</div>
+          <div className="flex items-center gap-2">
+            <img
+              src="/logo.png"
+              alt="Logo"
+              className="h-8 w-8 object-contain rounded-full bg-white p-1 border-2 border-gray-600"
+            />
+            <div className="text-xl font-bold text-white">Tasky</div>
+          </div>
           <img
             src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp"
             alt="User"
@@ -37,6 +45,7 @@ const Sidebar = () => {
         </div>
       </div>
 
+      {/* Overlay */}
       {isSidebarOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
@@ -44,6 +53,7 @@ const Sidebar = () => {
         />
       )}
 
+      {/* Desktop Sidebar */}
       <div
         className={`fixed md:static flex flex-col h-screen bg-white shadow-4xl w-64 z-40 transform transition-transform duration-300 ease-in-out ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -51,10 +61,9 @@ const Sidebar = () => {
       >
         <div className="bg-green-900 flex items-center justify-center gap-3 p-4">
           <img
-            src="logo.png"
-            alt="0"
-            className="h-12 w-12 object-contain rounded-full hidden md:block bg-white p-1 border-2 border-gray-600
-            "
+            src="/logo.png"
+            alt="Logo"
+            className="h-12 w-12 object-contain rounded-full bg-white p-1 border-2 border-gray-600"
           />
           <h1 className="text-2xl text-white font-extrabold">
             Tasky
@@ -63,7 +72,7 @@ const Sidebar = () => {
             </span>
           </h1>
         </div>
-        <div className="border-tborder-gray-300"></div>
+        <div className="border-t border-gray-300"></div>
         <nav className="flex-1 p-4 items-center justify-center py-4">
           <ul className="space-y-2 text-sm">
             {navItemsToUse.map(({ label, path, icon: Icon }) => (

@@ -3,7 +3,7 @@ import supabase from "../../Supabase";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import TaskModal from "../../components/TaskModal";
-import Sidebar from "../../components/Sidebar"; // Add this import
+import Sidebar from "../../components/Sidebar"; 
 
 const STATUS_TABS = [
   { label: "Ongoing", value: "ongoing" },
@@ -122,28 +122,30 @@ function TaskColumn({ status, tasks, moveTask, children }) {
 }
 
 const Tasks = () => {
-  // Move all hooks INSIDE the component
   const [TasksData, setTasksData] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [status, setSelectedStatus] = useState('');
   const [setId, setSelectedId] = useState('');
+  const [month, setMonth] = useState('');
+  const [year, setYear] = useState('');
   const modalRef = useRef();
 
   const user = JSON.parse(sessionStorage.getItem("user"));
   const employeeId = Number(user.id);
 
-  // Fetch tasks function inside component
-  const fetchTasks = useCallback(async () => {
-    const { data } = await supabase.from("tasks").select("*");
+
+   const fetchTasks = async (start, end) => {
+     const { data } = await supabase.from("tasks").select("*")
+    .gte('created_at', start)
+    .lte('created_at', end);
     setTasksData(data || []);
+  };
+
+
+  useEffect(() => {
+    handleTask();
   }, []);
 
-  // Fetch tasks on mount
-  useEffect(() => {
-    fetchTasks();
-  }, [fetchTasks]);
-
-  // Update tasks when TasksData changes
   useEffect(() => {
     const employeeTasks = TasksData.filter(
       (task) => task.user_id === employeeId && task.status !== "tba"
@@ -160,6 +162,43 @@ const Tasks = () => {
     updateTaskStatusInSupabase(taskId, newStatus);
   }, []);
 
+function GetFirstAndLastDate(year, month)
+{
+const firstDayOfMonth = new Date(year, month-1, 2);
+const lastDayOfMonth = new Date(year, month, 1);
+console.log('First Day: ' + firstDayOfMonth.toISOString());
+console.log('Last Day: ' + lastDayOfMonth.toISOString());
+const start = firstDayOfMonth.toISOString();
+const end = lastDayOfMonth.toISOString();
+fetchTasks(start, end);
+}
+
+function getCurrentMonthAndYear() {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth() + 1; 
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June", 
+    "July", "August", "September", "October", "November", "December"
+  ];
+  const monthName = monthNames[currentDate.getMonth()];
+
+  return {
+    monthNumber: month,
+    monthName: monthName,
+    year: year
+  };
+}
+
+function handleTask(){
+ const { monthNumber, year } = getCurrentMonthAndYear();
+ setMonth(monthNumber);
+ setYear(year);
+ GetFirstAndLastDate(year, monthNumber);
+}
+
+  
+
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-gradient-to-br from-gray-100 to-green-100">
       <Sidebar />
@@ -173,6 +212,30 @@ const Tasks = () => {
                 <div className="text-sm text-green-900">{user.position}</div>
                 <div className="text-xs text-gray-400">{user.email}</div>
               </div>
+            </div>
+              <div className="flex gap-2 mt-4 sm:mt-0">
+              <select defaultValue="Month" className="select" onChange={(e) => setMonth(e.target.value)} value={month}>
+                <option disabled={true}>Month</option>
+                <option value={1}>January</option>
+                <option value={2}>February</option>
+                <option value={3}>March</option>
+                <option value={4}>April</option>
+                <option value={5}>May</option>
+                <option value={6}>June</option>
+                <option value={7}>July</option>
+                <option value={8} >August</option>
+                <option value={9}>September</option>
+                <option value={10}>October</option>
+                <option value={11}>November</option>
+                <option value={12}>December</option>
+              </select>
+              <select defaultValue="Year" className="select w-25" onChange={(e) => setYear(e.target.value)} value={year}>
+                <option disabled={true}>Year</option>
+                <option value={2024}>2024</option>
+                <option value={2025}>2025</option>
+                <option value={2026}>2026</option>
+              </select>
+              <button className="bg-green-900 text-white btn rounded-lg" onClick={() => GetFirstAndLastDate(year, month)}>Display</button>
             </div>
           </div>
         </div>

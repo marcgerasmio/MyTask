@@ -48,8 +48,15 @@ const Activity = () => {
           Latest Tasks Completed
         </p>
       </div>
-      <div className="space-y-4">
-        {result.map((task) => (
+    <div className="space-y-4">
+        {result.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-base-content/70 text-sm sm:text-base">
+              No completed tasks yet
+            </p>
+          </div>
+        ) : (
+          result.map((task) => (
             <div
               key={task.id}
               className="card border border-base-300 rounded-md"
@@ -74,7 +81,8 @@ const Activity = () => {
                 </div>
               </div>
             </div>
-          ))}
+          ))
+        )}
       </div>
     </div>
   );

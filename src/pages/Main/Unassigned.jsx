@@ -59,53 +59,69 @@ const UnAssigned = () => {
             </div>
           </div>
           <div className="overflow-x-auto p-6 bg-white mt-6 rounded-md shadow-md">
-            <table className="table table-sm">
-              <thead>
-                <tr className="text-xs sm:text-sm">
-                  <th>Category</th>
-                  <th>Title</th>
-                  <th>Description</th>
-                  <th>Deadline</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {TasksData.map((tasks) => (
-                  <tr key={tasks.id}>
-                    <td>
-                      <div className="flex items-center gap-3">
-                        <div className="text-sm sm:text-base">
-                          {tasks.category}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="text-sm">{tasks.title}</td>
-                       <td className="text-sm">{tasks.description}</td>
-                          <td className="text-sm">{tasks.deadline}</td>
-                    <td>
-                      <div className="flex items-center gap-1">
-                       <button className="bg-yellow-600 text-white btn rounded-lg"
-                        onClick={() => {
-                            setSelectedTask(tasks)
-                            taskRef.current?.open();
-                        }}>
-                        <FaUsers className="h-4 w-4 mr-2" />
-                            Assign To
-                        </button>
-                        <button className="bg-red-800 text-white btn rounded-lg"
-                        onClick={() => deleteFunction("tasks", tasks.id)}>
-                        <FaRegTrashCan className="h-4 w-4 mr-2" />
-                            Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <div className="text-xs text-gray-500 mt-2 sm:hidden">
-              Scroll horizontally to view full table →
-            </div>
+            {TasksData.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="flex justify-center mb-4">
+                  <FaUsers className="h-16 w-16 text-gray-300" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                  No Available Tasks
+                </h3>
+                <p className="text-gray-500 mb-4">
+                  There are currently no unassigned tasks. Create a new task to get started.
+                </p>
+              </div>
+            ) : (
+              <>
+                <table className="table table-sm">
+                  <thead>
+                    <tr className="text-xs sm:text-sm">
+                      <th>Category</th>
+                      <th>Title</th>
+                      <th>Description</th>
+                      <th>Deadline</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {TasksData.map((tasks) => (
+                      <tr key={tasks.id}>
+                        <td>
+                          <div className="flex items-center gap-3">
+                            <div className="text-sm sm:text-base">
+                              {tasks.category}
+                            </div>
+                          </div>
+                        </td>
+                        <td className="text-sm">{tasks.title}</td>
+                        <td className="text-sm">{tasks.description}</td>
+                        <td className="text-sm">{tasks.deadline}</td>
+                        <td>
+                          <div className="flex items-center gap-1">
+                            <button className="bg-yellow-600 text-white btn rounded-lg"
+                              onClick={() => {
+                                setSelectedTask(tasks)
+                                taskRef.current?.open();
+                              }}>
+                              <FaUsers className="h-4 w-4 mr-2" />
+                              Assign To
+                            </button>
+                            <button className="bg-red-800 text-white btn rounded-lg"
+                              onClick={() => deleteFunction("tasks", tasks.id)}>
+                              <FaRegTrashCan className="h-4 w-4 mr-2" />
+                              Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <div className="text-xs text-gray-500 mt-2 sm:hidden">
+                  Scroll horizontally to view full table →
+                </div>
+              </>
+            )}
           </div>
         </main>
       </div>
