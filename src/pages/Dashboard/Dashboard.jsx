@@ -64,11 +64,10 @@ const Dashboard = () => {
       </div>
 
       <dialog id="my_modal_1" className="modal">
-        <div className="modal-box bg-gray-200 overflow-visible w-11/12 max-w-md mx-4">
-          <h3 className="font-bold text-lg md:text-xl mb-4">
+        <div className="modal-box bg-green-900 overflow-visible w-11/12 max-w-md mx-4">
+          <h3 className="font-bold text-lg md:text-xl mb-4 text-white">
             Hello! How are you feeling today?
           </h3>
-          
           <div className="relative z-50 mb-4">
             <InputEmoji
               value={emotion}
@@ -77,10 +76,9 @@ const Dashboard = () => {
               maxLength="1"
             />
           </div>
-          
-          <div className="modal-action flex flex-col sm:flex-row gap-2 sm:gap-3">
-            <button 
-              className="btn bg-green-900 hover:bg-green-800 text-white rounded-lg flex-1 sm:flex-none order-2 sm:order-1"
+          <div className="modal-action">
+               <button 
+              className="btn bg-green-900 hover:bg-white hover:text-black text-white rounded-lg flex-1 sm:flex-none order-2 sm:order-1"
               onClick={() => {
                 saveEmotion("emotion", user.id, emotion);
                 document.getElementById('my_modal_1').close();
@@ -88,12 +86,8 @@ const Dashboard = () => {
             >
               Save
             </button>
-            <button 
-              className="btn bg-gray-400 hover:bg-gray-500 text-white rounded-lg flex-1 sm:flex-none order-1 sm:order-2"
-              onClick={() => document.getElementById('my_modal_1').close()}
-            >
-              Cancel
-            </button>
+        
+            
           </div>
         </div>
         <form method="dialog" className="modal-backdrop">

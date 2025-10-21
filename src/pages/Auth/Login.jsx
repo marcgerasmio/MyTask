@@ -10,6 +10,10 @@ const Login = () => {
   const modalRef = useRef(null);
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
   const [modalData, setModalData] = useState({
     isOpen: false,
     type: "",
@@ -19,25 +23,60 @@ const Login = () => {
     email: "",
     password: "",
   });
+  
   useEffect(() => {
-  if (modalData.isOpen && modalRef.current) {
-    modalRef.current.showModal();
-  }
-}, [modalData.isOpen]);
+    if (modalData.isOpen && modalRef.current) {
+      modalRef.current.showModal();
+    }
+  }, [modalData.isOpen]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const { email, password } = formData;
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email.trim()) {
+      return "Email is required";
+    }
+    if (!emailRegex.test(email)) {
+      return "Please enter a valid email address";
+    }
+    return "";
+  };
+
+  const validatePassword = (password) => {
+    if (!password) {
+      return "Password is required";
+    }
+    if (password.length < 6) {
+      return "Password must be at least 6 characters";
+    }
+    return "";
+  };
+
+  const validateForm = () => {
+    const emailError = validateEmail(formData.email);
+    const passwordError = validatePassword(formData.password);
+
+    setErrors({
+      email: emailError,
+      password: passwordError,
+    });
+
+    return !emailError && !passwordError;
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+
     const { email, password } = formData;
     const { data, error } = await Supabase.auth.signInWithPassword({
-    email,
-    password,
-  })
- if (error) {
+      email,
+      password,
+    });
+    
+    if (error) {
       setModalData({
         isOpen: true,
         type: "error",
@@ -45,10 +84,10 @@ const Login = () => {
       });
     } else {
       console.log(data);
-      handleUserDetails(data.user.id)
-      sessionStorage.setItem("email", data.user.email)
+      handleUserDetails(data.user.id);
+      sessionStorage.setItem("email", data.user.email);
     }
-};
+  };
 
   const handleUserDetails = async (id) => {
     const { data, error } = await Supabase.from("userDetails").select("*").eq("user_id", id).single();
@@ -74,11 +113,28 @@ const Login = () => {
         modalRef.current?.showModal();
       }, 0);
     }
-};
+  };
 
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
+    
+    if (errors[id]) {
+      setErrors({ ...errors, [id]: "" });
+    }
+  };
+
+  const handleBlur = (e) => {
+    const { id, value } = e.target;
+    let error = "";
+    
+    if (id === "email") {
+      error = validateEmail(value);
+    } else if (id === "password") {
+      error = validatePassword(value);
+    }
+    
+    setErrors({ ...errors, [id]: error });
   };
 
   return (
@@ -97,21 +153,28 @@ const Login = () => {
               <h2 className="text-2xl font-bold">Welcome Back</h2>
               <p className="text-gray-600">Sign in your personal account</p>
             </div>
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleLogin}>
               {loginInputs.map((field) => (
-                <InputField
-                  key={field.id}
-                  {...field}
-                  type={
-                    field.id === "password"
-                      ? showPassword
-                        ? "text"
-                        : "password"
-                      : field.type
-                  }
-                  value={formData[field.id]}
-                  onChange={handleChange}
-                />
+                <div key={field.id}>
+                  <InputField
+                    {...field}
+                    type={
+                      field.id === "password"
+                        ? showPassword
+                          ? "text"
+                          : "password"
+                        : field.type
+                    }
+                    value={formData[field.id]}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors[field.id] && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors[field.id]}
+                    </p>
+                  )}
+                </div>
               ))}
               <div className="flex items-center space-x-2">
                 <input
@@ -125,7 +188,7 @@ const Login = () => {
                 </label>
               </div>
               <button
-                onClick={handleLogin}
+                type="submit"
                 className="btn bg-green-900 hover:bg-green-700 text-white border-none rounded-md w-full"
               >
                 Sign in
