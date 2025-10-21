@@ -13,16 +13,6 @@ const ActivityModal = forwardRef(({onClose }, ref) => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
-  function generatePassword() {
-    var length = 8,
-        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-        retVal = "";
-    for (var i = 0, n = charset.length; i < length; ++i) {
-        retVal += charset.charAt(Math.floor(Math.random() * n));
-    }
-    setPassword(retVal);
-    return retVal;
-}
 
   useImperativeHandle(ref, () => ({
     open: () => dialogRef.current?.showModal(),
@@ -64,6 +54,7 @@ const ActivityModal = forwardRef(({onClose }, ref) => {
               Fill up necessary information below.
             </p>
         </div>
+        <form onSubmit={createTask}>
                   <div className="p-4 space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                       <div className="space-y-2">
@@ -80,6 +71,7 @@ const ActivityModal = forwardRef(({onClose }, ref) => {
                           value={activityName}
                           onChange={(e) => setActivityName(e.target.value)
                           }
+                          required
                         />
                       </div> 
                     </div>
@@ -96,13 +88,14 @@ const ActivityModal = forwardRef(({onClose }, ref) => {
                           value={description}
                           onChange={(e) => setDescription(e.target.value)
                           }
+                          required
                         />
                       </div>
                       </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <label className="text-sm font-medium" htmlFor="phone">
-                         Deadline
+                         Start
                         </label>
                         <input
                         type="datetime-local"
@@ -110,11 +103,12 @@ const ActivityModal = forwardRef(({onClose }, ref) => {
                         value={startDate}
                         onChange={(e) => setStartDate(e.target.value)
                         }
+                        required
                         />
                       </div>
                              <div className="space-y-2">
                         <label className="text-sm font-medium" htmlFor="phone">
-                         Deadline
+                         End
                         </label>
                         <input
                         type="datetime-local"
@@ -122,18 +116,20 @@ const ActivityModal = forwardRef(({onClose }, ref) => {
                         value={endDate}
                         onChange={(e) => setEndDate(e.target.value)
                         }
+                        required
                         />
                       </div>
                     </div>
 
                          <div className="flex flex-col justify-end sm:flex-row gap-2">
                                    <button className="bg-green-900 text-white btn rounded-lg"
-                                   onClick={createTask}>
+                             type="submit">
                                        <FaSave className="h-4 w-4 mr-2" />
                                         Save
                                     </button>
                                 </div>
                              </div>
+                             </form>
                              </div>
                              </dialog>
   );

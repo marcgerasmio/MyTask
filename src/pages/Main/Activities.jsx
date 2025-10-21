@@ -3,6 +3,7 @@ import { IoIosAddCircle } from "react-icons/io";
 import ActivityModal from "../../components/ActivityModal";
 import { useState, useRef, useEffect } from "react";
 import MyCalendar from "../../components/Calendar";
+import supabase from "../../Supabase";
 
 const ActivityList = () => {
   const isAdmin = sessionStorage.getItem("isAdmin") === "true";

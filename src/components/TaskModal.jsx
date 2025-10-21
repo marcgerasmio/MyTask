@@ -77,6 +77,7 @@ const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
               Fill up necessary information for creating task.
             </p>
         </div>
+        <form onSubmit={createTask}>
                   <div className="p-4 space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                       <div className="space-y-2">
@@ -93,6 +94,7 @@ const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
                           value={title}
                           onChange={(e) => setTitle(e.target.value)
                           }
+                          required
                         />
                       </div> 
                     </div>
@@ -125,6 +127,7 @@ const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
                           value={description}
                           onChange={(e) => setDescription(e.target.value)
                           }
+                          required
                         />
                       </div>
                       </div>
@@ -139,6 +142,7 @@ const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
                         value={deadline}
                         onChange={(e) => setDeadline(e.target.value)
                         }
+                          required
                         />
                       </div>
                         <div>
@@ -149,7 +153,7 @@ const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
                           <div className="space-y-2">
                                   <label className="block text-sm font-medium ">Assign To</label>
                                   <div className="relative flex items-center">
-                                    <select name={UserData} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value={user_id} onChange={(e) => setUserId(e.target.value)}>
+                                    <select name={UserData} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required value={user_id} onChange={(e) => setUserId(e.target.value)}>
                                       <option>Select Employee</option>
                                       {UserData.map(users =>
                                       <option key={users.id} value={users.id}>{users.first_name} {users.last_name} </option>
@@ -164,12 +168,13 @@ const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
 
                          <div className="flex flex-col justify-end sm:flex-row gap-2">
                                    <button className="bg-green-900 text-white btn rounded-lg"
-                                   onClick={createTask}>
+                                  type="submit">
                                        <FaSave className="h-4 w-4 mr-2" />
                                         Save
                                     </button>
                                 </div>
                              </div>
+                             </form>
                              </div>
                              </dialog>
   );

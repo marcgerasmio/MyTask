@@ -8,7 +8,6 @@ import InputEmoji from "react-input-emoji";
 import { saveEmotion } from "../../lib/functions";
 
 const EmployeeDashboard = () => {
-  // Validate user data from sessionStorage
   const getUserData = () => {
     try {
       const userData = sessionStorage.getItem("user");
@@ -18,7 +17,7 @@ const EmployeeDashboard = () => {
       }
       const parsedUser = JSON.parse(userData);
       
-      // Validate required user fields
+   
       if (!parsedUser || !parsedUser.id || !parsedUser.first_name) {
         console.error("Invalid user data structure");
         return null;
@@ -36,7 +35,6 @@ const EmployeeDashboard = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
-  // Redirect or show error if user data is invalid
   useEffect(() => {
     if (!user) {
       setError("Unable to load user data. Please log in again.");
@@ -44,16 +42,13 @@ const EmployeeDashboard = () => {
   }, [user]);
 
   const handleEmotionChange = (value) => {
-    // Clear any previous errors
     setError('');
-    // Validate input is not null or empty
     if (value !== null && value !== undefined) {
       setEmotion(value);
     }
   };
 
   const handleSaveEmotion = async () => {
-    // Validate all required fields before saving
     if (!user || !user.id) {
       setError("User information is missing. Please log in again.");
       return;
@@ -64,7 +59,6 @@ const EmployeeDashboard = () => {
       return;
     }
 
-    // Additional validation: check if emotion is just whitespace
     if (emotion.trim().length === 0) {
       setError("Please enter a valid emotion.");
       return;
@@ -76,7 +70,6 @@ const EmployeeDashboard = () => {
       
       await saveEmotion("emotion", user.id, emotion.trim());
       
-      // Reset form and close modal on success
       setEmotion('');
       document.getElementById('my_modal_1').close();
     } catch (err) {
@@ -93,7 +86,7 @@ const EmployeeDashboard = () => {
     document.getElementById('my_modal_1').close();
   };
 
-  // Show error state if user data is invalid
+
   if (!user) {
     return (
       <div className="flex min-h-screen bg-gray-100 items-center justify-center">
