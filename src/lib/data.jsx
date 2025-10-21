@@ -12,6 +12,8 @@ import { FaTasks } from "react-icons/fa";
 import { BiTaskX } from "react-icons/bi";
 import { ImProfile } from "react-icons/im";
 import { FaCalendarAlt } from "react-icons/fa";
+import { FaArchive } from "react-icons/fa";
+import { BiTask } from "react-icons/bi";
 import Supabase from "../Supabase";
 
 
@@ -98,15 +100,26 @@ export const navItems = [
     icon: BiSolidDashboard,
   },
   {
-    label: "Tasks List",
+    label: "Employee Tasks",
     path: "/tasks",
     icon: FaTasks,
+  },
+    {
+    label: "Tasks Archive",
+    path: "/tasks-archive",
+    icon: FaArchive,
+  },
+    {
+    label: "For Approval",
+    path: "/tasks-approval",
+    icon: BiTask,
   },
     {
     label: "Unassigned Tasks",
     path: "/tasks-unassigned",
     icon: BiTaskX,
   },
+ 
     {
     label: "Activities",
     path: "/activities",
@@ -153,24 +166,28 @@ export const cards = [
     title: "Total Tasks",
     icon: LuUsers,
     count: FetchTasks().then(data => data.length).catch(() => 0),
+    color: "card shadow-md rounded-lg hover:shadow-lg transition hover:scale-[1.02] bg-gray-500 text-white",
   },
   {
     id: 2,
     title: "Pending Tasks",
     icon: IoWarningOutline,
     count: FetchTasks().then(data => data.filter(task => task.status === 'pending').length).catch(() => 0),
+    color: "card shadow-md rounded-lg hover:shadow-lg transition hover:scale-[1.02] bg-yellow-500 text-white",
   },
   {
     id: 3,
     title: "Ongoing Tasks",
     icon: IoCalendarClearOutline,
     count: FetchTasks().then(data => data.filter(task => task.status === 'ongoing').length).catch(() => 0),
+    color: "card shadow-md rounded-lg hover:shadow-lg transition hover:scale-[1.02] bg-orange-400 text-white",
   },
   {
     id: 4,
     title: "Total Completed",
     icon: FaArrowTrendUp,
     count: FetchTasks().then(data => data.filter(task => task.status === 'completed').length).catch(() => 0),
+    color: "card shadow-md rounded-lg hover:shadow-lg transition hover:scale-[1.02] bg-green-800 text-white",
   },
 ];
 

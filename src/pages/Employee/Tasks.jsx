@@ -4,6 +4,7 @@ import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import TaskModal from "../../components/TaskModal";
 import Sidebar from "../../components/Sidebar"; 
+import { IoMdAddCircleOutline } from "react-icons/io";
 
 const STATUS_TABS = [
   { label: "Ongoing", value: "ongoing" },
@@ -236,6 +237,13 @@ function handleTask(){
                 <option value={2026}>2026</option>
               </select>
               <button className="bg-green-900 text-white btn rounded-lg" onClick={() => GetFirstAndLastDate(year, month)}>Display</button>
+               <button className="bg-white-900 text-green-900 btn rounded-lg"
+                  onClick={() => {
+                  modalRef.current?.open();
+                  setSelectedStatus("tba")
+                  setSelectedId(user.id)
+
+                }}><IoMdAddCircleOutline className="h-4 w-4 mr-2"/>Create Task</button>
             </div>
           </div>
         </div>

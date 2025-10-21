@@ -6,25 +6,19 @@ const DashCard = () => {
       {cards.map((card) => {
         const Icon = card.icon;
         return (
-          <div key={card.id} className="card shadow-md bg-white rounded-lg hover:shadow-lg transition hover:scale-[1.02]">
+          <div key={card.id} className={card.color}>
             <div className="card-body">
               <h2 className="font-semibold flex justify-between tracking-normal">
                 {card.title}
                 {Icon && (
                   <Icon
                     size={17}
-                    className={
-                      card.title === "High Risk Cases"
-                        ? "text-red-500"
-                        : card.title === "Success Rate"
-                        ? "text-green-600"
-                        : "text-gray-600"
-                    }
+                   className={card.color}
                   />
                 )}
               </h2>
               <p
-                className={`text-2xl font-extrabold ${
+                className={`text-2xl font-extrabold text-white ${
                   card.title === "High Risk Cases"
                     ? "text-red-500"
                     : card.title === "Success Rate"

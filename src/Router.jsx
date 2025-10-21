@@ -11,11 +11,14 @@ import ActivityList from "./pages/Main/Activities";
 import UnAssigned from "./pages/Main/Unassigned";
 import CourseRecommender from "./components/Course";
 import NewsCards from "./components/NewsCards";
+import Archive from "./pages/Main/TasksArchive";
+import ForApproval from "./pages/Main/ForApproval";
 
 //Employee Routes
 import EmployeeDashboard from "./pages/Employee/Dashboard";
 import Tasks from "./pages/Employee/Tasks";
 import EmployeeActivity from "./pages/Employee/EmployeeActivity";
+
 
 
 const Router = () => {
@@ -31,6 +34,8 @@ const Router = () => {
         <Route path="/employee/tasks" element={<EmployeeTasks />} />
          <Route path="/activities" element={<ActivityList />} />
          <Route path="tasks-unassigned" element={< UnAssigned/>} />
+         <Route path="tasks-archive" element={< Archive/>} />
+          <Route path="tasks-approval" element={< ForApproval/>} />
 
                   <Route path="/course" element={< CourseRecommender/>} />
                   <Route path="/news" element={<NewsCards/>}/>

@@ -101,7 +101,9 @@ const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
                 <div className="space-y-2">
                 <label className="block text-sm font-medium">Task Category</label>
                 <div className="flex flex-wrap gap-4">
-                  {["PubMat", "Article", "Photo/Video", "Website Update", "Others"].map((cat) => (
+                  {["Publication Material", "Press Release", "Photo Coverage", "Video Production", 
+                  "Committee Tasks", "Merchandise Design", "Data Retrieval", "Audio Recording", "Graphic Illustration", 
+                  "Document Trailing",  "Website Update", "Others"].map((cat) => (
                     <label key={cat} className="inline-flex items-center space-x-2">
                       <input
                         type="checkbox"
@@ -127,7 +129,6 @@ const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
                           value={description}
                           onChange={(e) => setDescription(e.target.value)
                           }
-                          required
                         />
                       </div>
                       </div>
