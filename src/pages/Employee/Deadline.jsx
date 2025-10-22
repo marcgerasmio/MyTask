@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import Supabase from "../../Supabase";
 
 
-const user = JSON.parse(sessionStorage.getItem("user"));
+const user = JSON.parse(localStorage.getItem("user"));
 
 
 const Activity = () => {

@@ -4,7 +4,7 @@ import supabase from "../Supabase";
 
 const DateModal = forwardRef(({ onClose, event }, ref) => {
   const dialogRef = useRef(null);
-  const isAdmin = sessionStorage.getItem("isAdmin") === "true";
+  const isAdmin = localStorage.getItem("isAdmin") === "true";
   const [isEditing, setIsEditing] = useState(false);
   
   const [activityName, setActivityName] = useState('');

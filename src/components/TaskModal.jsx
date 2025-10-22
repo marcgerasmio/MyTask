@@ -125,7 +125,7 @@ const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
                           id="phone"
                           placeholder="Task Description"
                           className="w-full border rounded-md p-2"
-                          rows={6}
+                          rows={4}
                           value={description}
                           onChange={(e) => setDescription(e.target.value)
                           }

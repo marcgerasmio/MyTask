@@ -6,7 +6,7 @@ import MyCalendar from "../../components/Calendar";
 import supabase from "../../Supabase";
 
 const ActivityList = () => {
-  const isAdmin = sessionStorage.getItem("isAdmin") === "true";
+  const isAdmin = localStorage.getItem("isAdmin") === "true";
   const [showButton, setShowButton] = useState(true);
   const modalRef = useRef();
   const [searchTerm, setSearchTerm] = useState("");

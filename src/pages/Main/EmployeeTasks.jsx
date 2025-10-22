@@ -19,7 +19,7 @@ const STATUS_TABS = [
   
 ];
 const TAB_COLORS = {
-  ongoing: "bg-blue-500 text-white",
+  ongoing: "bg-orange-500 text-white",
   pending: "bg-yellow-500 text-white",
   completed: "bg-green-600 text-white",
   default: "bg-gray-200 text-gray-700"
@@ -148,7 +148,7 @@ const EmployeeTasks = () => {
                 className="bg-green-900 text-white btn rounded-lg"
                 onClick={() => navigate(`/tasks`)}>
                 <FaBackward className="h-4 w-4 mr-2" />
-                Back to Task Lists
+                Back to Employee Tasks
               </button>
             </div>
           </div>

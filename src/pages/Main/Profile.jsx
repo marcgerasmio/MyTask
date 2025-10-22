@@ -7,8 +7,8 @@ import PasswordModal from "../../components/PasswordModal";
 
 const Profile = () => {
     const modalRef = useRef();
-    const user = JSON.parse(sessionStorage.getItem("user"));
-    const email = sessionStorage.getItem("email");
+    const user = JSON.parse(localStorage.getItem("user"));
+    const email = localStorage.getItem("email");
 
     function formatDate(isoString) {
     const date = new Date(isoString);
@@ -34,7 +34,7 @@ const updateUserDetails = async () => {
     .update({ 'first_name': newFirstName, 'last_name' : newLastName, 'position' : newPosition})
     .eq('id', user.id)
     .select()
-    sessionStorage.setItem("user", JSON.stringify(data[0]));
+    localStorage.setItem("user", JSON.stringify(data[0]));
     window.location.reload();
 };
   

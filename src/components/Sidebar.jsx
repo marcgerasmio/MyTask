@@ -8,7 +8,7 @@ import { navItems, navItemsEmployee } from "../lib/data";
 
 
 const Sidebar = () => {
-  const isAdmin = sessionStorage.getItem("isAdmin");
+  const isAdmin = localStorage.getItem("isAdmin");
   const modalRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -116,7 +116,7 @@ const Sidebar = () => {
         confirmLabel="Yes, Logout."
         color="bg-red-500"
         onConfirm={() => {
-          sessionStorage.clear();
+          localStorage.clear();
           if (modalRef.current?.open) modalRef.current.close();
           setTimeout(() => navigate("/"), 100);
         }}

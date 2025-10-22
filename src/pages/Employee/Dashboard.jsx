@@ -10,7 +10,7 @@ import { saveEmotion } from "../../lib/functions";
 const EmployeeDashboard = () => {
   const getUserData = () => {
     try {
-      const userData = sessionStorage.getItem("user");
+      const userData = localStorage.getItem("user");
       if (!userData) {
         console.error("No user data found in session storage");
         return null;

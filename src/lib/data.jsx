@@ -174,20 +174,21 @@ export const cards = [
     count: FetchTasks().then(data => data.length).catch(() => 0),
     color: "card shadow-md rounded-lg hover:shadow-lg transition hover:scale-[1.02] bg-gray-500 text-white",
   },
-  {
+   {
     id: 2,
-    title: "Pending Tasks",
-    icon: IoWarningOutline,
-    count: FetchTasks().then(data => data.filter(task => task.status === 'pending').length).catch(() => 0),
-    color: "card shadow-md rounded-lg hover:shadow-lg transition hover:scale-[1.02] bg-yellow-500 text-white",
-  },
-  {
-    id: 3,
     title: "Ongoing Tasks",
     icon: IoCalendarClearOutline,
     count: FetchTasks().then(data => data.filter(task => task.status === 'ongoing').length).catch(() => 0),
     color: "card shadow-md rounded-lg hover:shadow-lg transition hover:scale-[1.02] bg-orange-400 text-white",
   },
+  {
+    id: 3,
+    title: "Pending Tasks",
+    icon: IoWarningOutline,
+    count: FetchTasks().then(data => data.filter(task => task.status === 'pending').length).catch(() => 0),
+    color: "card shadow-md rounded-lg hover:shadow-lg transition hover:scale-[1.02] bg-yellow-500 text-white",
+  },
+ 
   {
     id: 4,
     title: "Total Completed",

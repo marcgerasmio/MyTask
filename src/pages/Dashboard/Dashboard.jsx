@@ -8,7 +8,7 @@ import InputEmoji from "react-input-emoji";
 import { saveEmotion } from "../../lib/functions";
 
 const Dashboard = () => {
-  const user = JSON.parse(sessionStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user"));
   const [emotion, setEmotion] = useState('');
   
   return (

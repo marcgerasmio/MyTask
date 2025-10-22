@@ -23,7 +23,25 @@ const Login = () => {
     email: "",
     password: "",
   });
-  
+
+  const sessionChecker = () => {
+    const user = localStorage.getItem("user");
+    if (user !== null) {
+      const isAdmin = localStorage.getItem("isAdmin") === "true";
+      if (isAdmin) {
+        navigate("/dashboard");
+      }
+      else {
+        navigate("/employee/dashboard");
+      }
+    }
+    else{
+      return;
+    }
+  }
+  useEffect(() => {
+    sessionChecker();
+  }, []);  
   useEffect(() => {
     if (modalData.isOpen && modalRef.current) {
       modalRef.current.showModal();
@@ -85,7 +103,7 @@ const Login = () => {
     } else {
       console.log(data);
       handleUserDetails(data.user.id);
-      sessionStorage.setItem("email", data.user.email);
+      localStorage.setItem("email", data.user.email);
     }
   };
 
@@ -93,8 +111,8 @@ const Login = () => {
     const { data, error } = await Supabase.from("userDetails").select("*").eq("user_id", id).single();
     console.log(data);
     const isAdmin = data.isAdmin;
-    sessionStorage.setItem("isAdmin", data.isAdmin);
-    sessionStorage.setItem("user", JSON.stringify(data));
+    localStorage.setItem("isAdmin", data.isAdmin);
+    localStorage.setItem("user", JSON.stringify(data));
     if (isAdmin === true) {
       setURL("/dashboard");
       setModalData({
