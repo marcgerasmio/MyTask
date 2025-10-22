@@ -13,6 +13,7 @@ import CourseRecommender from "./components/Course";
 import NewsCards from "./components/NewsCards";
 import Archive from "./pages/Main/TasksArchive";
 import ForApproval from "./pages/Main/ForApproval";
+import AdminTask from "./pages/Main/AdminTask";
 
 //Employee Routes
 import EmployeeDashboard from "./pages/Employee/Dashboard";
@@ -36,6 +37,7 @@ const Router = () => {
          <Route path="tasks-unassigned" element={< UnAssigned/>} />
          <Route path="tasks-archive" element={< Archive/>} />
           <Route path="tasks-approval" element={< ForApproval/>} />
+          <Route path="/admin-tasks" element={< AdminTask/>} />
 
                   <Route path="/course" element={< CourseRecommender/>} />
                   <Route path="/news" element={<NewsCards/>}/>

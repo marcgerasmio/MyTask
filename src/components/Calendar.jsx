@@ -38,18 +38,36 @@ const MyCalendar = () => {
     modalRef.current?.open();
   }, []);
 
-  const eventStyleGetter = useCallback(() => {
+  const eventStyleGetter = useCallback((event) => {
+    const category = event.resource?.category || 'Other';
+    const backgroundColor = categoryColors[category] || '#003300';
+    const color = textColor[category] || '#ffffffff';
+
     return {
       style: {
-        backgroundColor: '#003300',
+        backgroundColor: backgroundColor,
         borderRadius: '4px',
         opacity: 0.8,
-        color: '#ffffff',
+        color: color,
         border: 'none',
         display: 'block'
       }
     };
   }, []);
+    const textColor = {
+      'Visitation': '#000000ff',
+      'Meeting': '#ffffffff',
+  };
+
+  const categoryColors = {
+  'University Activities': '#003300',
+  'Visitation': '#f1e312ff',
+  'Meeting': '#6e6e6eff',     
+  'Photo/Video': '#ff8f33ff',
+  'Urgent': '#ff0000ff',
+  'Ma\'am Aquessa': '#dd26ddff',
+  };
+
 
   return (
     <div className="bg-white p-4 sm:p-6 mt-8 rounded-lg shadow-md">

@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { usersData, tasksData } from "../../lib/data";
 import Sidebar from "../../components/Sidebar";
 import { FaBackward } from "react-icons/fa";
@@ -7,7 +7,9 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { deleteFunction } from "../../lib/functions";
+import { FaRegEdit } from "react-icons/fa";
 import Supabase from "../../Supabase";
+import EditTaskModal from "../../components/EditTaskModal";
 
 
 const STATUS_TABS = [
@@ -29,6 +31,9 @@ const EmployeeTasks = () => {
   const [TasksData, setTasks] = useState([]);
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
+  const [selectedTask, setSelectedTask] = useState(null);
+  const modalRef = useRef();
+
 
   const fetchTasks = async (start, end) => {
     const { data } = await Supabase.from("tasks").select("*")
@@ -88,10 +93,10 @@ const EmployeeTasks = () => {
   const filteredTasks = employeeTasks.filter((task) => task.status.toLowerCase() === activeTab);
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen bg-gray-100">
+    <div className="flex flex-col lg:flex-row h-screen bg-gray-100 overflow-hidden">
       <Sidebar />
-      <main className="flex-1 p-4 pt-20 sm:p-6 lg:pt-6 lg:ml-64">
-        <div className="bg-white p-4 rounded shadow">
+      <main className="flex-1 flex flex-col p-4 pt-20 sm:p-6 lg:pt-6 lg:ml-64 overflow-hidden">
+        <div className="bg-white p-4 rounded shadow flex-shrink-0">
           <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
             <div className="flex items-center gap-4">
               <img src={employeeData.image} alt="Avatar" className="rounded-full h-16 w-16" />
@@ -148,9 +153,10 @@ const EmployeeTasks = () => {
             </div>
           </div>
         </div>
-        <div className="min-h-screen bg-gray-100 p-6">
-          <h2 className="font-bold text-lg mb-2">All Tasks</h2>
-          <div className="flex gap-2 mb-4">
+        
+        <div className="bg-gray-100 p-6 flex-1 flex flex-col overflow-hidden">
+          <h2 className="font-bold text-lg mb-2 flex-shrink-0">All Tasks</h2>
+          <div className="flex gap-2 mb-4 flex-shrink-0">
             {STATUS_TABS.map((tab) => {
               const isActive = activeTab === tab.value;
               const colorClass = isActive ? TAB_COLORS[tab.value] : TAB_COLORS.default;
@@ -165,31 +171,50 @@ const EmployeeTasks = () => {
               );
             })}
           </div>
-          <div className="grid gap-4">
-            {filteredTasks.length === 0 ? (
-              <div className="text-gray-500">No tasks in this category.</div>
-            ) : (
-              filteredTasks.map((task) => (
-                <div key={task.id} className="bg-gray-50 rounded p-4 shadow flex justify-between items-start">
-                  <div> 
-                    <div className="font-bold">{task.title}</div>
-                    <div className="text-s text-gray-600">{task.description}</div>
-                    <div className="text-xs text-red-400">{task.deadline}</div>
+          
+          <div className="flex-1 overflow-y-auto">
+            <div className="grid gap-4">
+              {filteredTasks.length === 0 ? (
+                <div className="text-gray-500">No tasks in this category.</div>
+              ) : (
+                filteredTasks.map((task) => (
+                  <div key={task.id} className="bg-gray-50 rounded p-4 shadow flex justify-between items-start">
+                    <div> 
+                      <div className="font-bold">{task.title}</div>
+                      <div className="text-s text-gray-600">{task.description}</div>
+                      <div className="text-xs text-red-400">{task.deadline}</div>
+                    </div>
+                    <div>
+                      <button 
+                        className="btn btn-ghost text-yellow-500 hover:bg-white border-none shadow-none btn-xs"
+                        onClick={() => {
+                          modalRef.current?.open();
+                          setSelectedTask(task);
+                        }}
+                      >
+                        <FaRegEdit size={14} />
+                      </button>
+                      <button 
+                        className="btn btn-ghost text-red-500 hover:bg-white border-none shadow-none btn-xs"
+                        onClick={() => deleteFunction("tasks", task.id)}
+                      >
+                        <FaRegTrashCan size={14} />
+                      </button>
+                    </div>
                   </div>
-                  <button 
-                    className="btn btn-ghost text-red-500 hover:bg-white border-none shadow-none btn-xs"
-                    onClick={() => deleteFunction("tasks", task.id)}
-                  >
-                    <FaRegTrashCan size={14} />
-                  </button>
-                </div>
-              ))
-            )}
+                ))
+              )}
+            </div>
           </div>
         </div>
+        
+        <EditTaskModal
+          ref={modalRef}
+          task={selectedTask}
+          onClose={() => {}}
+        />
       </main>
     </div>
-    
   );
 };
 

@@ -14,6 +14,7 @@ import { ImProfile } from "react-icons/im";
 import { FaCalendarAlt } from "react-icons/fa";
 import { FaArchive } from "react-icons/fa";
 import { BiTask } from "react-icons/bi";
+import { RiAdminLine } from "react-icons/ri";
 import Supabase from "../Supabase";
 
 
@@ -103,6 +104,11 @@ export const navItems = [
     label: "Employee Tasks",
     path: "/tasks",
     icon: FaTasks,
+  },
+    {
+    label: "My Tasks",
+    path: "/admin-tasks",
+    icon: RiAdminLine,
   },
     {
     label: "Tasks Archive",

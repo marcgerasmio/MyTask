@@ -8,6 +8,25 @@ const { error } = await Supabase.from(tableName).delete().eq("id", id);
 window.location.reload();
 };
 
+export async function updateFunction(table, id, data) {
+  try {
+    const { error } = await supabase
+      .from(table)
+      .update(data)
+      .eq('id', id);
+
+    if (error) {
+      console.error(`Error updating ${table}:`, error);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error(`Unexpected error updating ${table}:`, error);
+    return false;
+  }
+}
+
 
 export async function updateTaskFunction(tableName, task_id, id){
 const { error } = await Supabase

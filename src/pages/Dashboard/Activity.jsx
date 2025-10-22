@@ -12,7 +12,8 @@ const Activity = () => {
     setUsers(data);
   };
    const fetchTasks = async () => {
-    const { data } = await Supabase.from("tasks").select("*");
+    const { data } = await Supabase.from("tasks").select("*")
+    .order('created_at', { ascending: true });
     const completedTasks = data.filter(task => task.status === 'completed');
         setTasks(completedTasks);
   };
@@ -56,7 +57,7 @@ const Activity = () => {
             </p>
           </div>
         ) : (
-          result.map((task) => (
+          result.slice(4).map((task) => (
             <div
               key={task.id}
               className="card border border-base-300 rounded-md"
