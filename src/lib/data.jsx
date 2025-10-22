@@ -18,10 +18,6 @@ import { RiAdminLine } from "react-icons/ri";
 import Supabase from "../Supabase";
 
 
-  const user = JSON.parse(localStorage.getItem("user"));
-  const employeeId = Number(user.id);
-
-
 export async function FetchUsers(){
 const { data } = await Supabase.from("userDetails").select("*");
 return data;
