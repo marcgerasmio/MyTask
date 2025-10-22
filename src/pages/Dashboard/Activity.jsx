@@ -13,9 +13,10 @@ const Activity = () => {
   };
    const fetchTasks = async () => {
     const { data } = await Supabase.from("tasks").select("*")
-    .order('created_at', { ascending: true });
-    const completedTasks = data.filter(task => task.status === 'completed');
-        setTasks(completedTasks);
+    .eq('status', 'completed')
+    .order('created_at', { ascending: false })
+    .limit(5);
+    setTasks(data);
   };
 
     useEffect(() => {
@@ -57,7 +58,7 @@ const Activity = () => {
             </p>
           </div>
         ) : (
-          result.slice(4).map((task) => (
+          result.map((task) => (
             <div
               key={task.id}
               className="card border border-base-300 rounded-md"

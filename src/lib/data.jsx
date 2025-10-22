@@ -18,6 +18,10 @@ import { RiAdminLine } from "react-icons/ri";
 import Supabase from "../Supabase";
 
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const employeeId = Number(user.id);
+
+
 export async function FetchUsers(){
 const { data } = await Supabase.from("userDetails").select("*");
 return data;
@@ -108,6 +112,7 @@ export const navItems = [
     {
     label: "My Tasks",
     path: "/admin-tasks",
+    count: FetchTasks().then(data => data.filter(task => task.user_id === employeeId && task.status !== 'completed').length).catch(() => 0),
     icon: RiAdminLine,
   },
     {
@@ -119,10 +124,12 @@ export const navItems = [
     label: "For Approval",
     path: "/tasks-approval",
     icon: BiTask,
+    count: FetchTasks().then(data => data.filter(task => task.status === 'tba').length).catch(() => 0),
   },
     {
     label: "Unassigned Tasks",
     path: "/tasks-unassigned",
+    count: FetchTasks().then(data => data.filter(task => task.user_id === null).length).catch(() => 0),
     icon: BiTaskX,
   },
  
@@ -153,6 +160,7 @@ export const navItemsEmployee = [
     label: "Tasks List",
     path: "/employee/tasklist",
     icon: FaTasks,
+     count: FetchTasks().then(data => data.filter(task => task.user_id === employeeId && task.status !== 'completed' && task.status !== 'tba').length).catch(() => 0),
   },
     {
     label: "Activities",

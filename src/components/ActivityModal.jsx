@@ -25,7 +25,8 @@ const ActivityModal = forwardRef(({onClose }, ref) => {
     onClose?.();
   };
 
-  const createTask = async () => {
+  const createTask = async (e) => {
+  e.preventDefault();
    const { data, error } = await supabase
   .from('activities')
   .insert({ 
@@ -33,6 +34,7 @@ const ActivityModal = forwardRef(({onClose }, ref) => {
     description,
     startDate,
     endDate,
+    category,
   });
   window.location.reload();
 };

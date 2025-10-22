@@ -61,11 +61,11 @@ const MyCalendar = () => {
 
   const categoryColors = {
   'University Activities': '#003300',
-  'Visitation': '#f1e312ff',
+  'Visitation': '#f9dc07',
   'Meeting': '#6e6e6eff',     
   'Photo/Video': '#ff8f33ff',
   'Urgent': '#ff0000ff',
-  'Ma\'am Aquessa': '#dd26ddff',
+  'Ma\'am Aquessa': '#f354f3ff',
   };
 
 

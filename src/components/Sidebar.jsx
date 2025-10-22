@@ -75,7 +75,7 @@ const Sidebar = () => {
         <div className="border-t border-gray-300"></div>
         <nav className="flex-1 p-4 items-center justify-center py-4">
           <ul className="space-y-2 text-sm">
-            {navItemsToUse.map(({ label, path, icon: Icon }) => (
+            {navItemsToUse.map(({ count, label, path, icon: Icon }) => (
               <li key={path}>
                 <NavLink
                   to={path}
@@ -88,6 +88,11 @@ const Sidebar = () => {
                 >
                   <Icon className="mr-3" size={16} />
                   {label}
+                  {count && (
+                    <span className="bg-red-100 text-red-800 text-xs font-medium ml-1 px-1.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+                      {count}
+                    </span>
+                  )}
                 </NavLink>
               </li>
             ))}

@@ -14,11 +14,13 @@ const Archive = () => {
   const [UserData, setUserData] = useState([]);
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
+  const [filter, setFilter] = useState('completed');
 
    const fetchTasks = async (start, end) => {
      const { data } = await Supabase.from("tasks").select("*")
     .gte('created_at', start)
-    .lte('created_at', end);
+    .lte('created_at', end)
+    .eq('status', filter);
     setTaskData(data || []);
   };
      const fetchUsers = async () => {
@@ -96,6 +98,13 @@ const tasksArray = new Map(UserData.map(obj => [obj.id, obj]));
             </h1>
             <div className="flex flex-col sm:flex-row gap-2">
                    <div className="flex gap-2 mt-4 sm:mt-0">
+                <select defaultValue={filter} className="select" onChange={(e) => setFilter(e.target.value)} value={filter}>
+                <option disabled={true}>Status</option>
+                <option value="completed">Completed</option>
+                   <option value="tba">For Approval</option>
+                      <option value="pending">Pending</option>
+                         <option value="ongoing">OnGoing</option>
+              </select>
               <select defaultValue="Month" className="select" onChange={(e) => setMonth(e.target.value)} value={month}>
                 <option disabled={true}>Month</option>
                 <option value={1}>January</option>
