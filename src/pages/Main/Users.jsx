@@ -82,7 +82,6 @@ const Users = () => {
                   <th>Name</th>
                   <th>Position</th>
                   <th>Admin Access</th>
-                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -109,14 +108,6 @@ const Users = () => {
                       >
                         {UserData.isAdmin.toString().toUpperCase()}
                       </span>
-                    </td>
-                    <td>
-                      <div className="flex items-center gap-1">
-                        <button className="btn btn-ghost text-red-500 hover:bg-white border-none shadow-none btn-xs"
-                        onClick={() => deleteFunction("userDetails", UserData.id)}>
-                          <FaRegTrashCan size={14} />
-                        </button>
-                      </div>
                     </td>
                   </tr>
                 ))}
