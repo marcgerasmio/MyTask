@@ -13,6 +13,7 @@ const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
   const [description, setDescription] = useState('');
   const [deadline, setDeadline] = useState('');
   const [category, setCategory] = useState('');
+  const [link, setLink] = useState('');
   const [UserData, setUserData] = useState([]);
 
     const fetchUsers = async () => {
@@ -55,6 +56,7 @@ const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
     deadline,
     category,
     status,
+    link,
   });
   window.location.reload();
 };
@@ -132,6 +134,25 @@ const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
                         />
                       </div>
                       </div>
+                          <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
+                      <div className="space-y-2">
+                        <label
+                          className="text-sm font-medium"
+                          htmlFor="firstName"
+                        >
+                        Link
+                        </label>
+                        <input
+                          id="firstName"
+                          placeholder="Task Link"
+                          className="w-full border rounded-md p-2"
+                          value={link}
+                          onChange={(e) => setLink(e.target.value)
+                          }
+                          required
+                        />
+                      </div> 
+                    </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <label className="text-sm font-medium" htmlFor="phone">

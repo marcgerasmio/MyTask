@@ -95,6 +95,7 @@ function TaskColumn({ status, tasks, moveTask, children }) {
         display: "flex",
         flexDirection: "column",
         padding: "1.5rem 1rem",
+        width: '20vw'
       }}
     >
       <div className="flex items-center mb-4">

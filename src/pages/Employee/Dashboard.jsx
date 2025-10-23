@@ -6,6 +6,7 @@ import EmotionCard from "../Dashboard/EmotionCard";
 import { useState, useEffect } from "react";
 import InputEmoji from "react-input-emoji";
 import { saveEmotion } from "../../lib/functions";
+import Activity from "../Dashboard/Activity";
 
 const EmployeeDashboard = () => {
   const getUserData = () => {
@@ -131,9 +132,12 @@ const EmployeeDashboard = () => {
           </div>
           <EmotionCard />
         
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
             <div className="w-full">
               <Deadline />
+            </div>
+              <div className="w-full">
+              <Activity />
             </div>
             <div className="w-full">
               <MyCalendar />

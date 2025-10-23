@@ -7,6 +7,9 @@ import UserInfo from "./UserInfo";
 import { navItems, navItemsEmployee } from "../lib/data";
 
 
+ const user = JSON.parse(localStorage.getItem("user"));
+
+
 const Sidebar = () => {
   const isAdmin = localStorage.getItem("isAdmin");
   const modalRef = useRef(null);
@@ -38,7 +41,7 @@ const Sidebar = () => {
             <div className="text-xl font-bold text-white">Tasky</div>
           </div>
           <img
-            src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp"
+            src={user.image}
             alt="User"
             className="w-8 h-8 rounded-full border-2 border-gray-600"
           />

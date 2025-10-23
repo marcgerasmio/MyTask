@@ -71,7 +71,7 @@ const MyCalendar = () => {
 
   return (
     <div className="bg-white p-4 sm:p-6 mt-8 rounded-lg shadow-md">
-      <div style={{ height: '600px' }}>
+      <div style={{ height: '520px' }}>
         <Calendar
           localizer={localizer}
           events={events}

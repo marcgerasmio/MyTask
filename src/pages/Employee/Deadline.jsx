@@ -12,7 +12,7 @@ const Activity = () => {
 
   const fetchTasks = async () => {
     const { data } = await Supabase.from("tasks").select("*");
-    const completedTasks = data.filter(task => task.user_id === user.id && task.status != "completed");
+    const completedTasks = data.filter(task => task.user_id === user.id && task.status != "completed" && task.status != "pending");
     setTasks(completedTasks);
   };
 
@@ -28,7 +28,7 @@ const Activity = () => {
   };
 
   return (
-    <div className="bg-white p-4 sm:p-6 mt-8 rounded-lg shadow-md overflow-y-auto h-[50h]">
+  <div className="bg-white p-4 sm:p-6 mt-8 rounded-lg shadow-md">
       <div className="mb-6 sm:mb-8">
         <h1 className="text-xl sm:text-2xl font-bold text-base-content mb-1">
           Upcoming Deadlines
@@ -37,7 +37,7 @@ const Activity = () => {
           Tasks with approaching deadlines
         </p>
       </div>
-      <div className="space-y-4 overflow-y-auto h-[50vh]">
+      <div className="space-y-4 overflow-y-auto max-h-[50vh]">
         {TaskData.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center py-12">
             <svg

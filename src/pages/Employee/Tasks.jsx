@@ -1,10 +1,12 @@
 import { useState, useCallback, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import supabase from "../../Supabase";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import TaskModal from "../../components/TaskModal";
 import Sidebar from "../../components/Sidebar"; 
 import { IoMdAddCircleOutline } from "react-icons/io";
+import { FaLink } from "react-icons/fa";
 
 const STATUS_TABS = [
   { label: "Ongoing", value: "ongoing" },
@@ -51,6 +53,8 @@ function TaskCard({ task, index }) {
       isDragging: monitor.isDragging(),
     }),
   });
+  
+  const navigate = useNavigate();
 
   return (
     <div
@@ -65,7 +69,12 @@ function TaskCard({ task, index }) {
         </span>
       </div>
       <div className="text-gray-600 mb-2">{task.description}</div>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-start">\
+         {task.link === null ? ( <></>) : (
+        <a className="text-black" href={task.link} target="_blank" rel="noopener noreferrer"
+        ><FaLink className="h-4 w-4 mr-2"/>
+        </a>
+         )}
         <span className="text-xs text-gray-400">Deadline: {task.deadline}</span>
       </div>
     </div>
@@ -95,6 +104,7 @@ function TaskColumn({ status, tasks, moveTask, children }) {
         display: "flex",
         flexDirection: "column",
         padding: "1.5rem 1rem",
+          width: '20vw'
       }}
     >
       <div className="flex items-center mb-4">
