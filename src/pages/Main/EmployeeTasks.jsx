@@ -10,6 +10,7 @@ import { deleteFunction } from "../../lib/functions";
 import { FaRegEdit } from "react-icons/fa";
 import Supabase from "../../Supabase";
 import EditTaskModal from "../../components/EditTaskModal";
+import TaskRemarksModal from "../../components/RemarksModal";
 
 
 const STATUS_TABS = [
@@ -32,8 +33,18 @@ const EmployeeTasks = () => {
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
   const [selectedTask, setSelectedTask] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
   const modalRef = useRef();
+  const remarksModalRef = useRef();
 
+
+  // Get current user from localStorage
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      setCurrentUser(user);
+    }
+  }, []);
 
   const fetchTasks = async (start, end) => {
     const { data } = await Supabase.from("tasks").select("*")
@@ -91,6 +102,11 @@ const EmployeeTasks = () => {
   const [activeTab, setActiveTab] = useState("ongoing");
 
   const filteredTasks = employeeTasks.filter((task) => task.status.toLowerCase() === activeTab);
+
+  const handleTaskClick = (task) => {
+    setSelectedTask(task);
+    remarksModalRef.current?.open();
+  };
 
   return (
     <div className="flex flex-col lg:flex-row h-screen bg-gray-100 overflow-hidden">
@@ -178,13 +194,17 @@ const EmployeeTasks = () => {
                 <div className="text-gray-500">No tasks in this category.</div>
               ) : (
                 filteredTasks.map((task) => (
-                  <div key={task.id} className="bg-gray-50 rounded p-4 shadow flex justify-between items-start">
+                  <div 
+                    key={task.id} 
+                    className="bg-gray-50 rounded p-4 shadow flex justify-between items-start cursor-pointer hover:bg-gray-100 transition-colors"
+                    onClick={() => handleTaskClick(task)}
+                  >
                     <div> 
                       <div className="font-bold">{task.title}</div>
                       <div className="text-s text-gray-600">{task.description}</div>
                       <div className="text-xs text-red-400">{task.deadline}</div>
                     </div>
-                    <div>
+                    <div onClick={(e) => e.stopPropagation()}>
                       <button 
                         className="btn btn-ghost text-yellow-500 hover:bg-white border-none shadow-none btn-xs"
                         onClick={() => {
@@ -212,6 +232,12 @@ const EmployeeTasks = () => {
           ref={modalRef}
           task={selectedTask}
           onClose={() => {}}
+        />
+
+        <TaskRemarksModal
+          ref={remarksModalRef}
+          task={selectedTask}
+          currentUser={currentUser}
         />
       </main>
     </div>
