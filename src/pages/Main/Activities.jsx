@@ -50,14 +50,13 @@ const ActivityList = () => {
               </span>
             </h1>
             <div className="flex flex-col sm:flex-row gap-2">
-              {isAdmin && 
               <button className="bg-green-900 text-white btn rounded-lg"
                onClick={() => {
                             modalRef.current?.open();
                           }}>
                    <IoIosAddCircle className="h-4 w-4 mr-2" />
                     Add Activity
-                </button>}
+                </button>
            
             </div>
           </div>
