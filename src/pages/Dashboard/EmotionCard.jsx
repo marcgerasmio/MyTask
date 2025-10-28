@@ -1,35 +1,23 @@
-import UserModal from "../../components/UserModal";
-import TaskModal from "../../components/TaskModal";
-import { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect,} from "react";
 import Supabase from "../../Supabase";
 
 const EmotionCard = () => {
-  const [emotionData, setEmotion] = useState([]);
-  const [userData, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [emotionData, setEmotionData] = useState([]);
   
-  const modalRef = useRef();
-
-  // Fetch data with error handling
-  useEffect(() => {
+    useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
         setError(null);
 
-        const [usersResponse, emotionsResponse] = await Promise.all([
-          Supabase.from("userDetails").select("*"),
-          Supabase.from("emotion").select("*")
-        ]);
+      const { data, error } = await Supabase.from('userDetails').select(`
+            "*",
+            emotion!emotion_user_id_fkey ("*")
+          `)
 
-        if (usersResponse.error) throw usersResponse.error;
-        if (emotionsResponse.error) throw emotionsResponse.error;
-
-        setUsers(usersResponse.data || []);
-        setEmotion(emotionsResponse.data || []);
+      setEmotionData(data || []);
       } catch (err) {
         console.error("Error fetching data:", err);
         setError("Failed to load employee data. Please try again.");
@@ -39,37 +27,6 @@ const EmotionCard = () => {
     };
 
     fetchData();
-  }, []);
-
-  // Memoized filtered employees
-  const filteredEmployees = useMemo(() => {
-    if (!searchTerm.trim()) return userData;
-    
-    const search = searchTerm.toLowerCase();
-    return userData.filter((emp) =>
-      emp.first_name?.toLowerCase().includes(search) ||
-      emp.last_name?.toLowerCase().includes(search) ||
-      emp.position?.toLowerCase().includes(search)
-    );
-  }, [userData, searchTerm]);
-
-  // Get current emotion for an employee
-  const getEmployeeEmotion = useCallback((employeeId) => {
-    const employeeEmotions = emotionData.filter(
-      (emotion) => emotion.user_id === employeeId
-    );
-    
-    // Get the most recent emotion
-    const latestEmotion = employeeEmotions
-      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-      .find((emotion) => emotion.emotion != null);
-    
-    return latestEmotion?.emotion || "😐";
-  }, [emotionData]);
-
-  // Handle employee click
-  const handleEmployeeClick = useCallback((employee) => {
-    setSelectedEmployee(employee);
   }, []);
 
   if (isLoading) {
@@ -100,18 +57,15 @@ const EmotionCard = () => {
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6 p-4 bg-white rounded shadow">
-        {filteredEmployees.length === 0 ? (
+        {emotionData.length === 0 ? (
           <div className="col-span-full text-center py-12 text-gray-500">
-            No employees found matching your search.
+            No employees found.
           </div>
         ) : (
-          filteredEmployees.map((emp) => {
-            const currentEmotion = getEmployeeEmotion(emp.id);
-
+          emotionData.map((emp) => {
             return (
               <div
                 key={emp.id}
-                onClick={() => handleEmployeeClick(emp)}
                 className="cursor-pointer transition-transform hover:scale-105"
               >
                 <div className="text-center">
@@ -125,7 +79,7 @@ const EmotionCard = () => {
                       }}
                     />
                     <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-white rounded-full border-2 border-gray-200 flex items-center justify-center text-lg">
-                      {currentEmotion}
+                      {emp.emotion[0].emotion || "😐"}
                     </div>
                   </div>
                   <div className="font-bold text-lg">
@@ -140,17 +94,6 @@ const EmotionCard = () => {
           })
         )}
       </div>
-
-      {selectedEmployee && (
-        <UserModal
-          ref={modalRef}
-          patient={selectedEmployee}
-          onClose={() => setSelectedEmployee(null)}
-          showTasks
-        />
-      )}
-
-      <TaskModal ref={modalRef} onClose={() => {}} />
     </>
   );
 };

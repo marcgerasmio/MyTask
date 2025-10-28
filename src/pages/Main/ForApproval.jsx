@@ -5,29 +5,22 @@ import Supabase from "../../Supabase";
 import { FaUsers } from "react-icons/fa";
 
 
-
 const ForApproval = () => {
   const modalRef = useRef();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [riskFilter, setRiskFilter] = useState("");
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [TaskData, setTaskData] = useState([]);
-  const [UserData, setUserData] = useState([]);
-  const [month, setMonth] = useState('');
-  const [year, setYear] = useState('');
 
-    const fetchTasks = async () => {
-    const { data } = await Supabase.from("tasks").select("*").eq("status", "tba");
-    setTaskData(data);
-  };
-     const fetchUsers = async () => {
-    const { data } = await Supabase.from("userDetails").select("*");
-    setUserData(data);
-  };
+     const fetchData = async () => {
+    const { data } = await Supabase.from("tasks").select(`
+            "*",
+            userDetails!id ("*")
+          `)
+          .eq('status', 'tba');
+   setTaskData(data || []);
+  }
 
    useEffect(() => {
-      fetchTasks();
-      fetchUsers();
+    fetchData();
     }, []);
 
 const updateTask = async (status, task_id,) => {
@@ -38,14 +31,6 @@ const { error } = await Supabase
   .select()
 window.location.reload();
 };
-
-
-const tasksArray = new Map(UserData.map(obj => [obj.id, obj]));
-
-  const result = TaskData.map(obj2 => {
-      const matchingObj1 = tasksArray.get(obj2.user_id);
-      return matchingObj1 ? { ...matchingObj1, ...obj2 } : obj2;
-  });
 
 
    const adminStyle = {
@@ -88,17 +73,17 @@ const tasksArray = new Map(UserData.map(obj => [obj.id, obj]));
                 </tr>
               </thead>
               <tbody>
-                {result.map((task) => (
+                {TaskData.map((task) => (
                   <tr key={task.id}>
                     <td>
                       <div className="flex items-center gap-3">
                         <div className="avatar">
                           <div className="rounded-full h-8 w-8 sm:h-10 sm:w-10">
-                            <img src={task.image} alt="No Image" />
+                            <img src={task.userDetails.image} alt="No Image" />
                           </div>
                         </div>
                         <div className="text-sm sm:text-base">
-                          {task.first_name}
+                          {task.userDetails.first_name}
                         </div>
                       </div>
                     </td>

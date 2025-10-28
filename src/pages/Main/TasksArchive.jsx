@@ -2,35 +2,31 @@ import Sidebar from "../../components/Sidebar";
 import UserModal from "../../components/UserModal";
 import { useState, useRef, useEffect } from "react";
 import Supabase from "../../Supabase";
-
+import { FaUsers } from "react-icons/fa";
 
 
 const Archive = () => {
   const modalRef = useRef();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [riskFilter, setRiskFilter] = useState("");
   const [selectedPatient, setSelectedPatient] = useState(null);
-  const [TaskData, setTaskData] = useState([]);
-  const [UserData, setUserData] = useState([]);
+  const [taskData, setTaskData] = useState([]);
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
   const [filter, setFilter] = useState('completed');
 
-   const fetchTasks = async (start, end) => {
-     const { data } = await Supabase.from("tasks").select("*")
-    .gte('created_at', start)
+   const fetchData = async (start, end) => {
+    const { data } = await Supabase.from("tasks").select(`
+            "*",
+            userDetails!id ("*")
+          `)
+            .gte('created_at', start)
     .lte('created_at', end)
-    .eq('status', filter);
-    setTaskData(data || []);
-  };
-     const fetchUsers = async () => {
-    const { data } = await Supabase.from("userDetails").select("*");
-    setUserData(data);
-  };
+    .eq('status', filter)
+
+   setTaskData(data || []);
+  }
 
    useEffect(() => {
       handleTask();
-      fetchUsers();
     }, []);
 
 
@@ -42,7 +38,7 @@ console.log('First Day: ' + firstDayOfMonth.toISOString());
 console.log('Last Day: ' + lastDayOfMonth.toISOString());
 const start = firstDayOfMonth.toISOString();
 const end = lastDayOfMonth.toISOString();
-fetchTasks(start, end);
+fetchData(start, end);
 }
 
 function getCurrentMonthAndYear() {
@@ -68,15 +64,6 @@ function handleTask(){
  setYear(year);
  GetFirstAndLastDate(year, monthNumber);
 }
-
-
-const tasksArray = new Map(UserData.map(obj => [obj.id, obj]));
-
-  const result = TaskData.map(obj2 => {
-      const matchingObj1 = tasksArray.get(obj2.user_id);
-      return matchingObj1 ? { ...matchingObj1, ...obj2 } : obj2;
-  });
-
 
    const adminStyle = {
     pending: "bg-yellow-500 text-white",
@@ -130,6 +117,16 @@ const tasksArray = new Map(UserData.map(obj => [obj.id, obj]));
             </div>
             </div>
           </div>
+            {taskData.length === 0 ? (
+                                  <div className="text-center py-12 bg-white mt-6 rounded-md shadow-md">
+                                    <div className="flex justify-center mb-4">
+                                      <FaUsers className="h-16 w-16 text-gray-300" />
+                                    </div>
+                                    <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                      No availabe task for this filter.
+                                    </h3>
+                                  </div>
+                                ) : (
           <div className="overflow-x-auto p-6 bg-white mt-6 rounded-md shadow-md overflow-y-auto h-[80vh]">
             <table className="table table-sm">
               <thead>
@@ -141,17 +138,17 @@ const tasksArray = new Map(UserData.map(obj => [obj.id, obj]));
                 </tr>
               </thead>
               <tbody>
-                {result.map((task) => (
+                {taskData.map((task) => (
                   <tr key={task.id}>
                     <td>
                       <div className="flex items-center gap-3">
                         <div className="avatar">
                           <div className="rounded-full h-8 w-8 sm:h-10 sm:w-10">
-                            <img src={task.image} alt="No Image" />
+                            <img src={task.userDetails.image} alt="No Image" />
                           </div>
                         </div>
                         <div className="text-sm sm:text-base">
-                          {task.first_name}
+                          {task.userDetails.first_name}
                         </div>
                       </div>
                     </td>
@@ -175,7 +172,7 @@ const tasksArray = new Map(UserData.map(obj => [obj.id, obj]));
             <div className="text-xs text-gray-500 mt-2 sm:hidden">
               Scroll horizontally to view full table →
             </div>
-          </div>
+          </div>)}
         </main>
       </div>
       <UserModal

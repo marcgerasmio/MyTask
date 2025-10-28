@@ -15,8 +15,6 @@ import Supabase from "../../Supabase";
 const UnAssigned = () => {
   const modalRef = useRef();
   const taskRef = useRef();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [riskFilter, setRiskFilter] = useState("");
   const [selectedTask, setSelectedTask] = useState(null);
   const [TasksData, setTasks] = useState([]);
   const fetchTasks = async () => {
