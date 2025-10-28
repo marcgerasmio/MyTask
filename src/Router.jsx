@@ -21,7 +21,6 @@ import Tasks from "./pages/Employee/Tasks";
 import EmployeeActivity from "./pages/Employee/EmployeeActivity";
 
 
-
 const Router = () => {
   return (
     <BrowserRouter>
@@ -41,7 +40,6 @@ const Router = () => {
 
                   <Route path="/course" element={< CourseRecommender/>} />
                   <Route path="/news" element={<NewsCards/>}/>
-
 
         //Employee Routes
 

@@ -8,21 +8,19 @@ import { useNavigate } from "react-router-dom";
 import Supabase from "../../Supabase";
 
 const Tasklists = () => {
-  const [TasksData, setTasks] = useState([]);
-  const [UserData, setUsers] = useState([]);
+  const [userData, setUserData] = useState([])
 
-    const fetchUsers = async () => {
-    const { data } = await Supabase.from("userDetails").select("*");
-    setUsers(data);
-  };
-      const fetchTasks = async () => {
-    const { data } = await Supabase.from("tasks").select("*");
-    setTasks(data);
-  };
+   const fetchData = async () => {
+      const { data } = await Supabase.from("userDetails").select(`
+              "*",
+              tasks!user_id ("*")
+            `)
+            .eq('tasks.status', 'ongoing');
+            setUserData(data);
+    }
 
    useEffect(() => {
-      fetchUsers();
-      fetchTasks();
+      fetchData();
     }, []);
   const navigate = useNavigate();
   const modalRef = useRef();
@@ -31,12 +29,10 @@ const Tasklists = () => {
   const [status, setSelectedStatus] = useState('');
 
  
-  const filteredEmployees = UserData.filter((emp) => {
+  const filteredEmployees = userData.filter((emp) => {
     const search = searchTerm.toLowerCase();
     return emp.first_name.toLowerCase().includes(search);
   });
-  const getOngoingTask = (tasksData) =>
-    tasksData?.find((task) => task.status === "ongoing");
 
   return (
     <>
@@ -76,12 +72,6 @@ const Tasklists = () => {
           </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
             {filteredEmployees.map((emp) => {
-              const employeeTasks = TasksData.filter(
-                (task) => task.user_id === emp.id
-              );
-              const ongoingTask = employeeTasks.find(
-                (task) => task.status === "ongoing"
-              );
               return (
                 <div
                   key={emp.id}
@@ -102,9 +92,9 @@ const Tasklists = () => {
                   </div>
                   <div>
                     <div className="font-semibold text-sm mb-1">Ongoing Task:</div>
-                    {ongoingTask ? (
+                    {emp.tasks[0] ? (
                       <div className="bg-blue-100 text-blue-700 rounded px-2 py-1 text-xs font-medium">
-                        {ongoingTask.title}
+                        {emp.tasks[0].title}
                       </div>
                     ) : (
                       <div className="text-gray-400 text-xs">No ongoing task</div>

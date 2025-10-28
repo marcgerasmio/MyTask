@@ -1,33 +1,31 @@
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Supabase from "../../Supabase";
 
 const Activity = () => {
-  const [UserData, setUsers] = useState([]);
   const [TaskData, setTasks] = useState([]);
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
   const [filter, setFilter] = useState('completed');
  
-  const fetchUsers = async () => {
-    const { data } = await Supabase.from("userDetails").select("*");
-    setUsers(data);
-  };
-
-  const fetchTasks = async (start, end) => {
-    const { data } = await Supabase.from("tasks").select("*")
-    .gte('created_at', start)
+  const fetchTask = async (start, end) => {
+    const { data } = await Supabase.from("tasks").select(`
+            "*",
+            userDetails!id ("*")
+          `)
+            .gte('created_at', start)
     .lte('created_at', end)
     .eq('status', filter)
     .order('created_at', { ascending: false });
-    setTasks(data || []);
-  };
+
+   setTasks(data || []);
+  }
 
   function GetFirstAndLastDate(year, month) {
     const firstDayOfMonth = new Date(year, month - 1, 2);
     const lastDayOfMonth = new Date(year, month, 1);
     const start = firstDayOfMonth.toISOString();
     const end = lastDayOfMonth.toISOString();
-    fetchTasks(start, end);
+    fetchTask(start, end);
   }
 
   function getCurrentMonthAndYear() {
@@ -48,18 +46,9 @@ const Activity = () => {
   }
 
   useEffect(() => {
-    fetchUsers();
     handleTask();
   }, []);
 
-  const modalRef = useRef(null);
-
-  const tasksArray = new Map(UserData.map(obj => [obj.id, obj]));
-
-  const result = TaskData.map(obj2 => {
-    const matchingObj1 = tasksArray.get(obj2.user_id);
-    return matchingObj1 ? { ...matchingObj1, ...obj2 } : obj2;
-  });
 
   return (
     <div className="bg-white p-4 sm:p-6 mt-8 rounded-lg shadow-md">
@@ -69,7 +58,7 @@ const Activity = () => {
         </h1>
       </div>
 
-      {/* Filter Controls */}
+
       <div className="flex flex-col sm:flex-row gap-2 mb-6">
         <select 
           className="select select-bordered select-sm" 
@@ -123,14 +112,14 @@ const Activity = () => {
       </div>
 
       <div className="space-y-4 h-[42vh] overflow-y-auto">
-        {result.length === 0 ? (
+        {TaskData.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-base-content/70 text-sm sm:text-base">
               No tasks found for the selected filters
             </p>
           </div>
         ) : (
-          result.map((task) => (
+          TaskData.map((task) => (
             <div
               key={task.id}
               className="card border border-base-300 rounded-md"
@@ -140,7 +129,7 @@ const Activity = () => {
                   <div className="flex items-center gap-4">
                     <img
                       className="w-12 h-12 rounded-full object-cover"
-                      src={task.image}
+                      src={task.userDetails.image}
                       alt="user"
                     />
                     <div>
@@ -148,7 +137,7 @@ const Activity = () => {
                         {task.title}
                       </h3>
                       <p className="text-xs text-base-content/90">
-                        Assigned To: {task.first_name} {task.last_name}
+                        Assigned To: {task.userDetails.first_name} {task.userDetails.last_name}
                       </p>
                     </div>
                   </div>
