@@ -47,7 +47,9 @@ const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
     onClose?.();
   };
 
-  const createTask = async () => {
+const createTask = async (e) => {
+   e.preventDefault();
+   
    const { data, error } = await supabase
   .from('tasks')
   .insert({ 
@@ -59,6 +61,13 @@ const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
     status,
     link,
   });
+  
+  if (error) {
+    console.error('Error creating task:', error);
+    alert('Failed to create task. Please try again.');
+    return;
+  }
+  
   window.location.reload();
 };
 
