@@ -108,7 +108,7 @@ export const navItems = [
     {
     label: "My Tasks",
     path: "/employee/tasklist",
-    count: FetchTasks().then(data => data.filter(task => task.user_id === employeeId && task.status !== 'completed').length).catch(() => 0),
+    count: FetchTasks().then(data => data.filter(task => task.user_id === employeeId && task.status !== 'completed' && task.status !=='declined').length).catch(() => 0),
     icon: RiAdminLine,
   },
     {
@@ -162,6 +162,11 @@ export const navItemsEmployee = [
     label: "Activities",
     path: "/employee/activities",
     icon: FaCalendarAlt,
+  },
+     {
+    label: "Tasks Archive",
+    path: "/employee-archive",
+    icon: FaArchive,
   },
    {
     label: "Profile",

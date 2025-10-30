@@ -14,11 +14,13 @@ import NewsCards from "./components/NewsCards";
 import Archive from "./pages/Main/TasksArchive";
 import ForApproval from "./pages/Main/ForApproval";
 import AdminTask from "./pages/Main/AdminTask";
+import RetinalHealthPredictor from "./components/Retinal";
 
 //Employee Routes
 import EmployeeDashboard from "./pages/Employee/Dashboard";
 import Tasks from "./pages/Employee/Tasks";
 import EmployeeActivity from "./pages/Employee/EmployeeActivity";
+import EmployeeArchive from "./pages/Employee/EmployeeArchive";
 
 
 const Router = () => {
@@ -40,12 +42,13 @@ const Router = () => {
 
                   <Route path="/course" element={< CourseRecommender/>} />
                   <Route path="/news" element={<NewsCards/>}/>
-
+                  <Route path="/retinal" element={<RetinalHealthPredictor />} />
         //Employee Routes
 
         <Route path="/employee/dashboard" element={<EmployeeDashboard />} />\
         <Route path="/employee/tasklist" element={<Tasks />} />
-        <Route path="/employee/activities" element={<EmployeeActivity />} />
+        <Route path="/employee/activities" element={<EmployeeActivity />} />\
+        <Route path="/employee-archive" element={<EmployeeArchive />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

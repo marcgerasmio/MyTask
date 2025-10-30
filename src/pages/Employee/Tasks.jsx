@@ -58,7 +58,6 @@ function TaskCard({ task, index, onTaskClick }) {
   const navigate = useNavigate();
 
   const handleCardClick = (e) => {
-    // Prevent click when dragging
     if (!isDragging) {
       onTaskClick(task);
     }
@@ -79,7 +78,7 @@ function TaskCard({ task, index, onTaskClick }) {
       </div>
       <div className="text-gray-600 mb-2">{task.description}</div>
       <div className="flex items-center justify-start">
-         {task.link === null ? ( <></>) : (
+         {task.link === null || task.link === 'N/A' ? ( <></>) : (
         <a 
           className="text-black" 
           href={task.link} 
@@ -167,7 +166,6 @@ const Tasks = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const employeeId = Number(user.id);
 
-  // Set current user
   useEffect(() => {
     setCurrentUser(user);
   }, []);

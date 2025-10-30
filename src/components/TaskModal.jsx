@@ -138,7 +138,7 @@ const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
                           className="text-sm font-medium"
                           htmlFor="firstName"
                         >
-                        Link
+                        Link (leave blank if not applicable)
                         </label>
                         <input
                           id="firstName"
@@ -147,7 +147,6 @@ const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
                           value={link}
                           onChange={(e) => setLink(e.target.value)
                           }
-                          required
                         />
                       </div> 
                     </div>
