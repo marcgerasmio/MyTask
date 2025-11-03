@@ -171,10 +171,23 @@ const Tasks = () => {
   }, []);
 
   const fetchTasks = async (start, end) => {
-    const { data } = await supabase.from("tasks").select("*")
+    // Fetch completed tasks within the date range
+    const { data: completedTasks } = await supabase
+      .from("tasks")
+      .select("*")
+      .eq('status', 'completed')
       .gte('created_at', start)
       .lte('created_at', end);
-    setTasksData(data || []);
+
+    // Fetch all ongoing and pending tasks regardless of date
+    const { data: ongoingPendingTasks } = await supabase
+      .from("tasks")
+      .select("*")
+      .in('status', ['ongoing', 'pending']);
+
+    // Combine both results
+    const allTasks = [...(completedTasks || []), ...(ongoingPendingTasks || [])];
+    setTasksData(allTasks);
   };
 
   useEffect(() => {

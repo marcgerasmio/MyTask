@@ -30,6 +30,7 @@ const TAB_COLORS = {
 
 const EmployeeTasks = () => {
   const [TasksData, setTasks] = useState([]);
+  const [AllTasksData, setAllTasks] = useState([]); // Store all tasks
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
   const [selectedTask, setSelectedTask] = useState(null);
@@ -45,6 +46,12 @@ const EmployeeTasks = () => {
       setCurrentUser(user);
     }
   }, []);
+
+  // Fetch all tasks on component mount
+  const fetchAllTasks = async () => {
+    const { data } = await Supabase.from("tasks").select("*");
+    setAllTasks(data || []);
+  };
 
   const fetchTasks = async (start, end) => {
     const { data } = await Supabase.from("tasks").select("*")
@@ -88,6 +95,7 @@ const EmployeeTasks = () => {
   }
 
   useEffect(() => {
+    fetchAllTasks(); // Fetch all tasks for ongoing/pending
     handleTask();
   }, []);
   
@@ -97,9 +105,19 @@ const EmployeeTasks = () => {
   const { id } = useParams();
   const employeeId = Number(id);
   const employee = usersData.find((emp) => emp.id === employeeId);
-  const employeeTasks = TasksData.filter((task) => task.user_id === employeeData.id);
-
+  
   const [activeTab, setActiveTab] = useState("ongoing");
+  
+  // Filter employee tasks based on active tab
+  const employeeTasks = (() => {
+    if (activeTab === 'ongoing' || activeTab === 'pending') {
+      // For ongoing and pending, use all tasks
+      return AllTasksData.filter((task) => task.user_id === employeeData.id);
+    } else {
+      // For completed, use date-filtered tasks
+      return TasksData.filter((task) => task.user_id === employeeData.id);
+    }
+  })();
 
   const filteredTasks = employeeTasks.filter((task) => task.status.toLowerCase() === activeTab);
 

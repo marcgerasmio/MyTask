@@ -14,7 +14,6 @@ import NewsCards from "./components/NewsCards";
 import Archive from "./pages/Main/TasksArchive";
 import ForApproval from "./pages/Main/ForApproval";
 import AdminTask from "./pages/Main/AdminTask";
-import RetinalHealthPredictor from "./components/Retinal";
 
 //Employee Routes
 import EmployeeDashboard from "./pages/Employee/Dashboard";
@@ -42,7 +41,6 @@ const Router = () => {
 
                   <Route path="/course" element={< CourseRecommender/>} />
                   <Route path="/news" element={<NewsCards/>}/>
-                  <Route path="/retinal" element={<RetinalHealthPredictor />} />
         //Employee Routes
 
         <Route path="/employee/dashboard" element={<EmployeeDashboard />} />\
