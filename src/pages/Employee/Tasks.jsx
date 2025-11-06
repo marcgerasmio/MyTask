@@ -78,7 +78,7 @@ function TaskCard({ task, index, onTaskClick }) {
       </div>
       <div className="text-gray-600 mb-2">{task.description}</div>
       <div className="flex items-center justify-start">
-         {task.link === null || task.link === 'N/A' ? ( <></>) : (
+         {task.link === null || task.link === "" || task.link === 'N/A' ? ( <></>) : (
         <a 
           className="text-black" 
           href={task.link} 
