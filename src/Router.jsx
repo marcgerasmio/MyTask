@@ -14,6 +14,7 @@ import NewsCards from "./components/NewsCards";
 import Archive from "./pages/Main/TasksArchive";
 import ForApproval from "./pages/Main/ForApproval";
 import AdminTask from "./pages/Main/AdminTask";
+import MemoTracker from "./pages/Main/MemoTracker";
 
 //Employee Routes
 import EmployeeDashboard from "./pages/Employee/Dashboard";
@@ -38,6 +39,7 @@ const Router = () => {
          <Route path="tasks-archive" element={< Archive/>} />
           <Route path="tasks-approval" element={< ForApproval/>} />
           <Route path="/admin-tasks" element={< AdminTask/>} />
+          <Route path="/memo-tracker" element={< MemoTracker/>} />
 
                   <Route path="/course" element={< CourseRecommender/>} />
                   <Route path="/news" element={<NewsCards/>}/>

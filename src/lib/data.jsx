@@ -11,6 +11,7 @@ import { FaArchive } from "react-icons/fa";
 import { BiTask } from "react-icons/bi";
 import { RiAdminLine } from "react-icons/ri";
 import Supabase from "../Supabase";
+import { CiMemoPad } from "react-icons/ci";
 
 
 
@@ -128,7 +129,11 @@ export const navItems = [
     count: FetchTasks().then(data => data.filter(task => task.user_id === null).length).catch(() => 0),
     icon: BiTaskX,
   },
- 
+ {
+    label: "Memo Tracker",
+    path: "/memo-tracker",
+    icon: CiMemoPad,
+  },
     {
     label: "Activities",
     path: "/activities",
