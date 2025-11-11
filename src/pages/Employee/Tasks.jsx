@@ -165,7 +165,7 @@ const Tasks = () => {
 
   const user = JSON.parse(localStorage.getItem("user"));
   const employeeId = Number(user.id);
-
+  const isAdmin = user.isAdmin;
   useEffect(() => {
     setCurrentUser(user);
   }, []);
@@ -286,17 +286,19 @@ const Tasks = () => {
                 <option value={2026}>2026</option>
               </select>
               <button className="bg-green-900 text-white btn rounded-lg" onClick={() => GetFirstAndLastDate(year, month)}>Display</button>
-              <button 
-                className="bg-white-900 text-green-900 btn rounded-lg"
-                onClick={() => {
-                  modalRef.current?.open();
-                  setSelectedStatus("tba")
-                  setSelectedId(user.id)
-                }}
-              >
-                <IoMdAddCircleOutline className="h-4 w-4 mr-2"/>
-                Create Task
-              </button>
+             {!isAdmin && (
+                <button 
+                  className="bg-white-900 text-green-900 btn rounded-lg"
+                  onClick={() => {
+                    modalRef.current?.open();
+                    setSelectedStatus("tba")
+                    setSelectedId(user.id)
+                  }}
+                >
+                  <IoMdAddCircleOutline className="h-4 w-4 mr-2"/>
+                  Create Task
+                </button>
+              )}
             </div>
           </div>
         </div>
