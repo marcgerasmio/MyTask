@@ -108,7 +108,7 @@ const EditTaskModal = forwardRef(({onClose, task }, ref) => {
             <div className="space-y-2">
               <label className="block text-sm font-medium">Task Category</label>
               <div className="flex flex-wrap gap-4">
-                {["Publication Material", "Press Release", "Photo Coverage", "Video Production", 
+                {["Publication Material", "Press Release", "Photo Coverage", "Video Production", "Correspondence", 
                   "Committee Tasks", "Merchandise Design", "Data Retrieval", "Audio Recording", 
                   "Graphic Illustration", "Document Trailing", "Website Update", "Others"].map((cat) => (
                   <label key={cat} className="inline-flex items-center space-x-2">

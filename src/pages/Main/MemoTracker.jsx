@@ -46,7 +46,6 @@ const MemoTracker = () => {
 
       if (error) throw error;
 
-      // Refresh data after deletion
       await fetchData();
       setShowDeleteModal(false);
       setMemoToDelete(null);
@@ -58,7 +57,7 @@ const MemoTracker = () => {
 
   const handleModalClose = () => {
     setSelectedMemo(null);
-    fetchData(); // Refresh data when modal closes
+    fetchData(); 
   }
 
   const adminStyle = {
