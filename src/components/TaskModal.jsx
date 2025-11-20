@@ -106,8 +106,8 @@ const createTask = async (e) => {
 
   return (
     <dialog ref={dialogRef} className="modal backdrop-blur-xs">
-     <div className="modal-box w-full max-w-4xl p-0 shadow-2xl rounded-2xl overflow-hidden">
-     <div className="bg-green-800 p-6 text-white">
+     <div className="modal-box w-full max-w-4xl max-h-[90vh] p-0 shadow-2xl rounded-2xl overflow-hidden flex flex-col">
+     <div className="bg-green-800 p-6 text-white flex-shrink-0">
                   <button
                     className="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 z-10 text-white hover:bg-white hover:bg-opacity-20"
                     onClick={handleClose}
@@ -118,8 +118,8 @@ const createTask = async (e) => {
                   <p className="text-green-100 mt-1">Fill up necessary information below.</p>
                 </div>
                 
-        <form onSubmit={createTask}>
-                  <div className="p-4 space-y-4">
+        <form onSubmit={createTask} className="flex flex-col flex-1 overflow-hidden">
+                  <div className="p-4 space-y-4 overflow-y-auto flex-1">
                     <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                       <div className="space-y-2">
                         <label
@@ -211,7 +211,7 @@ const createTask = async (e) => {
                             </div>
                           ) : 
                           <div className="space-y-2">
-                                  <label className="block text-sm font-medium">Assign To:</label>
+                                  <label className="block text-sm font-medium">Assign To (Select Multiple)</label>
                                   <div className="border rounded-md p-3 max-h-48 overflow-y-auto bg-white">
                                     {UserData.map(user => (
                                       <label key={user.id} className="flex items-center space-x-2 py-2 hover:bg-gray-50 cursor-pointer">
@@ -225,13 +225,18 @@ const createTask = async (e) => {
                                       </label>
                                     ))}
                                   </div>
+                                  {selectedUserIds.length > 0 && (
+                                    <p className="text-sm text-gray-600 mt-1">
+                                      {selectedUserIds.length} user(s) selected
+                                    </p>
+                                  )}
                           </div>}    
                     
                         </div>
                     
                     </div>
 
-                         <div className="flex flex-col justify-end sm:flex-row gap-2">
+                         <div className="flex flex-col justify-end sm:flex-row gap-2 pt-4 border-t mt-4">
                                    <button className="bg-green-800 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
                                   type="submit">
                                        <FaSave className="h-4 w-4 mr-2" />
