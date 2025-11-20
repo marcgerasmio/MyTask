@@ -9,7 +9,7 @@ import { FaTimes } from "react-icons/fa";
 const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
   const dialogRef = useRef(null);
   const [password, setPassword] = useState('');
-  const [user_id, setUserId] = useState(null);
+  const [selectedUserIds, setSelectedUserIds] = useState([]); // Changed to array
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [deadline, setDeadline] = useState('');
@@ -47,28 +47,60 @@ const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
     onClose?.();
   };
 
+  // Handle checkbox selection for multiple users
+  const handleUserSelection = (userId) => {
+    setSelectedUserIds(prev => {
+      if (prev.includes(userId)) {
+        return prev.filter(id => id !== userId);
+      } else {
+        return [...prev, userId];
+      }
+    });
+  };
+
 const createTask = async (e) => {
    e.preventDefault();
    
-   const { data, error } = await supabase
-  .from('tasks')
-  .insert({ 
-    user_id: setId != null ? setId : user_id,
-    title,
-    description,
-    deadline,
-    category,
-    status,
-    link,
-  });
-  
-  if (error) {
-    console.error('Error creating task:', error);
-    alert('Failed to create task. Please try again.');
-    return;
-  }
-  
-  window.location.reload();
+   // Determine which users to assign the task to
+   const userIdsToAssign = setId != null ? [setId] : selectedUserIds;
+   
+   if (userIdsToAssign.length === 0) {
+     alert('Please select at least one user to assign the task to.');
+     return;
+   }
+   
+   // Create a task for each selected user
+   const taskPromises = userIdsToAssign.map(userId => 
+     supabase
+       .from('tasks')
+       .insert({ 
+         user_id: userId,
+         title,
+         description,
+         deadline,
+         category,
+         status,
+         link,
+       })
+   );
+   
+   try {
+     const results = await Promise.all(taskPromises);
+     
+     // Check if any insertions failed
+     const errors = results.filter(result => result.error);
+     
+     if (errors.length > 0) {
+       console.error('Error creating tasks:', errors);
+       alert(`Failed to create ${errors.length} task(s). Please try again.`);
+       return;
+     }
+     
+     window.location.reload();
+   } catch (error) {
+     console.error('Error creating tasks:', error);
+     alert('Failed to create tasks. Please try again.');
+   }
 };
 
 
@@ -179,15 +211,20 @@ const createTask = async (e) => {
                             </div>
                           ) : 
                           <div className="space-y-2">
-                                  <label className="block text-sm font-medium ">Assign To</label>
-                                  <div className="relative flex items-center">
-                                    <select name={UserData} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required value={user_id} onChange={(e) => setUserId(e.target.value)}>
-                                      <option>Select Employee</option>
-                                      {UserData.map(users =>
-                                      <option key={users.id} value={users.id}>{users.first_name} {users.last_name} </option>
-                                      )};
-                                  </select>
-                                </div>
+                                  <label className="block text-sm font-medium">Assign To:</label>
+                                  <div className="border rounded-md p-3 max-h-48 overflow-y-auto bg-white">
+                                    {UserData.map(user => (
+                                      <label key={user.id} className="flex items-center space-x-2 py-2 hover:bg-gray-50 cursor-pointer">
+                                        <input
+                                          type="checkbox"
+                                          checked={selectedUserIds.includes(user.id)}
+                                          onChange={() => handleUserSelection(user.id)}
+                                          className="form-checkbox h-4 w-4 text-green-600"
+                                        />
+                                        <span className="text-sm">{user.first_name} {user.last_name}</span>
+                                      </label>
+                                    ))}
+                                  </div>
                           </div>}    
                     
                         </div>
