@@ -17,7 +17,8 @@ const MemoTracker = () => {
   const [memoToDelete, setMemoToDelete] = useState(null);
 
   const fetchData = async () => {
-    const { data } = await Supabase.from("memo").select("*").order('id', { ascending: false });
+    const { data } = await Supabase.from("memo").select("*").order('id', { ascending: true })
+    ;
     setMemoData(data || []);
   }
 
