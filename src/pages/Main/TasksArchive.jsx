@@ -21,6 +21,7 @@ const Archive = () => {
             .gte('created_at', start)
     .lte('created_at', end)
     .eq('status', filter)
+    .order('id', { ascending: true })
 
    setTaskData(data || []);
   }
@@ -131,6 +132,7 @@ function handleTask(){
             <table className="table table-sm">
               <thead>
                 <tr className="text-xs sm:text-sm">
+                  <th>Task ID</th>
                 <th>Assigned To</th>
                   <th>Task Title</th>
                   <th>Description</th>
@@ -140,6 +142,7 @@ function handleTask(){
               <tbody>
                 {taskData.map((task) => (
                   <tr key={task.id}>
+                    <td className="text-sm">{task.id}</td>
                     <td>
                       <div className="flex items-center gap-3">
                         <div className="avatar">

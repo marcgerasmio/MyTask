@@ -218,6 +218,11 @@ const EmployeeTasks = () => {
                     onClick={() => handleTaskClick(task)}
                   >
                     <div> 
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xs font-semibold text-gray-500 bg-gray-200 px-2 py-1 rounded">
+                          TASK ID: {task.id}
+                        </span>
+                      </div>
                       <div className="font-bold">{task.title}</div>
                       <div className="text-s text-gray-600">{task.description}</div>
                       <div className="text-xs text-red-400">{task.deadline}</div>

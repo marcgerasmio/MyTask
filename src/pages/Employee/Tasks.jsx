@@ -70,6 +70,11 @@ function TaskCard({ task, index, onTaskClick }) {
       className={`transition-all duration-200 bg-white rounded-xl shadow-lg p-4 mb-4 border-l-4 ${BORDER_COLORS[task.status.toLowerCase()] || BORDER_COLORS.default} hover:scale-105 hover:shadow-2xl ${isDragging ? "opacity-50" : "opacity-100"}`}
       style={{ cursor: isDragging ? "grabbing" : "pointer" }}
     >
+      <div className="flex items-center gap-2 mb-2">
+        <span className="text-xs font-semibold text-gray-500 bg-gray-200 px-2 py-1 rounded">
+          TASK ID: {task.id}
+        </span>
+      </div>
       <div className="flex items-center justify-between mb-2">
         <span className="font-semibold text-lg text-gray-800">{task.title}</span>
         <span className={`px-2 py-1 rounded text-xs font-bold uppercase ${TAB_COLORS[task.status.toLowerCase()] || TAB_COLORS.default}`}>

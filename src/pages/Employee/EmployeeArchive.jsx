@@ -22,6 +22,7 @@ const user = JSON.parse(localStorage.getItem("user"));
             .gte('created_at', start)
     .lte('created_at', end)
     .eq('status', filter)
+    .order('id', { ascending: true })
     .eq('user_id', user.id)
 
    setTaskData(data || []);
@@ -134,6 +135,7 @@ function handleTask(){
             <table className="table table-sm">
               <thead>
                 <tr className="text-xs sm:text-sm">
+                  <th>Task ID</th>
                   <th>Task Title</th>
                   <th>Description</th>
                   <th>Status</th>
@@ -142,6 +144,7 @@ function handleTask(){
               <tbody>
                 {taskData.map((task) => (
                   <tr key={task.id}>
+                    <td className="text-sm">{task.id}</td>
                     <td className="text-sm">{task.title}</td>
                      <td className="text-sm">{task.description}</td>
                        <td>
