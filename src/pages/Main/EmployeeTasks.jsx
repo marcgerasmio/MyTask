@@ -219,13 +219,17 @@ const EmployeeTasks = () => {
                   >
                     <div> 
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs font-semibold text-gray-500 bg-gray-200 px-2 py-1 rounded">
+                        
+                        <span className={`px-2 py-1 rounded text-xs font-bold uppercase ${TAB_COLORS[task.status.toLowerCase()] || TAB_COLORS.default}`}>
+          {task.category}
+        </span>
+        <span className="text-xs font-semibold text-gray-500 bg-gray-200 px-2 py-1 rounded">
                           TASK ID: {task.id}
                         </span>
                       </div>
                       <div className="font-bold">{task.title}</div>
                       <div className="text-s text-gray-600">{task.description}</div>
-                      <div className="text-xs text-red-400">{task.deadline}</div>
+                      <div className="text-xs text-red-400">Deadline: {task.deadline}</div>
                     </div>
                     <div onClick={(e) => e.stopPropagation()}>
                       <button 
