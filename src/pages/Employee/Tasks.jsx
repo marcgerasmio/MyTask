@@ -36,9 +36,11 @@ const ItemTypes = {
 const BOARD_HEIGHT = "60vh";
 
 async function updateTaskStatusInSupabase(taskId, newStatus) {
+    const now = new Date();
+  const timestamp = now.toISOString().replace('T', ' ').replace('Z', '');
   const { error } = await supabase
     .from("tasks")
-    .update({ status: newStatus })
+    .update({ status: newStatus, updated_at: timestamp })
     .eq("id", taskId);
 
   if (error) {
@@ -63,6 +65,13 @@ function TaskCard({ task, index, onTaskClick }) {
     }
   };
 
+function formatDate(datetimeString) {
+    const date = new Date(datetimeString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
   return (
     <div
       ref={drag}
@@ -70,20 +79,21 @@ function TaskCard({ task, index, onTaskClick }) {
       className={`transition-all duration-200 bg-white rounded-xl shadow-lg p-4 mb-4 border-l-4 ${BORDER_COLORS[task.status.toLowerCase()] || BORDER_COLORS.default} hover:scale-105 hover:shadow-2xl ${isDragging ? "opacity-50" : "opacity-100"}`}
       style={{ cursor: isDragging ? "grabbing" : "pointer" }}
     >
-      <div className="flex items-center gap-2 mb-2">
+      <div className="flex justify-between gap-2 mb-2">
         <span className="text-xs font-semibold text-gray-500 bg-gray-200 px-2 py-1 rounded">
           TASK ID: {task.id}
+        </span>
+          <span className={`px-2 py-1 rounded text-xs font-bold uppercase ${TAB_COLORS[task.status.toLowerCase()] || TAB_COLORS.default}`}>
+          {task.category}
         </span>
       </div>
       <div className="flex items-center justify-between mb-2">
         <span className="font-semibold text-lg text-gray-800">{task.title}</span>
-        <span className={`px-2 py-1 rounded text-xs font-bold uppercase ${TAB_COLORS[task.status.toLowerCase()] || TAB_COLORS.default}`}>
-          {task.category}
-        </span>
       </div>
       <div className="text-gray-600 mb-2">{task.description}</div>
-      <div className="flex items-center justify-start">
-         {task.link === null || task.link === "" || task.link === 'N/A' ? ( <></>) : (
+      <div className="flex items-center justify-between">
+        <div className="flex">  
+          {task.link === null || task.link === "" || task.link === 'N/A' ? ( <></>) : (
         <a 
           className="text-black" 
           href={task.link} 
@@ -94,7 +104,14 @@ function TaskCard({ task, index, onTaskClick }) {
           <FaLink className="h-4 w-4 mr-2"/>
         </a>
          )}
-        <span className="text-xs text-gray-400">Deadline: {task.deadline}</span>
+           <span className="text-xs text-black">
+        {task.status === 'completed' ? 'Completed At' : 
+        task.status === 'pending' ? 'Posted' : 
+        task.status === 'ongoing' ? 'Started Working On' :
+        'Updated At'}: {formatDate(task.status === 'pending' ? task.created_at : task.updated_at)}
+      </span>
+        </div>
+      <span className="text-xs text-red-400">Deadline: {task.deadline}</span>
       </div>
     </div>
   );
@@ -206,13 +223,19 @@ const Tasks = () => {
     setTasks(employeeTasks);
   }, [TasksData, employeeId]);
 
-  const moveTask = useCallback((taskId, newStatus) => {
+  const moveTask = useCallback(async (taskId, newStatus) => {
+    const now = new Date();
+    const timestamp = now.toISOString().replace('T', ' ').replace('Z', '');
+    
+    // Optimistically update the UI
     setTasks((prev) =>
       prev.map((task) =>
-        task.id === taskId ? { ...task, status: newStatus } : task
+        task.id === taskId ? { ...task, status: newStatus, updated_at: timestamp } : task
       )
     );
-    updateTaskStatusInSupabase(taskId, newStatus);
+    
+    // Update in database
+    await updateTaskStatusInSupabase(taskId, newStatus);
   }, []);
 
   const handleTaskClick = (task) => {

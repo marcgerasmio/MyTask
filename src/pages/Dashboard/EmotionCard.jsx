@@ -56,7 +56,7 @@ const EmotionCard = () => {
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6 p-4 bg-white rounded shadow">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 p-4 bg-white rounded shadow">
         {emotionData.length === 0 ? (
           <div className="col-span-full text-center py-12 text-gray-500">
             No employees found.
