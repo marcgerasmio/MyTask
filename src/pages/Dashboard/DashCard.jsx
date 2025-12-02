@@ -4,7 +4,9 @@ import { LuUsers } from "react-icons/lu";
 import { IoCalendarClearOutline } from "react-icons/io5";
 import { IoWarningOutline } from "react-icons/io5";
 import { FaArrowTrendUp } from "react-icons/fa6";
-
+import { MdFileDownloadDone } from "react-icons/md";
+import { MdOutlinePendingActions } from "react-icons/md";
+import { IoFileTrayFull } from "react-icons/io5";
 
 
 const DashCard = () => {
@@ -35,14 +37,14 @@ const DashCard = () => {
   {
     id: 1,
     title: "Total Tasks",
-    icon: LuUsers,
+    icon: IoFileTrayFull,
     count: tasks.length,
     color: "card shadow-md rounded-lg hover:shadow-lg transition hover:scale-[1.02] bg-gray-500 text-white",
   },
    {
     id: 2,
     title: "Ongoing Tasks",
-    icon: IoCalendarClearOutline,
+    icon: MdOutlinePendingActions,
     count: tasks.filter(task => task.status === 'ongoing').length,
     color: "card shadow-md rounded-lg hover:shadow-lg transition hover:scale-[1.02] bg-orange-400 text-white",
   },
@@ -57,7 +59,7 @@ const DashCard = () => {
   {
     id: 4,
     title: "Total Completed",
-    icon: FaArrowTrendUp,
+    icon: MdFileDownloadDone,
     count: tasks.filter(task => task.status === 'completed').length,
     color: "card shadow-md rounded-lg hover:shadow-lg transition hover:scale-[1.02] bg-green-800 text-white",
   },
