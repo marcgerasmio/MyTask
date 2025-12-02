@@ -64,7 +64,7 @@ const DashCard = () => {
 ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-5 tracking-widest">
+    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-5 tracking-widest">
       {cards.map((card) => {
         const Icon = card.icon;
         return (

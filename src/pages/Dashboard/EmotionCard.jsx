@@ -16,6 +16,7 @@ const EmotionCard = () => {
             "*",
             emotion!emotion_user_id_fkey ("*")
           `)
+          .order("created_at", { ascending: true });
 
       setEmotionData(data || []);
       } catch (err) {
@@ -56,44 +57,46 @@ const EmotionCard = () => {
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 p-4 bg-white rounded shadow">
-        {emotionData.length === 0 ? (
-          <div className="col-span-full text-center py-12 text-gray-500">
-            No employees found.
-          </div>
-        ) : (
-          emotionData.map((emp) => {
-            return (
-              <div
-                key={emp.id}
-                className="cursor-pointer transition-transform hover:scale-105"
-              >
-                <div className="text-center">
-                  <div className="relative inline-block mb-2">
-                    <img
-                      className="rounded-full h-20 w-20 object-cover border-2 border-gray-200"
-                      src={emp.image || "/default-avatar.png"}
-                      alt={`${emp.first_name}'s avatar`}
-                      onError={(e) => {
-                        e.target.src = "/default-avatar.png";
-                      }}
-                    />
-                    <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-white rounded-full border-2 border-gray-200 flex items-center justify-center text-lg">
-                      {emp.emotion[0].emotion || "😐"}
-                    </div>
-                  </div>
-                  <div className="font-bold text-lg">
-                    {emp.first_name} {emp.last_name}
-                  </div>
-                  <div className="text-xs text-gray-600 mt-1 italic">
-                    {emp.position || "No position"}
-                  </div>
+      <div className="overflow-x-auto p-4 bg-white rounded shadow">
+  <div className="grid grid-flow-col auto-cols-[minmax(200px,1fr)] sm:auto-cols-[minmax(250px,1fr)]">
+    {emotionData.length === 0 ? (
+      <div className="col-span-full text-center py-12 text-gray-500">
+        No employees found.
+      </div>
+    ) : (
+      emotionData.map((emp) => {
+        return (
+          <div
+            key={emp.id}
+            className="cursor-pointer transition-transform hover:scale-105"
+          >
+            <div className="text-center">
+              <div className="relative inline-block mb-2">
+                <img
+                  className="rounded-full h-20 w-20 object-cover border-2 border-gray-200"
+                  src={emp.image || "/default-avatar.png"}
+                  alt={`${emp.first_name}'s avatar`}
+                  onError={(e) => {
+                    e.target.src = "/default-avatar.png";
+                  }}
+                />
+                <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-white rounded-full border-2 border-gray-200 flex items-center justify-center text-lg">
+                  {emp.emotion[0].emotion || "😐"}
                 </div>
               </div>
-            );
-          })
-        )}
-      </div>
+              <div className="font-bold text-lg">
+                {emp.first_name} {emp.last_name}
+              </div>
+              <div className="text-xs text-gray-600 mt-1 italic">
+                {emp.position || "No position"}
+              </div>
+            </div>
+          </div>
+        );
+      })
+    )}
+  </div>
+</div>
     </>
   );
 };

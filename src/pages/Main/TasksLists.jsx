@@ -15,7 +15,8 @@ const Tasklists = () => {
               "*",
               tasks!user_id ("*")
             `)
-            .eq('tasks.status', 'ongoing');
+            .eq('tasks.status', 'ongoing')
+             .order("created_at", { ascending: true });
             setUserData(data);
     }
 
