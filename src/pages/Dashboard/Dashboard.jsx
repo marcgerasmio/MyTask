@@ -17,7 +17,7 @@ const Dashboard = () => {
         <Sidebar />
         
         {/* Main Content */}
-        <main className="flex-1 w-full p-4 pt-20 lg:p-6 lg:pt-6 lg:ml-64">
+       <main className="flex-1 w-full p-4 pt-20 lg:p-6 lg:pt-6 lg:pl-72">
           
           {/* Header Section */}
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-6">
