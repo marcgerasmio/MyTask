@@ -15,6 +15,8 @@ import Archive from "./pages/Main/TasksArchive";
 import ForApproval from "./pages/Main/ForApproval";
 import AdminTask from "./pages/Main/AdminTask";
 import MemoTracker from "./pages/Main/MemoTracker";
+import Reports from "./pages/Main/Reports";
+// import PDSExtractor from "./components/PDFExtract";
 
 //Employee Routes
 import EmployeeDashboard from "./pages/Employee/Dashboard";
@@ -40,9 +42,11 @@ const Router = () => {
           <Route path="tasks-approval" element={< ForApproval/>} />
           <Route path="/admin-tasks" element={< AdminTask/>} />
           <Route path="/memo-tracker" element={< MemoTracker/>} />
+          <Route path="/reports" element={< Reports/>} />
 
                   <Route path="/course" element={< CourseRecommender/>} />
                   <Route path="/news" element={<NewsCards/>}/>
+                  {/* <Route path="/pds-extractor" element={<PDSExtractor/>}/> */}
         //Employee Routes
 
         <Route path="/employee/dashboard" element={<EmployeeDashboard />} />\

@@ -66,35 +66,20 @@ const DashCard = () => {
 ];
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-5 tracking-widest">
+   <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-5 tracking-widest">
       {cards.map((card) => {
         const Icon = card.icon;
         return (
-          <div key={card.id} className={card.color}>
-            <div className="card-body">
-              <h2 className="font-semibold flex justify-between tracking-normal">
-                {card.title}
-                {Icon && (
-                  <Icon
-                    size={17}
-                   className={card.color}
-                  />
-                )}
-              </h2>
-              <p
-                className={`text-2xl font-extrabold text-white ${
-                  card.title === "High Risk Cases"
-                    ? "text-red-500"
-                    : card.title === "Success Rate"
-                    ? "text-green-600"
-                    : "text-black"
-                }`}
-              >
-                {card.count}
-                <span className="block font-normal text-xs text-gray-600 tracking-normal">
-                  {card.detail}
-                </span>
-              </p>
+          <div 
+            key={card.id} 
+            className={`p-6 rounded-lg shadow-md hover:shadow-lg transition hover:scale-[1.02] ${card.color} text-white`}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm">{card.title}</p>
+                <p className="text-3xl font-bold">{card.count}</p>
+              </div>
+              {Icon && <Icon className="text-4xl" />}
             </div>
           </div>
         );

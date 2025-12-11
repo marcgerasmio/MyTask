@@ -12,6 +12,7 @@ import { BiTask } from "react-icons/bi";
 import { RiAdminLine } from "react-icons/ri";
 import Supabase from "../Supabase";
 import { CiMemoPad } from "react-icons/ci";
+import { VscGraphLine } from "react-icons/vsc";
 
 
 
@@ -139,6 +140,12 @@ export const navItems = [
     path: "/activities",
     icon: FaCalendarAlt,
   },
+      {
+    label: "Reports",
+    path: "/reports",
+    icon: VscGraphLine,
+  },
+
   {
     label: "Users",
     path: "/users",

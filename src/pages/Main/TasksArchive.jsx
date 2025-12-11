@@ -85,7 +85,7 @@ function handleTask(){
               </span>
             </h1>
             <div className="flex flex-col sm:flex-row gap-2">
-                   <div className="flex gap-2 mt-4 sm:mt-0">
+                <div className="flex gap-2 mt-4 sm:mt-0">
                 <select defaultValue={filter} className="select" onChange={(e) => setFilter(e.target.value)} value={filter}>
                 <option disabled={true}>Status</option>
                 <option value="completed">Completed</option>

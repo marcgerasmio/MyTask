@@ -163,7 +163,7 @@ const Login = () => {
         backgroundSize: "cover",
       }}
     >
-      <div className="w-100 max-w-4xl bg-white rounded-2xl shadow-xl overflow-hidden">
+      <div className="max-w-xl bg-white rounded-2xl shadow-xl overflow-hidden">
         <div className="grid lg:grid-cols-1 h-full">
           <div className="p-6 lg:p-12 flex flex-col justify-center">
             <div className="mb-6 text-center">
