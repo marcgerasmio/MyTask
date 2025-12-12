@@ -141,7 +141,7 @@ export const navItems = [
     icon: FaCalendarAlt,
   },
       {
-    label: "Reports",
+    label: "Analytics Reports",
     path: "/reports",
     icon: VscGraphLine,
   },

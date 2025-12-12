@@ -1,10 +1,9 @@
 import { useState, useEffect, useRef } from "react";
-import { FaChartBar, FaTasks, FaCheckCircle, FaClock, FaUsers } from "react-icons/fa";
+import { FaChartBar, FaTasks, FaCheckCircle, FaClock, FaUsers, FaBalanceScale, FaExclamationTriangle } from "react-icons/fa";
 import * as Chart from "chart.js";
 import Sidebar from "../../components/Sidebar";
 import Supabase from "../../Supabase";
 
-// Register Chart.js components
 const { Chart: ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, PieController, LineController, BarController } = Chart;
 ChartJS.register(
   ArcElement, 
@@ -33,9 +32,11 @@ const Reports = () => {
   const pieChartRef = useRef(null);
   const lineChartRef = useRef(null);
   const barChartRef = useRef(null);
+  const workloadChartRef = useRef(null);
   const pieChartInstance = useRef(null);
   const lineChartInstance = useRef(null);
   const barChartInstance = useRef(null);
+  const workloadChartInstance = useRef(null);
 
   // Fetch data from Supabase - All statuses, filter only by date
   const fetchData = async (start, end) => {
@@ -112,7 +113,6 @@ const Reports = () => {
     setCurrentPage(pageNumber);
   };
 
-  // User performance data
   const getUserPerformance = () => {
     const userMap = {};
     taskData.forEach(task => {
@@ -132,7 +132,43 @@ const Reports = () => {
     return Object.values(userMap);
   };
 
-  // Timeline data
+  // Workload Analysis calculations
+  const getWorkloadAnalysis = () => {
+    const userMap = {};
+    taskData.forEach(task => {
+      const userId = task.userDetails.id;
+      if (!userMap[userId]) {
+        userMap[userId] = {
+          id: userId,
+          name: task.userDetails.first_name,
+          image: task.userDetails.image,
+          completed: 0,
+          pending: 0,
+          ongoing: 0,
+          tba: 0,
+          total: 0
+        };
+      }
+      userMap[userId][task.status]++;
+      userMap[userId].total++;
+    });
+    
+    const users = Object.values(userMap);
+    const avgTasksPerUser = users.length > 0 ? totalTasks / users.length : 0;
+    
+    return users.map(user => ({
+      ...user,
+      completionRate: user.total > 0 ? ((user.completed / user.total) * 100).toFixed(1) : 0,
+      activeLoad: user.pending + user.ongoing + user.tba,
+      deviation: user.total - avgTasksPerUser,
+      isOverloaded: user.total > avgTasksPerUser * 1.2,
+      isUnderloaded: user.total < avgTasksPerUser * 0.8
+    })).sort((a, b) => b.total - a.total);
+  };
+
+  const workloadData = getWorkloadAnalysis();
+  const avgTasksPerUser = workloadData.length > 0 ? totalTasks / workloadData.length : 0;
+
   const getTimelineData = () => {
     const days = 7;
     const timeline = [];
@@ -149,7 +185,6 @@ const Reports = () => {
     return timeline;
   };
 
-  // Create/Update Charts
   useEffect(() => {
     if (!loading && taskData.length > 0) {
       // Pie Chart
@@ -290,12 +325,87 @@ const Reports = () => {
           }
         });
       }
+
+      // Workload Distribution Chart
+      if (workloadChartRef.current) {
+        if (workloadChartInstance.current) {
+          workloadChartInstance.current.destroy();
+        }
+
+        const ctx = workloadChartRef.current.getContext('2d');
+        workloadChartInstance.current = new ChartJS(ctx, {
+          type: 'bar',
+          data: {
+            labels: workloadData.map(u => u.name),
+            datasets: [
+              {
+                label: 'Completed',
+                data: workloadData.map(u => u.completed),
+                backgroundColor: '#166534',
+                borderRadius: 5
+              },
+              {
+                label: 'Ongoing',
+                data: workloadData.map(u => u.ongoing),
+                backgroundColor: '#FB923C',
+                borderRadius: 5
+              },
+              {
+                label: 'Pending',
+                data: workloadData.map(u => u.pending),
+                backgroundColor: '#EAB308',
+                borderRadius: 5
+              },
+              {
+                label: 'For Approval',
+                data: workloadData.map(u => u.tba),
+                backgroundColor: '#3B82F6',
+                borderRadius: 5
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: {
+                  padding: 15
+                }
+              },
+              tooltip: {
+                callbacks: {
+                  footer: function(items) {
+                    const index = items[0].dataIndex;
+                    const user = workloadData[index];
+                    return `Total: ${user.total} tasks\nActive Load: ${user.activeLoad} tasks`;
+                  }
+                }
+              }
+            },
+            scales: {
+              x: {
+                stacked: true
+              },
+              y: {
+                stacked: true,
+                beginAtZero: true,
+                ticks: {
+                  stepSize: 1
+                }
+              }
+            }
+          }
+        });
+      }
     }
 
     return () => {
       if (pieChartInstance.current) pieChartInstance.current.destroy();
       if (lineChartInstance.current) lineChartInstance.current.destroy();
       if (barChartInstance.current) barChartInstance.current.destroy();
+      if (workloadChartInstance.current) workloadChartInstance.current.destroy();
     };
   }, [taskData, loading]);
 
@@ -429,52 +539,95 @@ const Reports = () => {
           </div>
         </div>
 
-        {/* Bar Chart */}
-        <div className="grid grid-cols-1 gap-6 mb-6">
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-bold mb-4">Team Member Performance</h2>
-            <div className="relative" style={{ height: '300px' }}>
+
+    <h1 className="text-lg sm:text-xl md:text-2xl font-extrabold mb-3 mt-3">
+            <FaChartBar className="inline mr-2 mb-1" />
+         Work Load Analysis
+            <span className="block font-normal text-sm sm:text-base text-gray-600 mt-1">
+            </span>
+          </h1>
+        {/* Workload Analysis Section */}
+        <div className="mb-6">
+          {/* Workload Metrics */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            <div className="p-6 rounded-lg shadow-m hover:shadow-lg transition hover:scale-[1.02] bg-green-800 text-white">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm">Average Tasks/Person</p>
+                  <p className="text-3xl font-bold">{avgTasksPerUser.toFixed(1)}</p>
+                </div>
+                <FaBalanceScale className="text-4xl" />
+              </div>
+            </div>
+
+            <div className=" p-6 rounded-lg shadow-md hover:shadow-lg transition hover:scale-[1.02] bg-yellow-500 text-white">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm">Team Members</p>
+                  <p className="text-3xl font-bold">{workloadData.length}</p>
+                </div>
+                <FaUsers className="text-4xl" />
+              </div>
+            </div>
+
+            <div className="p-6 rounded-lg shadow-md hover:shadow-lg transition hover:scale-[1.02] bg-orange-400 text-white ">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm">Overloaded Members</p>
+                  <p className="text-3xl font-bold">
+                    {workloadData.filter(u => u.isOverloaded).length}
+                  </p>
+                </div>
+                <FaExclamationTriangle className="text-4xl text-red-600" />
+              </div>
+            </div>
+          </div>
+
+          {/* Workload Distribution Chart */}
+          <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+            <h3 className="text-xl font-bold mb-4">Task Distribution by Status</h3>
+            <div className="relative" style={{ height: '350px' }}>
               {loading || taskData.length === 0 ? (
                 <div className="h-full flex items-center justify-center text-gray-400">
                   {loading ? 'Loading...' : 'No data available for selected period'}
                 </div>
               ) : (
-                <canvas ref={barChartRef}></canvas>
+                <canvas ref={workloadChartRef}></canvas>
               )}
             </div>
           </div>
-        </div>
 
-        {/* Detailed Table */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-bold mb-4">Task Details</h2>
-          {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-            </div>
-          ) : taskData.length === 0 ? (
-            <div className="text-center py-12">
-              <FaTasks className="mx-auto h-16 w-16 text-gray-300 mb-4" />
-              <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                No tasks found for selected period
-              </h3>
-              <p className="text-gray-500 text-sm">
-                Try selecting a different month or year to view tasks
-              </p>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Assigned To</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+          {/* Detailed Workload Table */}
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h3 className="text-xl font-bold mb-4">Individual Workload Details</h3>
+            {loading ? (
+              <div className="flex justify-center items-center h-64">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+              </div>
+            ) : workloadData.length === 0 ? (
+              <div className="text-center py-12">
+                <FaBalanceScale className="mx-auto h-16 w-16 text-gray-300 mb-4" />
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                  No workload data available
+                </h3>
+                <p className="text-gray-500 text-sm">
+                  Select a period with assigned tasks to view workload analysis
+                </p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Member</th>
+                      <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Total Tasks</th>
+                      <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Completed</th>
+                      <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Active Load</th>
+                      <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Completion Rate</th>
+                      <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
                   {currentTasks.map((task) => (
                     <tr key={task.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap text-sm">{task.id}</td>
@@ -529,7 +682,7 @@ const Reports = () => {
                     {/* Page Numbers */}
                     {[...Array(totalPages)].map((_, index) => {
                       const pageNumber = index + 1;
-                      // Show first page, last page, current page, and pages around current
+    
                       if (
                         pageNumber === 1 ||
                         pageNumber === totalPages ||
@@ -574,6 +727,7 @@ const Reports = () => {
             </div>
           )}
         </div>
+         </div>
       </main>
     </div>
   );
