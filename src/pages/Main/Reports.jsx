@@ -619,12 +619,11 @@ const Reports = () => {
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Member</th>
-                      <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Total Tasks</th>
-                      <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Completed</th>
-                      <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Active Load</th>
-                      <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Completion Rate</th>
-                      <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Status</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">MEMBER</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">TASK</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">STATUS</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">DATE</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
