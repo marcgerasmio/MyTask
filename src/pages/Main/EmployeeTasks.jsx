@@ -245,7 +245,14 @@ const EmployeeTasks = () => {
                         className="btn btn-ghost text-red-500 hover:bg-white border-none shadow-none btn-xs"
                         onClick={() => deleteFunction("tasks", task.id)}
                       >
-                        <FaRegTrashCan size={14} />
+                           <FaRegTrashCan
+                        className="text-red-600 cursor-pointer"
+                        onClick={() => {
+                          if (window.confirm("Are you sure you want to delete this task?")) {
+                            deleteFunction("tasks", task.id);
+                          }
+                        }}
+                      />
                       </button>
                     </div>
                   </div>

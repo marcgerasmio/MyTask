@@ -170,15 +170,20 @@ export const navItemsEmployee = [
     icon: FaTasks,
      count: FetchTasks().then(data => data.filter(task => task.user_id === employeeId && task.status !== 'completed' && task.status !== 'tba').length).catch(() => 0),
   },
-    {
+   {
     label: "Activities",
-    path: "/employee/activities",
+    path: "/activities",
     icon: FaCalendarAlt,
   },
-     {
+   {
     label: "Tasks Archive",
-    path: "/employee-archive",
+    path: "/tasks-archive",
     icon: FaArchive,
+  },
+        {
+    label: "Analytics Reports",
+    path: "/reports",
+    icon: VscGraphLine,
   },
    {
     label: "Profile",

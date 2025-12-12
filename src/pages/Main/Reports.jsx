@@ -38,7 +38,6 @@ const Reports = () => {
   const barChartInstance = useRef(null);
   const workloadChartInstance = useRef(null);
 
-  // Fetch data from Supabase - All statuses, filter only by date
   const fetchData = async (start, end) => {
     setLoading(true);
     try {
@@ -200,7 +199,7 @@ const Reports = () => {
             labels: ['Completed', 'Pending', 'Ongoing', 'For Approval'],
             datasets: [{
               data: [statusCounts.completed, statusCounts.pending, statusCounts.ongoing, statusCounts.tba],
-              backgroundColor: ['#166534', '#EAB308', '#FB923C', '#3B82F6'],
+              backgroundColor: ['#166534', '#EAB308', '#FB923C', '#757d89ff'],
               borderWidth: 2,
               borderColor: '#fff'
             }]
@@ -247,7 +246,7 @@ const Reports = () => {
             datasets: [{
               label: 'Tasks Created',
               data: timelineData.map(d => d.tasks),
-              borderColor: '#3B82F6',
+              borderColor: '#003300',
               backgroundColor: 'rgba(59, 130, 246, 0.1)',
               tension: 0.4,
               fill: true,
@@ -359,7 +358,7 @@ const Reports = () => {
               {
                 label: 'For Approval',
                 data: workloadData.map(u => u.tba),
-                backgroundColor: '#3B82F6',
+                backgroundColor: '#757d89ff',
                 borderRadius: 5
               }
             ]
@@ -578,14 +577,14 @@ const Reports = () => {
                     {workloadData.filter(u => u.isOverloaded).length}
                   </p>
                 </div>
-                <FaExclamationTriangle className="text-4xl text-red-600" />
+                <FaExclamationTriangle className="text-4xl" />
               </div>
             </div>
           </div>
 
           {/* Workload Distribution Chart */}
           <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-            <h3 className="text-xl font-bold mb-4">Task Distribution by Status</h3>
+            <h3 className="text-xl font-bold mb-4">Workload by Members</h3>
             <div className="relative" style={{ height: '350px' }}>
               {loading || taskData.length === 0 ? (
                 <div className="h-full flex items-center justify-center text-gray-400">
