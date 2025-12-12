@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import { useNavigate } from "react-router-dom";
 import supabase from "../../Supabase";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
@@ -7,7 +7,7 @@ import TaskModal from "../../components/TaskModal";
 import Sidebar from "../../components/Sidebar"; 
 import TaskRemarksModal from "../../components/RemarksModal";
 import { IoMdAddCircleOutline } from "react-icons/io";
-import { FaLink } from "react-icons/fa";
+import { FaLink, FaUserEdit, FaSave, FaTimes } from "react-icons/fa";
 
 const STATUS_TABS = [
   { label: "Ongoing", value: "ongoing" },
@@ -36,7 +36,7 @@ const ItemTypes = {
 const BOARD_HEIGHT = "60vh";
 
 async function updateTaskStatusInSupabase(taskId, newStatus) {
-    const now = new Date();
+  const now = new Date();
   const timestamp = now.toISOString().replace('T', ' ').replace('Z', '');
   const { error } = await supabase
     .from("tasks")
@@ -48,7 +48,7 @@ async function updateTaskStatusInSupabase(taskId, newStatus) {
   }
 }
 
-function TaskCard({ task, index, onTaskClick }) {
+function TaskCard({ task, index, onTaskClick, onReassignClick }) {
   const [{ isDragging }, drag] = useDrag({
     type: ItemTypes.TASK,
     item: { id: task.id, index, status: task.status },
@@ -65,13 +65,19 @@ function TaskCard({ task, index, onTaskClick }) {
     }
   };
 
-function formatDate(datetimeString) {
+  const handleReassignClick = (e) => {
+    e.stopPropagation();
+    onReassignClick(task);
+  };
+
+  function formatDate(datetimeString) {
     const date = new Date(datetimeString);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
-}
+  }
+
   return (
     <div
       ref={drag}
@@ -83,41 +89,48 @@ function formatDate(datetimeString) {
         <span className="text-xs font-semibold text-gray-500 bg-gray-200 px-2 py-1 rounded">
           TASK ID: {task.id}
         </span>
-          <span className={`px-2 py-1 rounded text-xs font-bold uppercase ${TAB_COLORS[task.status.toLowerCase()] || TAB_COLORS.default}`}>
+        <span className={`px-2 py-1 rounded text-xs font-bold uppercase ${TAB_COLORS[task.status.toLowerCase()] || TAB_COLORS.default}`}>
           {task.category}
         </span>
       </div>
       <div className="flex items-center justify-between mb-2">
         <span className="font-semibold text-lg text-gray-800">{task.title}</span>
+        <button
+          onClick={handleReassignClick}
+          className="p-1.5 hover:bg-blue-100 rounded-full transition-colors"
+          title="Reassign Task"
+        >
+          <FaUserEdit className="h-4 w-4 text-blue-600" />
+        </button>
       </div>
       <div className="text-gray-600 mb-2">{task.description}</div>
       <div className="flex items-center justify-between">
         <div className="flex">  
           {task.link === null || task.link === "" || task.link === 'N/A' ? ( <></>) : (
-        <a 
-          className="text-black" 
-          href={task.link} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <FaLink className="h-4 w-4 mr-2"/>
-        </a>
-         )}
-           <span className="text-xs text-black">
-        {task.status === 'completed' ? 'Completed At' : 
-        task.status === 'pending' ? 'Posted' : 
-        task.status === 'ongoing' ? 'Started Working On' :
-        'Updated At'}: {formatDate(task.status === 'pending' ? task.created_at : task.updated_at)}
-      </span>
+            <a 
+              className="text-black" 
+              href={task.link} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <FaLink className="h-4 w-4 mr-2"/>
+            </a>
+          )}
+          <span className="text-xs text-black">
+            {task.status === 'completed' ? 'Completed At' : 
+            task.status === 'pending' ? 'Posted' : 
+            task.status === 'ongoing' ? 'Started Working On' :
+            'Updated At'}: {formatDate(task.status === 'pending' ? task.created_at : task.updated_at)}
+          </span>
         </div>
-      <span className="text-xs text-red-400">Deadline: {task.deadline}</span>
+        <span className="text-xs text-red-400">Deadline: {task.deadline}</span>
       </div>
     </div>
   );
 }
 
-function TaskColumn({ status, tasks, moveTask, onTaskClick, children }) {
+function TaskColumn({ status, tasks, moveTask, onTaskClick, onReassignClick, children }) {
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: ItemTypes.TASK,
     drop: (item) => {
@@ -140,7 +153,7 @@ function TaskColumn({ status, tasks, moveTask, onTaskClick, children }) {
         display: "flex",
         flexDirection: "column",
         padding: "1.5rem 1rem",
-          width: '20vw'
+        width: '20vw'
       }}
     >
       <div className="flex items-center mb-4">
@@ -165,6 +178,7 @@ function TaskColumn({ status, tasks, moveTask, onTaskClick, children }) {
               task={task} 
               index={idx} 
               onTaskClick={onTaskClick}
+              onReassignClick={onReassignClick}
             />
           ))
         )}
@@ -172,6 +186,121 @@ function TaskColumn({ status, tasks, moveTask, onTaskClick, children }) {
     </div>
   );
 }
+
+// Reassign Modal Component
+const ReassignModal = forwardRef(({ task, onReassign }, ref) => {
+  const dialogRef = useRef(null);
+  const [employees, setEmployees] = useState([]);
+  const [selectedEmployee, setSelectedEmployee] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  useImperativeHandle(ref, () => ({
+    open: () => {
+      dialogRef.current?.showModal();
+      fetchEmployees();
+    },
+    close: () => dialogRef.current?.close(),
+  }));
+
+  const fetchEmployees = async () => {
+    const { data, error } = await supabase
+      .from("userDetails")
+      .select("*");
+
+    if (error) {
+      console.error("Error fetching employees:", error);
+    } else {
+      setEmployees(data || []);
+    }
+  };
+
+  const handleClose = () => {
+    dialogRef.current?.close();
+    setSelectedEmployee('');
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!selectedEmployee) {
+      alert("Please select an employee");
+      return;
+    }
+
+    setLoading(true);
+    await onReassign(task?.id, parseInt(selectedEmployee));
+    setLoading(false);
+    setSelectedEmployee('');
+    handleClose();
+  };
+
+  return (
+    <dialog ref={dialogRef} className="modal backdrop-blur-xs">
+      <div className="modal-box w-full max-w-2xl max-h-[90vh] p-0 shadow-2xl rounded-2xl overflow-hidden flex flex-col">
+        <div className="bg-green-800 p-6 text-white flex-shrink-0">
+          <button
+            className="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 z-10 text-white hover:bg-white hover:bg-opacity-20"
+            onClick={handleClose}
+          >
+            <FaTimes />
+          </button>
+          <h1 className="text-2xl font-bold">Reassign Task</h1>
+          <div className="flex justify-between items-center mb-2">
+            <p className="text-white mt-1">Selected Task: {task?.title}</p>
+                 <span className={`px-2 py-1 rounded text-xs font-bold uppercase bg-white text-green-800`}>
+          {task?.category}
+        </span>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
+          <div className="p-6 space-y-4 overflow-y-auto flex-1">
+            <div className="mb-4 p-4 bg-gray-100 rounded-lg">
+               <p className="text-md text-black mt-1">{task?.description}</p>
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium">
+                Select Employee
+              </label>
+              <select
+                value={selectedEmployee}
+                onChange={(e) => setSelectedEmployee(e.target.value)}
+                className="w-full border rounded-md p-2"
+                required
+              >
+                <option value="">Choose an employee...</option>
+                {employees.map((emp) => (
+                  <option key={emp.id} value={emp.id}>
+                    {emp.first_name} {emp.last_name} - {emp.position}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex flex-col justify-end sm:flex-row gap-2 pt-4 border-t mt-4">
+              <button
+                type="button"
+                onClick={handleClose}
+                className="bg-gray-200 text-gray-700 font-medium py-3 px-6 rounded-lg transition-all duration-200 hover:bg-gray-300"
+                disabled={loading}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="bg-green-800 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg disabled:bg-green-400"
+                disabled={loading}
+              >
+                <FaSave className="h-4 w-4" />
+                {loading ? 'Reassigning...' : 'Reassign Task'}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </dialog>
+  );
+});
 
 const Tasks = () => {
   const [TasksData, setTasksData] = useState([]);
@@ -182,18 +311,20 @@ const Tasks = () => {
   const [year, setYear] = useState('');
   const [selectedTask, setSelectedTask] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
+  const [taskToReassign, setTaskToReassign] = useState(null);
   const modalRef = useRef();
   const remarksModalRef = useRef();
+  const reassignModalRef = useRef();
 
   const user = JSON.parse(localStorage.getItem("user"));
   const employeeId = Number(user.id);
   const isAdmin = user.isAdmin;
+  
   useEffect(() => {
     setCurrentUser(user);
   }, []);
 
   const fetchTasks = async (start, end) => {
-    // Fetch completed tasks within the date range
     const { data: completedTasks } = await supabase
       .from("tasks")
       .select("*")
@@ -201,13 +332,11 @@ const Tasks = () => {
       .gte('created_at', start)
       .lte('created_at', end);
 
-    // Fetch all ongoing and pending tasks regardless of date
     const { data: ongoingPendingTasks } = await supabase
       .from("tasks")
       .select("*")
       .in('status', ['ongoing', 'pending']);
 
-    // Combine both results
     const allTasks = [...(completedTasks || []), ...(ongoingPendingTasks || [])];
     setTasksData(allTasks);
   };
@@ -227,14 +356,12 @@ const Tasks = () => {
     const now = new Date();
     const timestamp = now.toISOString().replace('T', ' ').replace('Z', '');
     
-    // Optimistically update the UI
     setTasks((prev) =>
       prev.map((task) =>
         task.id === taskId ? { ...task, status: newStatus, updated_at: timestamp } : task
       )
     );
     
-    // Update in database
     await updateTaskStatusInSupabase(taskId, newStatus);
   }, []);
 
@@ -243,11 +370,40 @@ const Tasks = () => {
     remarksModalRef.current?.open();
   };
 
+  const handleReassignClick = (task) => {
+    setTaskToReassign(task);
+    reassignModalRef.current?.open();
+  };
+
+  const handleReassign = async (taskId, newUserId) => {
+    try {
+      const now = new Date();
+      const timestamp = now.toISOString().replace('T', ' ').replace('Z', '');
+      
+      const { error } = await supabase
+        .from("tasks")
+        .update({ 
+          user_id: newUserId,
+          updated_at: timestamp 
+        })
+        .eq("id", taskId);
+
+      if (error) {
+        console.error("Failed to reassign task:", error.message);
+        alert("Failed to reassign task");
+      } else {
+        const { monthNumber, year } = getCurrentMonthAndYear();
+        GetFirstAndLastDate(year, monthNumber);
+      }
+    } catch (error) {
+      console.error("Error reassigning task:", error);
+      alert("An error occurred while reassigning the task");
+    }
+  };
+
   function GetFirstAndLastDate(year, month) {
     const firstDayOfMonth = new Date(year, month-1, 2);
     const lastDayOfMonth = new Date(year, month, 1);
-    console.log('First Day: ' + firstDayOfMonth.toISOString());
-    console.log('Last Day: ' + lastDayOfMonth.toISOString());
     const start = firstDayOfMonth.toISOString();
     const end = lastDayOfMonth.toISOString();
     fetchTasks(start, end);
@@ -314,7 +470,7 @@ const Tasks = () => {
                 <option value={2026}>2026</option>
               </select>
               <button className="bg-green-900 text-white btn rounded-lg" onClick={() => GetFirstAndLastDate(year, month)}>Display</button>
-             {!isAdmin && (
+              {!isAdmin && (
                 <button 
                   className="bg-white-900 text-green-900 btn rounded-lg"
                   onClick={() => {
@@ -340,6 +496,7 @@ const Tasks = () => {
                   tasks={tasks.filter((task) => task.status.toLowerCase() === tab.value)}
                   moveTask={moveTask}
                   onTaskClick={handleTaskClick}
+                  onReassignClick={handleReassignClick}
                 >
                   {tab.label}
                 </TaskColumn>
@@ -360,6 +517,12 @@ const Tasks = () => {
         ref={remarksModalRef}
         task={selectedTask}
         currentUser={currentUser}
+      />
+
+      <ReassignModal
+        ref={reassignModalRef}
+        task={taskToReassign}
+        onReassign={handleReassign}
       />
     </div>
   );

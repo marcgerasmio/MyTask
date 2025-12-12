@@ -17,7 +17,7 @@ import AdminTask from "./pages/Main/AdminTask";
 import MemoTracker from "./pages/Main/MemoTracker";
 import Reports from "./pages/Main/Reports";
 import WordPressExtractor from "./components/Sample";
-// import PDSExtractor from "./components/PDFExtract";
+
 
 //Employee Routes
 import EmployeeDashboard from "./pages/Employee/Dashboard";
@@ -48,7 +48,6 @@ const Router = () => {
                   <Route path="/course" element={< CourseRecommender/>} />
                   <Route path="/news" element={<NewsCards/>}/>
                   <Route path="/sample" element={<WordPressExtractor/>}/>
-                  {/* <Route path="/pds-extractor" element={<PDSExtractor/>}/> */}
         //Employee Routes
 
         <Route path="/employee/dashboard" element={<EmployeeDashboard />} />\

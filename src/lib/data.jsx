@@ -176,6 +176,11 @@ export const navItemsEmployee = [
     icon: FaCalendarAlt,
   },
    {
+    label: "Memo Tracker",
+    path: "/memo-tracker",
+    icon: CiMemoPad,
+  },
+   {
     label: "Tasks Archive",
     path: "/tasks-archive",
     icon: FaArchive,
