@@ -1,7 +1,7 @@
 import { MdOutlineAlternateEmail, MdOutlineRemoveRedEye } from "react-icons/md";
 import { TbNurse } from "react-icons/tb";
 import { FaRegUser } from "react-icons/fa";
-import { BiSolidDashboard } from "react-icons/bi";
+import { BiCategory, BiSolidDashboard } from "react-icons/bi";
 import { FaUserInjured } from "react-icons/fa";
 import { FaTasks } from "react-icons/fa";
 import { BiTaskX } from "react-icons/bi";
@@ -13,6 +13,7 @@ import { RiAdminLine } from "react-icons/ri";
 import Supabase from "../Supabase";
 import { CiMemoPad } from "react-icons/ci";
 import { VscGraphLine } from "react-icons/vsc";
+
 
 
 
@@ -145,7 +146,12 @@ export const navItems = [
     path: "/reports",
     icon: VscGraphLine,
   },
+  {
+    label: "Categories",
+    path: "/categories",
+    icon: BiCategory,
 
+  },
   {
     label: "Users",
     path: "/users",

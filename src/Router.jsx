@@ -17,6 +17,7 @@ import AdminTask from "./pages/Main/AdminTask";
 import MemoTracker from "./pages/Main/MemoTracker";
 import Reports from "./pages/Main/Reports";
 import WordPressExtractor from "./components/Sample";
+import Categories from "./pages/Main/Categories";
 
 
 //Employee Routes
@@ -44,6 +45,7 @@ const Router = () => {
           <Route path="/admin-tasks" element={< AdminTask/>} />
           <Route path="/memo-tracker" element={< MemoTracker/>} />
           <Route path="/reports" element={< Reports/>} />
+          <Route path="/categories" element={< Categories/>} />
 
                   <Route path="/course" element={< CourseRecommender/>} />
                   <Route path="/news" element={<NewsCards/>}/>

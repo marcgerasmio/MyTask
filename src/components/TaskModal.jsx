@@ -16,14 +16,20 @@ const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
   const [category, setCategory] = useState('');
   const [link, setLink] = useState('');
   const [UserData, setUserData] = useState([]);
+  const [categoryData, setCategoryData] = useState([]);
 
     const fetchUsers = async () => {
     const { data } = await supabase.from("userDetails").select("*");
     setUserData(data);
   };
+     const fetchCategories = async () => {
+    const { data } = await supabase.from("categories").select("*");
+    setCategoryData(data);
+  };
 
    useEffect(() => {
       fetchUsers();
+      fetchCategories();
     }, []);
 
   function generatePassword() {
@@ -141,21 +147,19 @@ const createTask = async (e) => {
                     </div>
                 <div className="space-y-2">
                 <label className="block text-sm font-medium">Task Category</label>
-                <div className="flex flex-wrap gap-4">
-                  {["Publication Material", "Press Release", "Photo Coverage", "Video Production", "Correspondence",
-                  "Committee Tasks", "Merchandise Design", "Data Retrieval", "Audio Recording", "Graphic Illustration", 
-                  "Document Trailing",  "Website Update", "Others"].map((cat) => (
-                    <label key={cat} className="inline-flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        checked={category === cat}
-                        onChange={() => setCategory(category === cat ? "" : cat)}
-                        className="form-checkbox h-4 w-4 text-blue-600"
-                      />
-                      <span>{cat}</span>
-                    </label>
-                  ))}
-                </div>
+             <div className="flex flex-wrap gap-4">
+              {categoryData.map((cat) => (
+                <label key={cat.id} className="inline-flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={category === cat.category_name}
+                    onChange={() => setCategory(category === cat.category_name ? "" : cat.category_name)}
+                    className="form-checkbox h-4 w-4 text-blue-600"
+                  />
+                  <span>{cat.category_name}</span>
+                </label>
+              ))}
+            </div>
               </div>
                    <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                       <div className="space-y-2">
