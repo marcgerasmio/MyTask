@@ -78,7 +78,7 @@ const Users = () => {
           <div className="overflow-x-auto p-6 bg-white mt-6 rounded-md shadow-md">
             <table className="table table-sm">
               <thead>
-                <tr className="text-xs sm:text-sm">
+                <tr className="text-xs sm:text-sm text-black">
                   <th>Name</th>
                   <th>Position</th>
                   <th>Admin Access</th>

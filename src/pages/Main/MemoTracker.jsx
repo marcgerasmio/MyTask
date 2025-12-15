@@ -5,6 +5,7 @@ import Supabase from "../../Supabase";
 import { IoIosAddCircle } from "react-icons/io";
 import { CiMemoPad } from "react-icons/ci";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
+import { FaRegEdit } from "react-icons/fa";
 
 const MemoTracker = () => {
   const modalRef = useRef();
@@ -128,7 +129,7 @@ const MemoTracker = () => {
                             className="btn btn-sm btn-ghost text-blue-600 hover:bg-blue-50"
                             title="Edit memo"
                           >
-                            <FiEdit2 className="h-4 w-4" />
+                            <FaRegEdit className="text-black h-4 w-4" />
                           </button>
                           <button
                             onClick={() => handleDeleteClick(memo)}

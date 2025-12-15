@@ -131,7 +131,7 @@ function handleTask(){
           <div className="overflow-x-auto p-6 bg-white mt-6 rounded-md shadow-md overflow-y-auto h-[80vh]">
             <table className="table table-sm">
               <thead>
-                <tr className="text-xs sm:text-sm">
+                <tr className="text-xs sm:text-sm text-black">
                   <th>Task ID</th>
                 <th>Assigned To</th>
                   <th>Task Title</th>

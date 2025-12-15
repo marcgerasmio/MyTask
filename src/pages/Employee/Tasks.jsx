@@ -100,7 +100,7 @@ function TaskCard({ task, index, onTaskClick, onReassignClick }) {
           className="p-1.5 hover:bg-blue-100 rounded-full transition-colors"
           title="Reassign Task"
         >
-          <FaUserEdit className="h-4 w-4 text-blue-600" />
+          <FaUserEdit className="h-4 w-4 text-black" />
         </button>
       </div>
       <div className="text-gray-600 mb-2">{task.description}</div>

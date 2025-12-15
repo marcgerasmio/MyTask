@@ -239,14 +239,14 @@ const EmployeeTasks = () => {
                           setSelectedTask(task);
                         }}
                       >
-                        <FaRegEdit size={14} />
+                        <FaRegEdit className="text-black h-4 w-4" />
                       </button>
                       <button 
                         className="btn btn-ghost text-red-500 hover:bg-white border-none shadow-none btn-xs"
                         onClick={() => deleteFunction("tasks", task.id)}
                       >
                            <FaRegTrashCan
-                        className="text-red-600 cursor-pointer"
+                        className="h-4 w-4"
                         onClick={() => {
                           if (window.confirm("Are you sure you want to delete this task?")) {
                             deleteFunction("tasks", task.id);
