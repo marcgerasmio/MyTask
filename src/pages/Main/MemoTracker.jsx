@@ -17,15 +17,25 @@ const MemoTracker = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [memoToDelete, setMemoToDelete] = useState(null);
 
-  const fetchData = async () => {
-    const { data } = await Supabase.from("memo").select("*").order('id', { ascending: true })
-    ;
+  const fetchData = async (start, end) => {
+    const { data } = await Supabase
+      .from("memo")
+      .select("*")
+      .gte('created_at', start)
+      .lte('created_at', end)
+      .order('id', { ascending: true });
     setMemoData(data || []);
   }
 
   useEffect(() => {
-    fetchData();
+    handleTask();
   }, []);
+
+  function handleTask() {
+    const { year } = getCurrentMonthAndYear();
+    setYear(year);
+    GetFirstAndLastDate(year);
+  }
 
   const handleEdit = (memo) => {
     setSelectedMemo(memo);
@@ -48,7 +58,7 @@ const MemoTracker = () => {
 
       if (error) throw error;
 
-      await fetchData();
+      GetFirstAndLastDate(year);
       setShowDeleteModal(false);
       setMemoToDelete(null);
     } catch (error) {
@@ -59,7 +69,7 @@ const MemoTracker = () => {
 
   const handleModalClose = () => {
     setSelectedMemo(null);
-    fetchData(); 
+    GetFirstAndLastDate(year);
   }
 
   const adminStyle = {
@@ -68,35 +78,89 @@ const MemoTracker = () => {
     completed: "bg-green-800 text-white",
   };
 
+  function getCurrentMonthAndYear() {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth() + 1;
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    const monthName = monthNames[currentDate.getMonth()];
+
+    return {
+      monthNumber: month,
+      monthName: monthName,
+      year: year
+    };
+  }
+
+  function GetFirstAndLastDate(year) {
+    // First day of the year at 00:00:00
+    const firstDayOfYear = new Date(year, 0, 1, 0, 0, 0);
+    // Last day of the year at 23:59:59
+    const lastDayOfYear = new Date(year, 11, 31, 23, 59, 59);
+    
+    console.log('First Day: ' + firstDayOfYear.toISOString());
+    console.log('Last Day: ' + lastDayOfYear.toISOString());
+    
+    const start = firstDayOfYear.toISOString();
+    const end = lastDayOfYear.toISOString();
+    fetchData(start, end);
+  }
+
   return (
     <>
       <div className="flex flex-col lg:flex-row min-h-screen bg-gray-100">
         <Sidebar />
         <main className="flex-1 p-4 pt-20 sm:p-6 lg:pt-6 lg:ml-64">
+
           <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
             <h1 className="text-lg sm:text-xl md:text-2xl font-extrabold">
               Memo Tracker
               <span className="block font-normal text-sm sm:text-base text-gray-600">
               </span>
             </h1>
-            <button
-              className="bg-green-900 text-white btn rounded-lg"
-              onClick={() => {
-                setSelectedMemo(null);
-                modalRef.current?.open();
-              }}
-            >
-              <IoIosAddCircle className="h-4 w-4 mr-2" />
-              Add Memo
-            </button>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <div className="flex gap-2 mt-4 sm:mt-0">
+                <select 
+                  className="select w-25" 
+                  onChange={(e) => setYear(parseInt(e.target.value))} 
+                  value={year}
+                >
+                  <option disabled value="">Year</option>
+                  <option value={2024}>2024</option>
+                  <option value={2025}>2025</option>
+                  <option value={2026}>2026</option>
+                </select>
+                <button 
+                  className="bg-green-900 text-white btn rounded-lg" 
+                  onClick={() => GetFirstAndLastDate(year)}
+                >
+                  Display
+                </button>
+                <button
+                  className="bg-green-900 text-white btn rounded-lg"
+                  onClick={() => {
+                    setSelectedMemo(null);
+                    modalRef.current?.open();
+                  }}
+                >
+                  <IoIosAddCircle className="h-4 w-4 mr-2" />
+                  Add Memo
+                </button>
+              </div>
+            </div>
+
           </div>
+
           {memoData.length === 0 ? (
             <div className="text-center py-12 bg-white mt-6 rounded-md shadow-md">
               <div className="flex justify-center mb-4">
                 <CiMemoPad className="h-16 w-16 text-gray-300" />
               </div>
               <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                No memos found.
+                No memos found for the selected period.
               </h3>
             </div>
           ) : (
@@ -151,7 +215,7 @@ const MemoTracker = () => {
           )}
         </main>
       </div>
-      
+
       <MemoModal
         ref={modalRef}
         memo={selectedMemo}
