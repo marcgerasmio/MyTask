@@ -111,7 +111,7 @@ const EmployeeDashboard = () => {
     <>
       <div className="flex min-h-screen bg-gray-100">
         <Sidebar />
-        <main className="flex-1 p-3 pt-20 lg:p-6 lg:pt-6 lg:ml-64">
+       <main className="flex-1 w-full p-4 pt-20 lg:p-6 lg:pt-6 lg:pl-72">
           <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
             <div>
               <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold">
@@ -130,7 +130,10 @@ const EmployeeDashboard = () => {
               </button>
             </div>
           </div>
-          <EmotionCard />
+
+          <div className="mb-6">
+            <EmotionCard />
+          </div>
         
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
             <div className="w-full">

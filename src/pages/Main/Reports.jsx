@@ -563,7 +563,7 @@ const Reports = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm">Team Members</p>
-                  <p className="text-3xl font-bold">{workloadData.length}</p>
+                  <p className="text-3xl font-bold">6</p>
                 </div>
                 <FaUsers className="text-4xl" />
               </div>
