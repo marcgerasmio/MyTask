@@ -180,7 +180,7 @@ const MemoTracker = () => {
                       <td>
                         <div className="flex items-center gap-3">
                           <div className="text-sm sm:text-base">
-                            {memo.id}
+                            {memo.memo_id}
                           </div>
                         </div>
                       </td>

@@ -8,6 +8,7 @@ const MemoModal = forwardRef(({ memo, onClose }, ref) => {
   const dialogRef = useRef(null);
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
+  const [memoNumber, setMemoNumber] = useState('');
 
   // Populate form when editing existing memo
   useEffect(() => {
@@ -29,7 +30,8 @@ const MemoModal = forwardRef(({ memo, onClose }, ref) => {
           .from('memo')
           .update({ 
             title,
-            date
+            date,
+            memo_id: memoNumber
           })
           .eq('id', memo.id);
 
@@ -40,7 +42,8 @@ const MemoModal = forwardRef(({ memo, onClose }, ref) => {
           .from('memo')
           .insert({ 
             title,
-            date
+            date,
+            memo_id: memoNumber
           });
 
         if (error) throw error;
@@ -112,6 +115,20 @@ const MemoModal = forwardRef(({ memo, onClose }, ref) => {
                 className="w-full border rounded-md p-2"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
+              />
+            </div>
+
+               <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="phone">
+                Memo Number (Format : 2026-00001)
+              </label>
+              <input
+                id="phone"
+                type="text"
+                placeholder="2026-00001"
+                className="w-full border rounded-md p-2"
+                value={memoNumber}
+                onChange={(e) => setMemoNumber(e.target.value)}
               />
             </div>
           </div>
