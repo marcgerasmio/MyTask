@@ -23,7 +23,7 @@ const MemoTracker = () => {
       .select("*")
       .gte('created_at', start)
       .lte('created_at', end)
-      .order('id', { ascending: true });
+      .order('memo_id', { ascending: true });
     setMemoData(data || []);
   }
 
