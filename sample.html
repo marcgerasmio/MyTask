@@ -1,84 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Colleges & Professional Schools</title>
-  <style>
-  * {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-  }
-
-  .carousel-wrapper {
-    overflow: hidden;
-    width: 100%;
-  }
-
-  .carousel-track {
-    display: flex;
-    width: max-content !important;
-    animation: scroll 30s linear infinite;
-  }
-
-  .carousel-track img {
-    width: 150px;
-    height: 150px;
-    margin-right: 50px;
-    flex-shrink: 0;
-    object-fit: contain;
-  }
-
-  @keyframes scroll {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(-50%);
-    }
-  }
-
-  @media (max-width: 768px) {
-    .carousel-track img {
-      width: 180px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .carousel-track img {
-      width: 140px;
-    }
-  }
-</style>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Plumbing Experts</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div class="carousel-wrapper">
-    <div class="carousel-track">
-     
-  <img src="https://www.carsu.edu.ph/wp-content/uploads/2026/01/CSU-GS-Black-scaled.webp" alt="GS" />
-      <img src="https://www.carsu.edu.ph/wp-content/uploads/2026/01/CSU-SoM-Black-scaled.webp" alt="SOM" />
-      <img src="https://www.carsu.edu.ph/wp-content/uploads/2026/01/CSU-CoFES-Black-scaled.webp" alt="CoFES" />
-      <img src="https://www.carsu.edu.ph/wp-content/uploads/2026/01/CSU-CMNS-Black-scaled.webp" alt="CMNS" />
-      <img src="https://www.carsu.edu.ph/wp-content/uploads/2026/01/CSU-CHaSS-Black-scaled.webp" alt="CHaSS" />
-      <img src="https://www.carsu.edu.ph/wp-content/uploads/2026/01/CSU-CEGS-Black-scaled.webp" alt="CEGS" />
-      <img src="https://www.carsu.edu.ph/wp-content/uploads/2026/01/CSU-CEd-Black-scaled.webp" alt="CEd" />
-      <img src="https://www.carsu.edu.ph/wp-content/uploads/2026/01/CSU-CCIS-Black-scaled.webp" alt="CCIS" />
-      <img src="https://www.carsu.edu.ph/wp-content/uploads/2026/01/CSU-CAA-Black-scaled.webp" alt="CAA" />
-      
-      <img src="https://www.carsu.edu.ph/wp-content/uploads/2026/01/CSU-GS-Black-scaled.webp" alt="GS" />
-      <img src="https://www.carsu.edu.ph/wp-content/uploads/2026/01/CSU-SoM-Black-scaled.webp" alt="GS" />
-      <img src="https://www.carsu.edu.ph/wp-content/uploads/2026/01/CSU-CoFES-Black-scaled.webp" alt="CoFES" />
-      <img src="https://www.carsu.edu.ph/wp-content/uploads/2026/01/CSU-CMNS-Black-scaled.webp" alt="CMNS" />
-      <img src="https://www.carsu.edu.ph/wp-content/uploads/2026/01/CSU-CHaSS-Black-scaled.webp" alt="CHaSS" />
-      <img src="https://www.carsu.edu.ph/wp-content/uploads/2026/01/CSU-CEGS-Black-scaled.webp" alt="CEGS" />
-      <img src="https://www.carsu.edu.ph/wp-content/uploads/2026/01/CSU-CEd-Black-scaled.webp" alt="CEd" />
-      <img src="https://www.carsu.edu.ph/wp-content/uploads/2026/01/CSU-CCIS-Black-scaled.webp" alt="CCIS" />
-      <img src="https://www.carsu.edu.ph/wp-content/uploads/2026/01/CSU-CAA-Black-scaled.webp" alt="CAA" />
+<section class="hero">
+  <div class="hero-content">
+
+    <!-- LEFT CONTENT -->
+    <div class="hero-text">
+      <span class="badge">Commercial & Residential</span>
+      <h1>
+        Plumbing <span>Experts</span>
+      </h1>
+      <p>
+        Repairs • Sewer & Drain • Cross Connection Control<br>
+        Service & Installation
+      </p>
+
+      <button class="primary-btn">Get a Free Quote</button>
     </div>
+
+    <!-- RIGHT FORM -->
+    <div class="form-card">
+  <h2>Request Plumbing Service</h2>
+  <p class="form-subtext">Fast response • No obligation</p>
+
+  <form>
+
+    <!-- Contact Info -->
+    <div class="field">
+      <input type="text" required placeholder=" ">
+      <label>Full Name *</label>
+    </div>
+
+    <div class="field">
+      <input type="email" required placeholder=" ">
+      <label>Email Address *</label>
+    </div>
+
+    <div class="field">
+      <input type="tel" placeholder=" ">
+      <label>Phone Number</label>
+    </div>
+
+    <!-- Customer Type -->
+    <div class="field">
+      <select required>
+        <option value="" disabled selected></option>
+        <option>New Customer</option>
+        <option>Existing Customer</option>
+      </select>
+      <label>Customer Type *</label>
+    </div>
+
+    <!-- Message -->
+    <div class="field">
+      <textarea rows="4" placeholder=" "></textarea>
+      <label>How can we help you?</label>
+    </div>
+
+    <!-- CTA -->
+    <button type="submit" class="submit-btn">
+      Send Request
+    </button>
+
+    <p class="form-note">
+      We usually respond within 1 business day.
+    </p>
+
+  </form>
+</div>
+
+
   </div>
+</section>
 
 </body>
 </html>
