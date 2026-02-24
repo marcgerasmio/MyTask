@@ -41,7 +41,7 @@ const ActivityList = () => {
     <>
       <div className="flex flex-col lg:flex-row min-h-screen bg-gray-100">
         <Sidebar />
-        <main className="flex-1 p-4 pt-20 sm:p-6 lg:pt-6 lg:ml-64">
+    <main className="flex-1 p-4 pt-20 sm:p-6 lg:pt-6 lg:ml-64 min-w-0 overflow-x-hidden">
           <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
             <h1 className="text-lg sm:text-xl md:text-2xl font-extrabold">
            Activities List
