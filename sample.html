@@ -1,85 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Plumbing Experts</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>World Map – Faculty & Student Mobility</title>
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f4;
+    }
+
+    #map {
+      height: 100vh;
+      width: 100%;
+    }
+
+    .leaflet-popup-content {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+  </style>
 </head>
 <body>
 
-<section class="hero">
-  <div class="hero-content">
+<div id="map"></div>
 
-    <!-- LEFT CONTENT -->
-    <div class="hero-text">
-      <span class="badge">Commercial & Residential</span>
-      <h1>
-        Plumbing <span>Experts</span>
-      </h1>
-      <p>
-        Repairs • Sewer & Drain • Cross Connection Control<br>
-        Service & Installation
-      </p>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-      <button class="primary-btn">Get a Free Quote</button>
-    </div>
+<script>
+  /* ---------------- MAP INIT ---------------- */
+  const map = L.map('map').setView([20, 0], 2);
 
-    <!-- RIGHT FORM -->
-    <div class="form-card">
-  <h2>Request Plumbing Service</h2>
-  <p class="form-subtext">Fast response • No obligation</p>
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
 
-  <form>
+  /* ---------------- DATA ---------------- */
+  const countryStats = {
+    "Japan": { faculty: 78, outbound: 0, inbound: 0 },
+    "Thailand": { faculty: 31, outbound: 37, inbound: 0 },
+    "Taiwan": { faculty: 20, outbound: 9, inbound: 0 },
+    "Malaysia": { faculty: 13, outbound: 3, inbound: 0 },
+    "Vietnam": { faculty: 10, outbound: 0, inbound: 0 },
+    "Cambodia": { faculty: 4, outbound: 5, inbound: 3 },
+    "South Korea": { faculty: 3, outbound: 0, inbound: 0 },
+    "Australia": { faculty: 2, outbound: 0, inbound: 0 },
+    "Indonesia": { faculty: 2, outbound: 0, inbound: 0 },
+    "India": { faculty: 1, outbound: 0, inbound: 0 },
+    "Sweden": { faculty: 1, outbound: 0, inbound: 0 },
+    "Bangladesh": { faculty: 1, outbound: 0, inbound: 0 },
+    "Slovakia": { faculty: 1, outbound: 0, inbound: 0 },
+    "Turkey": { faculty: 1, outbound: 0, inbound: 0 },
+    "Netherlands": { faculty: 1, outbound: 0, inbound: 0 },
+    "United States of America": { faculty: 1, outbound: 2, inbound: 0 },
+    "Austria": { faculty: 1, outbound: 0, inbound: 0 },
+    "France": { faculty: 1, outbound: 0, inbound: 0 },
+    "New Zealand": { faculty: 1, outbound: 0, inbound: 0 }
+  };
 
-    <!-- Contact Info -->
-    <div class="field">
-      <input type="text" required placeholder=" ">
-      <label>Full Name *</label>
-    </div>
+  /* ---------------- COLOR BY TOTAL ---------------- */
+  function getColor(total) {
+    if (total >= 75) return "#c62828";     // red
+    if (total >= 25) return "#f57c00";     // orange
+    if (total > 0)   return "#003300";     // green
+    return "#cccccc";                      // no data
+  }
 
-    <div class="field">
-      <input type="email" required placeholder=" ">
-      <label>Email Address *</label>
-    </div>
+  function countryStyle(feature) {
+    const stats = countryStats[feature.properties.name];
+    const total = stats
+      ? stats.faculty + stats.outbound + stats.inbound
+      : 0;
 
-    <div class="field">
-      <input type="tel" placeholder=" ">
-      <label>Phone Number</label>
-    </div>
+    return {
+      fillColor: getColor(total),
+      weight: 1,
+      color: "#666",
+      fillOpacity: total > 0 ? 0.85 : 0.3
+    };
+  }
 
-    <!-- Customer Type -->
-    <div class="field">
-      <select required>
-        <option value="" disabled selected></option>
-        <option>New Customer</option>
-        <option>Existing Customer</option>
-      </select>
-      <label>Customer Type *</label>
-    </div>
+  /* ---------------- INTERACTIONS ---------------- */
+  function onEachCountry(feature, layer) {
+    const name = feature.properties.name;
+    const stats = countryStats[name] || { faculty: 0, outbound: 0, inbound: 0 };
+    const total = stats.faculty + stats.outbound + stats.inbound;
 
-    <!-- Message -->
-    <div class="field">
-      <textarea rows="4" placeholder=" "></textarea>
-      <label>How can we help you?</label>
-    </div>
+    layer.on({
+      mouseover: (e) => {
+        e.target.setStyle({ weight: 2, fillOpacity: 0.95 });
+      },
+      mouseout: (e) => {
+        geojson.resetStyle(e.target);
+      },
+      click: () => {
+        layer.bindPopup(`
+          <strong>${name}</strong><br><br>
+          👩‍🏫 Faculty: <strong>${stats.faculty}</strong><br>
+          🎓 Student Outbound: <strong>${stats.outbound}</strong><br>
+          🎒 Student Inbound: <strong>${stats.inbound}</strong><br>
+          <hr>
+          <strong>Total: ${total}</strong>
+        `).openPopup();
+      }
+    });
+  }
 
-    <!-- CTA -->
-    <button type="submit" class="submit-btn">
-      Send Request
-    </button>
-
-    <p class="form-note">
-      We usually respond within 1 business day.
-    </p>
-
-  </form>
-</div>
-
-
-  </div>
-</section>
+  /* ---------------- LOAD GEOJSON ---------------- */
+  let geojson;
+  fetch("https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json")
+    .then(res => res.json())
+    .then(data => {
+      geojson = L.geoJSON(data, {
+        style: countryStyle,
+        onEachFeature: onEachCountry
+      }).addTo(map);
+    });
+</script>
 
 </body>
 </html>

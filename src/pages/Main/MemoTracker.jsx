@@ -96,9 +96,7 @@ const MemoTracker = () => {
   }
 
   function GetFirstAndLastDate(year) {
-    // First day of the year at 00:00:00
     const firstDayOfYear = new Date(year, 0, 1, 0, 0, 0);
-    // Last day of the year at 23:59:59
     const lastDayOfYear = new Date(year, 11, 31, 23, 59, 59);
     
     console.log('First Day: ' + firstDayOfYear.toISOString());
