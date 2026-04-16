@@ -63,15 +63,42 @@ const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
       }
     });
   };
-
 const createTask = async (e) => {
    e.preventDefault();
    
    // Determine which users to assign the task to
-   const userIdsToAssign = setId != null ? [setId] : selectedUserIds;
+   let userIdsToAssign = [];
    
+   if (setId != null) {
+     // When editing/assigning to a specific user
+     userIdsToAssign = [setId];
+   } else if (selectedUserIds.length > 0) {
+     // When creating task(s) for selected users
+     userIdsToAssign = selectedUserIds;
+   }
+   
+   // If no users are selected, create a floating task (user_id = null)
    if (userIdsToAssign.length === 0) {
-     alert('Please select at least one user to assign the task to.');
+     // Create a single floating task with no assigned user
+     const { data, error } = await supabase
+       .from('tasks')
+       .insert({ 
+         user_id: null,  // Explicitly set to null for floating tasks
+         title,
+         description,
+         deadline,
+         category,
+         status,
+         link,
+       });
+     
+     if (error) {
+       console.error('Error creating floating task:', error);
+       alert('Failed to create floating task. Please try again.');
+       return;
+     }
+     
+     window.location.reload();
      return;
    }
    
