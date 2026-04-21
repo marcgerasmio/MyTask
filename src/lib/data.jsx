@@ -181,6 +181,12 @@ export const navItemsEmployee = [
     path: "/activities",
     icon: FaCalendarAlt,
   },
+  {
+    label: "Unassigned Tasks",
+    path: "/tasks-unassigned",
+    count: FetchTasks().then(data => data.filter(task => task.user_id === null).length).catch(() => 0),
+    icon: BiTaskX,
+  },
    {
     label: "Memo Tracker",
     path: "/memo-tracker",
