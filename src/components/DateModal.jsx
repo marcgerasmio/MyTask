@@ -181,8 +181,6 @@ const DateModal = forwardRef(({ onClose, event }, ref) => {
                       {event.description}
                     </p>
                   </div>
-                  {/* Admin Actions */}
-                  {isAdmin && (
                     <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200">
                       <button
                         className="flex-1 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
@@ -199,7 +197,6 @@ const DateModal = forwardRef(({ onClose, event }, ref) => {
                         <span>Delete Activity</span>
                       </button>
                     </div>
-                  )}
                 </div>
               ) : (
                 <div className="text-center py-12">
