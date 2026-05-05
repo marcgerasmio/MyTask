@@ -55,9 +55,9 @@ const Dashboard = () => {
             <div className="w-full">
               <Activity />
             </div>
-            <div className="w-full">
-              <MyCalendar />
-            </div>
+            <div className="w-full h-[60vh] overflow-y-auto overflow-x-hidden">
+            <MyCalendar />
+          </div>
           </div>
           
         </main>
