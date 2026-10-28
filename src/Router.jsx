@@ -16,7 +16,7 @@ import ForApproval from "./pages/Main/ForApproval";
 import AdminTask from "./pages/Main/AdminTask";
 import MemoTracker from "./pages/Main/MemoTracker";
 import Reports from "./pages/Main/Reports";
-import WordPressExtractor from "./components/Sample";
+import WordPressExtractor from "./Article";
 import Categories from "./pages/Main/Categories";
 
 
@@ -49,7 +49,7 @@ const Router = () => {
 
                   <Route path="/course" element={< CourseRecommender/>} />
                   <Route path="/news" element={<NewsCards/>}/>
-                  <Route path="/sample" element={<WordPressExtractor/>}/>
+                  <Route path="/article" element={<WordPressExtractor/>}/>
         //Employee Routes
 
         <Route path="/employee/dashboard" element={<EmployeeDashboard />} />\

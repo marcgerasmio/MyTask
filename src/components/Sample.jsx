@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Download, Loader2 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 
-export default function WordPressExtractor() {
+export default function Extractor() {
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState('');
@@ -106,12 +106,12 @@ export default function WordPressExtractor() {
       XLSX.utils.book_append_sheet(wb, ws, sheetName);
     });
 
-    XLSX.writeFile(wb, 'wordpress-posts.xlsx');
+    XLSX.writeFile(wb, '-posts.xlsx');
   };
 
   const handleExtract = async () => {
     if (!url) {
-      setStatus('Please enter a WordPress site URL');
+      setStatus('Please enter a  site URL');
       return;
     }
 
@@ -157,17 +157,17 @@ export default function WordPressExtractor() {
         <div className="bg-white rounded-lg shadow-xl p-8">
           <div className="mb-6">
             <h1 className="text-3xl font-bold text-gray-800 mb-2">
-              WordPress Posts Extractor
+               Posts Extractor
             </h1>
             <p className="text-gray-600">
-              Extract all posts from your WordPress site and organize them by month
+              Extract all posts from your  site and organize them by month
             </p>
           </div>
 
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                WordPress Site URL
+                 Site URL
               </label>
               <input
                 type="text"
@@ -178,7 +178,7 @@ export default function WordPressExtractor() {
                 disabled={loading}
               />
               <p className="mt-1 text-xs text-gray-500">
-                Enter your WordPress site URL (e.g., yoursite.com or https://yoursite.com)
+                Enter your  site URL (e.g., yoursite.com or https://yoursite.com)
               </p>
             </div>
 
@@ -219,7 +219,7 @@ export default function WordPressExtractor() {
                   Total posts extracted: <span className="font-bold">{posts.length}</span>
                 </p>
                 <p className="text-sm text-gray-600 mt-1">
-                  File downloaded: <span className="font-bold">wordpress-posts.xlsx</span>
+                  File downloaded: <span className="font-bold">-posts.xlsx</span>
                 </p>
                 <p className="text-xs text-gray-500 mt-2">
                   Posts are organized into separate sheets by month and year
@@ -231,7 +231,7 @@ export default function WordPressExtractor() {
           <div className="mt-8 pt-6 border-t border-gray-200">
             <h3 className="font-semibold text-gray-800 mb-2 text-sm">How it works:</h3>
             <ul className="text-xs text-gray-600 space-y-1 list-disc list-inside">
-              <li>Connects to your WordPress site via the REST API</li>
+              <li>Connects to your  site via the REST API</li>
               <li>Fetches all published posts automatically</li>
               <li>Groups posts by month and year</li>
               <li>Creates separate Excel sheets for each month</li>

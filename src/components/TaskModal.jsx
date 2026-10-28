@@ -1,47 +1,33 @@
-import { useRef, forwardRef, useImperativeHandle } from "react";
-import { FaSave } from "react-icons/fa";
-import { useState, useEffect } from "react";
-import { usersData } from "../lib/data";
+import { useRef, forwardRef, useImperativeHandle, useState, useEffect } from "react";
+import { FaSave, FaTimes } from "react-icons/fa";
 import supabase from "../Supabase";
-import { FaTimes } from "react-icons/fa";
 
-
-const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
+const TaskModal = forwardRef(({ onClose, status, setId }, ref) => {
   const dialogRef = useRef(null);
-  const [password, setPassword] = useState('');
-  const [selectedUserIds, setSelectedUserIds] = useState([]); // Changed to array
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [deadline, setDeadline] = useState('');
-  const [category, setCategory] = useState('');
-  const [link, setLink] = useState('');
+  const [selectedUserIds, setSelectedUserIds] = useState([]);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [deadline, setDeadline] = useState("");
+  const [category, setCategory] = useState("");
+  const [link, setLink] = useState("");
   const [UserData, setUserData] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const fetchUsers = async () => {
+  const fetchUsers = async () => {
     const { data } = await supabase.from("userDetails").select("*");
-    setUserData(data);
+    setUserData(data || []);
   };
-     const fetchCategories = async () => {
+
+  const fetchCategories = async () => {
     const { data } = await supabase.from("categories").select("*");
-    setCategoryData(data);
+    setCategoryData(data || []);
   };
 
-   useEffect(() => {
-      fetchUsers();
-      fetchCategories();
-    }, []);
-
-  function generatePassword() {
-    var length = 8,
-        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-        retVal = "";
-    for (var i = 0, n = charset.length; i < length; ++i) {
-        retVal += charset.charAt(Math.floor(Math.random() * n));
-    }
-    setPassword(retVal);
-    return retVal;
-}
+  useEffect(() => {
+    fetchUsers();
+    fetchCategories();
+  }, []);
 
   useImperativeHandle(ref, () => ({
     open: () => dialogRef.current?.showModal(),
@@ -55,229 +41,251 @@ const TaskModal = forwardRef(({onClose, status, setId }, ref) => {
 
   // Handle checkbox selection for multiple users
   const handleUserSelection = (userId) => {
-    setSelectedUserIds(prev => {
-      if (prev.includes(userId)) {
-        return prev.filter(id => id !== userId);
-      } else {
-        return [...prev, userId];
-      }
-    });
+    setSelectedUserIds((prev) =>
+      prev.includes(userId)
+        ? prev.filter((id) => id !== userId)
+        : [...prev, userId]
+    );
   };
-const createTask = async (e) => {
-   e.preventDefault();
-   
-   // Determine which users to assign the task to
-   let userIdsToAssign = [];
-   
-   if (setId != null) {
-     // When editing/assigning to a specific user
-     userIdsToAssign = [setId];
-   } else if (selectedUserIds.length > 0) {
-     // When creating task(s) for selected users
-     userIdsToAssign = selectedUserIds;
-   }
-   
-   // If no users are selected, create a floating task (user_id = null)
-   if (userIdsToAssign.length === 0) {
-     // Create a single floating task with no assigned user
-     const { data, error } = await supabase
-       .from('tasks')
-       .insert({ 
-         user_id: null,  // Explicitly set to null for floating tasks
-         title,
-         description,
-         deadline,
-         category,
-         status,
-         link,
-       });
-     
-     if (error) {
-       console.error('Error creating floating task:', error);
-       alert('Failed to create floating task. Please try again.');
-       return;
-     }
-     
-     window.location.reload();
-     return;
-   }
-   
-   // Create a task for each selected user
-   const taskPromises = userIdsToAssign.map(userId => 
-     supabase
-       .from('tasks')
-       .insert({ 
-         user_id: userId,
-         title,
-         description,
-         deadline,
-         category,
-         status,
-         link,
-       })
-   );
-   
-   try {
-     const results = await Promise.all(taskPromises);
-     
-     // Check if any insertions failed
-     const errors = results.filter(result => result.error);
-     
-     if (errors.length > 0) {
-       console.error('Error creating tasks:', errors);
-       alert(`Failed to create ${errors.length} task(s). Please try again.`);
-       return;
-     }
-     
-     window.location.reload();
-   } catch (error) {
-     console.error('Error creating tasks:', error);
-     alert('Failed to create tasks. Please try again.');
-   }
-};
 
+  const createTask = async (e) => {
+    e.preventDefault();
+
+    if (isSubmitting) return; // guard against rapid double submits
+    setIsSubmitting(true);
+
+    // Determine which users to assign the task to
+    let userIdsToAssign = [];
+
+    if (setId != null) {
+      // When assigning to a specific user
+      userIdsToAssign = [setId];
+    } else if (selectedUserIds.length > 0) {
+      // When creating task(s) for selected users
+      userIdsToAssign = selectedUserIds;
+    }
+
+    // If no users are selected, create a floating task (user_id = null)
+    if (userIdsToAssign.length === 0) {
+      const { error } = await supabase.from("tasks").insert({
+        user_id: null,
+        title,
+        description,
+        deadline,
+        category,
+        status,
+        link,
+      });
+
+      if (error) {
+        console.error("Error creating floating task:", error);
+        alert("Failed to create floating task. Please try again.");
+        setIsSubmitting(false); // re-enable on failure
+        return;
+      }
+
+      window.location.reload();
+      return;
+    }
+
+    // Create a task for each selected user
+    const taskPromises = userIdsToAssign.map((userId) =>
+      supabase.from("tasks").insert({
+        user_id: userId,
+        title,
+        description,
+        deadline,
+        category,
+        status,
+        link,
+      })
+    );
+
+    try {
+      const results = await Promise.all(taskPromises);
+      const errors = results.filter((result) => result.error);
+
+      if (errors.length > 0) {
+        console.error("Error creating tasks:", errors);
+        alert(`Failed to create ${errors.length} task(s). Please try again.`);
+        setIsSubmitting(false); // re-enable on failure
+        return;
+      }
+
+      window.location.reload();
+    } catch (error) {
+      console.error("Error creating tasks:", error);
+      alert("Failed to create tasks. Please try again.");
+      setIsSubmitting(false); // re-enable on failure
+    }
+  };
 
   return (
     <dialog ref={dialogRef} className="modal backdrop-blur-xs">
-     <div className="modal-box w-full max-w-4xl max-h-[90vh] p-0 shadow-2xl rounded-2xl overflow-hidden flex flex-col">
-     <div className="bg-green-800 p-6 text-white flex-shrink-0">
-                  <button
-                    className="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 z-10 text-white hover:bg-white hover:bg-opacity-20"
-                    onClick={handleClose}
-                  >
-                    <FaTimes />
-                  </button>
-                  <h1 className="text-2xl font-bold">Create Task</h1>
-                  <p className="text-green-100 mt-1">Fill up necessary information below.</p>
-                </div>
-                
-        <form onSubmit={createTask} className="flex flex-col flex-1 overflow-hidden">
-                  <div className="p-4 space-y-4 overflow-y-auto flex-1">
-                    <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
-                      <div className="space-y-2">
-                        <label
-                          className="text-sm font-medium"
-                          htmlFor="firstName"
-                        >
-                        Title
-                        </label>
-                        <input
-                          id="firstName"
-                          placeholder="Task Title"
-                          className="w-full border rounded-md p-2"
-                          value={title}
-                          onChange={(e) => setTitle(e.target.value)
-                          }
-                          required
-                        />
-                      </div> 
-                    </div>
-                <div className="space-y-2">
-                <label className="block text-sm font-medium">Task Category</label>
-             <div className="flex flex-wrap gap-4">
-              {categoryData.map((cat) => (
-                <label key={cat.id} className="inline-flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    checked={category === cat.category_name}
-                    onChange={() => setCategory(category === cat.category_name ? "" : cat.category_name)}
-                    className="form-checkbox h-4 w-4 text-blue-600"
-                  />
-                  <span>{cat.category_name}</span>
-                </label>
-              ))}
-            </div>
-              </div>
-                   <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium" htmlFor="phone">
-                          Description
-                        </label>
-                        <textarea
-                          id="phone"
-                          placeholder="Task Description"
-                          className="w-full border rounded-md p-2"
-                          rows={4}
-                          value={description}
-                          onChange={(e) => setDescription(e.target.value)
-                          }
-                        />
-                      </div>
-                      </div>
-                          <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
-                      <div className="space-y-2">
-                        <label
-                          className="text-sm font-medium"
-                          htmlFor="firstName"
-                        >
-                        Link (leave blank if not applicable)
-                        </label>
-                        <input
-                          id="firstName"
-                          placeholder="Task Link"
-                          className="w-full border rounded-md p-2"
-                          value={link}
-                          onChange={(e) => setLink(e.target.value)
-                          }
-                        />
-                      </div> 
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium" htmlFor="phone">
-                         Deadline
-                        </label>
-                        <input
-                        type="date"
-                        className="w-full border rounded-md p-2"
-                        value={deadline}
-                        onChange={(e) => setDeadline(e.target.value)
-                        }
-                          required
-                        />
-                      </div>
-                        <div>
-                          {setId != null ? (
-                            <div>
-                            </div>
-                          ) : 
-                          <div className="space-y-2">
-                                  <label className="block text-sm font-medium">Assign To (Select Multiple)</label>
-                                  <div className="border rounded-md p-3 max-h-48 overflow-y-auto bg-white">
-                                    {UserData.map(user => (
-                                      <label key={user.id} className="flex items-center space-x-2 py-2 hover:bg-gray-50 cursor-pointer">
-                                        <input
-                                          type="checkbox"
-                                          checked={selectedUserIds.includes(user.id)}
-                                          onChange={() => handleUserSelection(user.id)}
-                                          className="form-checkbox h-4 w-4 text-green-600"
-                                        />
-                                        <span className="text-sm">{user.first_name} {user.last_name}</span>
-                                      </label>
-                                    ))}
-                                  </div>
-                                  {selectedUserIds.length > 0 && (
-                                    <p className="text-sm text-gray-600 mt-1">
-                                      {selectedUserIds.length} user(s) selected
-                                    </p>
-                                  )}
-                          </div>}    
-                    
-                        </div>
-                    
-                    </div>
+      <div className="modal-box w-full max-w-4xl max-h-[90vh] p-0 shadow-2xl rounded-2xl overflow-hidden flex flex-col">
+        <div className="bg-green-800 p-6 text-white flex-shrink-0">
+          <button
+            type="button"
+            className="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 z-10 text-white hover:bg-white hover:bg-opacity-20"
+            onClick={handleClose}
+          >
+            <FaTimes />
+          </button>
+          <h1 className="text-2xl font-bold">Create Task</h1>
+          <p className="text-green-100 mt-1">
+            Fill up necessary information below.
+          </p>
+        </div>
 
-                         <div className="flex flex-col justify-end sm:flex-row gap-2 pt-4 border-t mt-4">
-                                   <button className="bg-green-800 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
-                                  type="submit">
-                                       <FaSave className="h-4 w-4 mr-2" />
-                                        Save
-                                    </button>
-                                </div>
-                             </div>
-                             </form>
-                             </div>
-                             </dialog>
+        <form
+          onSubmit={createTask}
+          className="flex flex-col flex-1 overflow-hidden"
+        >
+          <div className="p-4 space-y-4 overflow-y-auto flex-1">
+            {/* Title */}
+            <div className="grid grid-cols-1 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium" htmlFor="taskTitle">
+                  Title
+                </label>
+                <input
+                  id="taskTitle"
+                  placeholder="Task Title"
+                  className="w-full border rounded-md p-2"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Category */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium">Task Category</label>
+              <div className="flex flex-wrap gap-4">
+                {categoryData.map((cat) => (
+                  <label
+                    key={cat.id}
+                    className="inline-flex items-center space-x-2"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={category === cat.category_name}
+                      onChange={() =>
+                        setCategory(
+                          category === cat.category_name
+                            ? ""
+                            : cat.category_name
+                        )
+                      }
+                      className="form-checkbox h-4 w-4 text-blue-600"
+                    />
+                    <span>{cat.category_name}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Description */}
+            <div className="grid grid-cols-1 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium" htmlFor="taskDescription">
+                  Description
+                </label>
+                <textarea
+                  id="taskDescription"
+                  placeholder="Task Description"
+                  className="w-full border rounded-md p-2"
+                  rows={4}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* Link */}
+            <div className="grid grid-cols-1 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium" htmlFor="taskLink">
+                  Link (leave blank if not applicable)
+                </label>
+                <input
+                  id="taskLink"
+                  placeholder="Task Link"
+                  className="w-full border rounded-md p-2"
+                  value={link}
+                  onChange={(e) => setLink(e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* Deadline + Assign To */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium" htmlFor="taskDeadline">
+                  Deadline
+                </label>
+                <input
+                  id="taskDeadline"
+                  type="date"
+                  className="w-full border rounded-md p-2"
+                  value={deadline}
+                  onChange={(e) => setDeadline(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div>
+                {setId != null ? (
+                  <div></div>
+                ) : (
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium">
+                      Assign To (Select Multiple)
+                    </label>
+                    <div className="border rounded-md p-3 max-h-48 overflow-y-auto bg-white">
+                      {UserData.map((user) => (
+                        <label
+                          key={user.id}
+                          className="flex items-center space-x-2 py-2 hover:bg-gray-50 cursor-pointer"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedUserIds.includes(user.id)}
+                            onChange={() => handleUserSelection(user.id)}
+                            className="form-checkbox h-4 w-4 text-green-600"
+                          />
+                          <span className="text-sm">
+                            {user.first_name} {user.last_name}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                    {selectedUserIds.length > 0 && (
+                      <p className="text-sm text-gray-600 mt-1">
+                        {selectedUserIds.length} user(s) selected
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Save */}
+            <div className="flex flex-col justify-end sm:flex-row gap-2 pt-4 border-t mt-4">
+              <button
+                className="bg-green-800 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:shadow-md"
+                type="submit"
+                disabled={isSubmitting}
+              >
+                <FaSave className="h-4 w-4 mr-2" />
+                {isSubmitting ? "Saving..." : "Save"}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </dialog>
   );
 });
 
